@@ -1,1 +1,3 @@
-// import './auth/login.js';
+// import './auth/login';
+import './perfil/password';
+import './perfil/email';

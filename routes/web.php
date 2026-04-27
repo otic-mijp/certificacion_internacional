@@ -22,5 +22,12 @@ Route::group(['prefix' => 'recuperar', 'controller' => LoginController::class], 
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [UserController::class, 'index'])->name('usuario.bienvenida');
-    Route::get('/perfil', [UserController::class, 'perfil'])->name('usuario.perfil');
+
+    Route::controller(UserController::class)->prefix('usuario')->name('usuario.')->group(function () {
+        Route::get('/perfil', 'perfil')->name('perfil');
+        Route::get('/cambio_preguntas', 'preguntas_seguridad')->name('preguntas');
+        Route::get('/cambio_correo', 'correo_electronico_nuevo')->name('correo');
+        Route::get('/cambio_clave', 'clave_nueva')->name('clave');
+    });
+    
 });
