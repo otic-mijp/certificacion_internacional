@@ -7,35 +7,33 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Ejecuta las migraciones.
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->text('two_factor_secret')
-                ->after('password')
+        // Accedemos a la tabla 'usuarios' que creamos anteriormente
+        Schema::table('usuarios', function (Blueprint $table) {
+            $table->text('secreto_doble_factor')
+                ->after('contrasena') // Se coloca justo después de la contraseña
                 ->nullable();
 
-            $table->text('two_factor_recovery_codes')
-                ->after('two_factor_secret')
+            $table->text('codigos_recuperacion_doble_factor')
+                ->after('secreto_doble_factor')
                 ->nullable();
 
-            $table->timestamp('two_factor_confirmed_at')
-                ->after('two_factor_recovery_codes')
+            $table->timestamp('confirmacion_doble_factor_en')
+                ->after('codigos_recuperacion_doble_factor')
                 ->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('usuarios', function (Blueprint $table) {
             $table->dropColumn([
-                'two_factor_secret',
-                'two_factor_recovery_codes',
-                'two_factor_confirmed_at',
+                'secreto_doble_factor',
+                'codigos_recuperacion_doble_factor',
+                'confirmacion_doble_factor_en',
             ]);
         });
     }
