@@ -13,13 +13,13 @@ return new class extends Migration
     {
         // Tabla de Usuarios
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->string('nombre');
             $table->string('correo_electronico')->unique();
             $table->timestamp('verificacion_correo_en')->nullable();
             $table->string('contrasena');
-            $table->rememberToken(); 
-            $table->timestamps(); 
+            $table->rememberToken();
+            $table->timestamps();
         });
 
         // Tabla de Tokens para restablecer contraseña
@@ -32,11 +32,11 @@ return new class extends Migration
         // Tabla de Sesiones de usuario
         Schema::create('sesiones', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('usuario_id')->nullable()->index(); // Relación con la tabla usuarios
-            $table->string('direccion_ip', 45)->nullable();
-            $table->text('agente_usuario')->nullable();
-            $table->longText('carga_util'); // El contenido de la sesión
-            $table->integer('ultima_actividad')->index();
+            $table->foreignId('user_id')->nullable()->index(); // Laravel busca 'user_id'
+            $table->string('ip_address', 45)->nullable();     // Laravel busca 'ip_address'
+            $table->text('user_agent')->nullable();           // Laravel busca 'user_agent'
+            $table->longText('payload');                      // Laravel busca 'payload'
+            $table->integer('last_activity')->index();        // Laravel busca 'last_activity'
         });
     }
 

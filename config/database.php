@@ -99,6 +99,20 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        'pgsql_venezuela' => [ 
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_VENEZUELA', '127.0.0.1'),
+            'port' => env('DB_PORT_VENEZUELA', '5432'),
+            'database' => env('DB_DATABASE_VENEZUELA', 'forge'),
+            'username' => env('DB_USERNAME_VENEZUELA', 'forge'),
+            'password' => env('DB_PASSWORD_VENEZUELA', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),
@@ -149,7 +163,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-database-'),
+            'prefix' => env('REDIS_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-database-'),
             'persistent' => env('REDIS_PERSISTENT', false),
         ],
 
