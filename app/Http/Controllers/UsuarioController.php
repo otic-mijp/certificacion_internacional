@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\View\View;
 
-class UserController extends Controller
+class UsuarioController extends Controller
 {
     /**
      * Muestra la pantalla de bienvenida o dashboard inicial.
