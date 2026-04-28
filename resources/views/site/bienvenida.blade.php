@@ -57,4 +57,38 @@
 
         </div>
     </div>
+
+    <section id="modal-container" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+        <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+
+        <div
+            class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all">
+
+            <button id="modal-close-icon"
+                class="absolute top-4 right-4 z-10 bg-white/80 backdrop-blur-md p-2 rounded-full shadow-sm">
+                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="flex flex-col">
+                <img src="{{ asset('img/informacion.jpg') }}" alt="Información Importante"
+                    class="w-full h-auto object-cover max-h-[50vh] md:max-h-[600px]">
+
+                <div class="p-6 md:p-8 text-center">
+                    <h3 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">
+                        Aviso Importante
+                    </h3>
+                    <p class="text-[11px] md:text-sm text-slate-500 mb-6 font-medium">
+                        Lea detenidamente antes de continuar.
+                    </p>
+
+                    <button id="modal-confirm-button"
+                        class="w-full py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
+                        Entendido, continuar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
 @endsection
