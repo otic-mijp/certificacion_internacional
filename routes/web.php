@@ -14,7 +14,10 @@ Route::get('/', function () {
 
 # Registro de personas:
 Route::post('/cedula', [RegistroController::class, 'buscar_cedula'])->name('consulta.cedula');
-
+Route::prefix('ubicacion')->group(function () {
+    Route::get('/municipios/{estado_id}', [RegistroController::class, 'getMunicipios']);
+    Route::get('/parroquias/{municipio_id}', [RegistroController::class, 'getParroquias']);
+});
 
 
 Route::get('/requisitos', [LoginController::class, 'requisitos'])->name('requisitos');

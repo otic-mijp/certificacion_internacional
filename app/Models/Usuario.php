@@ -4,37 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
 class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * Tabla asociada al modelo.
-     */
     protected $table = 'usuarios';
 
-    /**
-     * Los atributos que se pueden asignar masivamente.
-     */
     protected $fillable = [
         'nombre',
         'correo_electronico',
         'contrasena',
+        'pais_id',
+        'estado_id',
+        'municipio_id',
+        'parroquia_id',
+        'profesion_id',
     ];
 
-    /**
-     * Los atributos que deben ocultarse para la serialización.
-     */
     protected $hidden = [
         'contrasena',
         'remember_token',
     ];
 
-    /**
-     * Atributos que deben ser convertidos.
-     */
     protected function casts(): array
     {
         return [
@@ -44,7 +38,7 @@ class Usuario extends Authenticatable
     }
 
     /**
-     * Sobrescribir para decirle a Laravel que use 'contrasena' en lugar de 'password'.
+     * Usar 'contrasena' en lugar de 'password'.
      */
     public function getAuthPassword()
     {
@@ -57,5 +51,45 @@ class Usuario extends Authenticatable
     public function routeNotificationForMail($notification)
     {
         return $this->correo_electronico;
+    }
+
+    /**
+     * Relación: El usuario pertenece a un País.
+     */
+    public function pais(): BelongsTo
+    {
+        return $this->belongsTo(Pais::class);
+    }
+
+    /**
+     * Relación: El usuario pertenece a un Estado.
+     */
+    public function estado(): BelongsTo
+    {
+        return $this->belongsTo(Estado::class, 'estado_id');
+    }
+
+    /**
+     * Relación: El usuario pertenece a un Municipio.
+     */
+    public function municipio(): BelongsTo
+    {
+        return $this->belongsTo(Municipio::class, 'municipio_id');
+    }
+
+    /**
+     * Relación: El usuario pertenece a una Parroquia.
+     */
+    public function parroquia(): BelongsTo
+    {
+        return $this->belongsTo(Parroquia::class, 'parroquia_id');
+    }
+
+    /**
+     * Relación: El usuario pertenece a una Profesión.
+     */
+    public function profesion(): BelongsTo
+    {
+        return $this->belongsTo(Profesion::class, 'profesion_id');
     }
 }

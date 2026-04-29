@@ -4,3 +4,4 @@
 // import './perfil/email';
 // import './responsive';
 
+import './auth/selects-geograficos';

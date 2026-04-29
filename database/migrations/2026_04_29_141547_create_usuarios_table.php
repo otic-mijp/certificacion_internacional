@@ -13,8 +13,28 @@ return new class extends Migration
     {
         // Tabla de Usuarios
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
+            $table->id(); // Esta es la UNICA llave primaria
+
+            # Datos personales
+            $table->string('nombres', 55);
+            $table->string('primer_apellido', 100);
+            $table->string('segundo_apellido', 100)->nullable();
+
+            // CORRECCIÓN AQUÍ:
+            // Usamos integer o bigInteger, con unique() para evitar duplicados
+            $table->integer('cedula')->unique()->index();
+
+            $table->date('fecha_nacimiento');
+            $table->string('sexo', 1)->nullable();
+
+            # Relaciones Geográficas
+            $table->foreignId('pais_id')->constrained('paises');
+            $table->foreignId('parroquia_id')->nullable()->constrained('parroquias');
+
+            // Relación de Profesión
+            $table->foreignId('profesion_id')->nullable()->constrained('profesiones');
+
+            # Autenticacion
             $table->string('correo_electronico')->unique();
             $table->timestamp('verificacion_correo_en')->nullable();
             $table->string('contrasena');

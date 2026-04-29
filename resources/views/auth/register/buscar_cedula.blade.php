@@ -2,7 +2,7 @@
 
 @section('content')
     <section class="w-full max-w-xl mx-auto px-4">
-        <div class="bg-white rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-100 p-10 mt-10">
+        <div class="bg-white rounded-[40px] shadow-2xl shadow-slate-200/50 border border-slate-400 p-10 mt-10">
             <section class="flex justify-between items-start mb-10">
                 <div>
                     <h3 class="text-[13px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2">
