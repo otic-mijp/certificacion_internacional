@@ -11,16 +11,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-   
     const hideModal = () => {
         if (modal) {
             modal.classList.add('hidden');
         }
     };
 
-    showModal();
+    // Solo ejecutamos si el modal existe
+    if (modal) {
+        showModal();
+        
+        // Validamos cada botón individualmente para evitar errores en consola
+        if (btnCerrarX) {
+            btnCerrarX.addEventListener('click', hideModal);
+        }
 
-    btnCerrarX.addEventListener('click', hideModal);
-    btnEntendido.addEventListener('click', hideModal);
-    overlay.addEventListener('click', hideModal);
+        if (btnEntendido) {
+            btnEntendido.addEventListener('click', hideModal);
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', hideModal);
+        }
+    }
 });
