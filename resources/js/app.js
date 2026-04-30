@@ -1,7 +1,6 @@
-// import './auth/login';
-// import './popup-app';
-// import './perfil/password';
-// import './perfil/email';
-// import './responsive';
-
+import './auth/login';
+import './popup-app';
+import './perfil/password';
+import './perfil/email';
+import './responsive';
 import './auth/index';
