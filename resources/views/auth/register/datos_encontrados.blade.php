@@ -264,7 +264,9 @@
                                 value="{{ old('parroquia_id') }}">
 
                             @error('parroquia_id')
-                                <small class="text-red-500 text-xs mt-1 ml-1 block">{{ $message }}</small>
+                                <div class="text-red-500 text-center mt-1 text-xs">
+                                    ¡Atención! {{ $message }}
+                                </div>
                             @enderror
 
                             <div
@@ -281,6 +283,12 @@
                         <textarea rows="4" id="direccion" name="direccion"
                             class="w-full rounded-xl border-slate-200 p-4 text-sm focus:ring-2 focus:ring-blue-500 border resize-none transition-all outline-none"
                             placeholder="Av, Calle, Casa/Apto...">{{ old('direccion') }}</textarea>
+
+                        @error('direccion')
+                            <div class="text-red-500 text-center mt-1 text-xs">
+                                ¡Atención! {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                 </section>
 
