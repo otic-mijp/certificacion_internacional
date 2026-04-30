@@ -37,7 +37,7 @@ class UsuarioController extends Controller
     /**
      * Muestra el formulario para el cambio de correo electrónico.
      */
-    public function correo_electronico_nuevo(): View
+    public function email_nuevo(): View
     {
         $user = Auth::user();
         return view('site.perfil.cambiar_correo', compact('user'));

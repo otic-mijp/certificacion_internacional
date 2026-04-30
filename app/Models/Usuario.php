@@ -21,7 +21,7 @@ class Usuario extends Authenticatable
         'cedula',
         'fecha_nacimiento',
         'sexo',
-        'correo_electronico',
+        'email',
         'contrasena',
         'telefono_celular',
         'telefono_local',
@@ -54,11 +54,11 @@ class Usuario extends Authenticatable
     }
 
     /**
-     * IMPORTANTE: Decirle a Laravel que use 'correo_electronico' para notificaciones.
+     * IMPORTANTE: Decirle a Laravel que use 'email' para notificaciones.
      */
     public function routeNotificationForMail($notification)
     {
-        return $this->correo_electronico;
+        return $this->email;
     }
 
     /**

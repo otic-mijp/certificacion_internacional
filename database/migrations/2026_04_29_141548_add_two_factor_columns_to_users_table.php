@@ -14,7 +14,7 @@ return new class extends Migration
         // Accedemos a la tabla 'usuarios' que creamos anteriormente
         Schema::table('usuarios', function (Blueprint $table) {
             $table->text('secreto_doble_factor')
-                ->after('contrasena') // Se coloca justo después de la contraseña
+                ->after('contrasena') 
                 ->nullable();
 
             $table->text('codigos_recuperacion_doble_factor')

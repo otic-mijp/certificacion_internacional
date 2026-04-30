@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             'pais_id'           => 1, // Ahora estamos seguros de que existe el ID 1
             'parroquia_id'      => null, // Ponlo en null si no tienes el seeder de parroquias listo
             'profesion_id'      => 1,
-            'correo_electronico' => 'admin@certificacion.com',
+            'email' => 'admin@certificacion.com',
             'contrasena'        => Hash::make('admin1234'),
             'verificacion_correo_en' => now(),
         ]);

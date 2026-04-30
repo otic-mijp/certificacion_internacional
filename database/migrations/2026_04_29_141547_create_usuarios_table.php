@@ -16,23 +16,22 @@ return new class extends Migration
             $table->id();
             $table->char('letra_cedula', 1);
             $table->unsignedInteger('cedula')->unique();
-            $table->string('correo_electronico', 255)->unique()->index();
-            $table->string('nombres', 50);
+            $table->string('email', 255)->unique()->index();
+            $table->string('nombres', 100); // Aumentado para evitar truncado
             $table->string('primer_apellido', 100);
             $table->string('segundo_apellido', 100)->nullable();
             $table->date('fecha_nacimiento');
             $table->char('sexo', 1);
-            
-            // Ajuste: Cambiado de integer a string para evitar errores de longitud y ceros a la izquierda
-            $table->string('telefono_celular', 15); 
-            $table->string('telefono_local', 15); 
 
-            // Relaciones
+            // String es mejor para manejar formatos de teléfono
+            $table->string('telefono_celular', 20);
+            $table->string('telefono_local', 20)->nullable(); // Puede ser opcional
+
             $table->foreignId('estado_id')->constrained('estados');
             $table->foreignId('municipio_id')->constrained('municipios');
             $table->foreignId('parroquia_id')->constrained('parroquias');
             $table->foreignId('profesion_id')->constrained('profesiones');
-            
+
             $table->string('direccion', 500);
             $table->string('contrasena');
             $table->timestamp('verificacion_correo_en')->nullable();
@@ -42,7 +41,7 @@ return new class extends Migration
 
         // Tabla de Tokens para restablecer contraseña
         Schema::create('tokens_restablecimiento_contrasena', function (Blueprint $table) {
-            $table->string('correo_electronico')->primary();
+            $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('creado_at')->nullable();
         });

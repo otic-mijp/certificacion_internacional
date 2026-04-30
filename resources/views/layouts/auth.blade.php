@@ -11,8 +11,6 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-
-        /* Prevenimos saltos visuales al cargar */
         [x-cloak] {
             display: none !important;
         }

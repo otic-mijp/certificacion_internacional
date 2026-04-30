@@ -1,3 +1,3 @@
-import './login';
-import './password';
+// import './login';
+// import './password';
 import './selects-geograficos';

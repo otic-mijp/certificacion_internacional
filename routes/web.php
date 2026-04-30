@@ -40,7 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::controller(UsuarioController::class)->prefix('usuario')->name('usuario.')->group(function () {
         Route::get('/perfil', 'perfil')->name('perfil');
         Route::get('/cambio_preguntas', 'preguntas_seguridad')->name('preguntas');
-        Route::get('/cambio_correo', 'correo_electronico_nuevo')->name('correo');
+        Route::get('/cambio_correo', 'email_nuevo')->name('correo');
         Route::get('/cambio_clave', 'clave_nueva')->name('clave');
     });
 

@@ -97,7 +97,7 @@ class RegistroController extends Controller
             'sexo'             => $personaProcesada['sexo'],
 
             # Datos del request (también en minúsculas)
-            'correo_electronico' => mb_strtolower($request->input('correo_electronico')),
+            'email' => mb_strtolower($request->input('email')),
             'telefono_celular'   => $request->input('telefono_celular'),
             'telefono_local'     => $request->input('telefono_local'),
             'profesion_id'       => $request->input('profesion_id'),

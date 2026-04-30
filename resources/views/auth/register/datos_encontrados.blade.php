@@ -60,17 +60,17 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="flex flex-col gap-1">
                                     <label for="email" class="block text-xs font-bold text-slate-700 mb-2 uppercase">Correo electrónico:</label>
-                                    <input type="email" id="email" name="correo_electronico"
-                                        value="{{ old('correo_electronico') }}" placeholder="ejemplo@correo.com"
-                                        class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border @error('correo_electronico') border-red-500 @enderror">
-                                    @error('correo_electronico')
+                                    <input type="email" id="email" name="email"
+                                        value="{{ old('email') }}" placeholder="ejemplo@correo.com"
+                                        class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border @error('email') border-red-500 @enderror">
+                                    @error('email')
                                         <span class="px-2 text-[11px] text-red-500 mt-1">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="flex flex-col gap-1">
                                     <label for="email_confirmation" class="block text-xs font-bold text-slate-700 mb-2 uppercase">Confirmar correo:</label>
                                     <input type="email" id="email_confirmation" 
-                                        name="correo_electronico_confirmation" placeholder="Repita su correo"
+                                        name="email_confirmation" placeholder="Repita su correo"
                                         class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-slate-50/50">
                                 </div>
                             </div>
