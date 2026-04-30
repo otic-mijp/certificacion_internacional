@@ -24,8 +24,8 @@ return new class extends Migration
             $table->char('sexo', 1);
 
             // String es mejor para manejar formatos de teléfono
-            $table->string('telefono_celular', 20);
-            $table->string('telefono_local', 20)->nullable(); // Puede ser opcional
+            $table->string('telefono_celular', 35);
+            $table->string('telefono_local', 35);
 
             $table->foreignId('estado_id')->constrained('estados');
             $table->foreignId('municipio_id')->constrained('municipios');

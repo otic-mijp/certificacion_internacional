@@ -185,18 +185,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function rehidratarSelects() {
-        const estadoId = document.querySelector('#group-estado .input-real').value;
-        const municipioId = document.querySelector('#group-municipio .input-real').value;
+        // 1. Verificamos si al menos el grupo de estado existe. Si no, no estamos en la vista correcta.
+        const groupEstado = document.querySelector('#group-estado');
+        if (!groupEstado) return; // Salida prematura si no existe el elemento
 
+        const inputEstado = groupEstado.querySelector('.input-real');
+        if (!inputEstado) return;
+
+        const estadoId = inputEstado.value;
+
+        // 2. Si hay un estado seleccionado, intentamos cargar municipios
         if (estadoId) {
-            // Cargamos municipios y le pasamos el ID del municipio guardado para que lo seleccione
-            cargarHijos('municipio', estadoId, municipioId);
-        }
+            const groupMunicipio = document.querySelector('#group-municipio');
+            if (groupMunicipio) {
+                const inputMunicipio = groupMunicipio.querySelector('.input-real');
+                const municipioId = inputMunicipio ? inputMunicipio.value : null;
 
-        if (municipioId) {
-            const parroquiaId = document.querySelector('#group-parroquia .input-real').value;
-            // Cargamos parroquias y le pasamos el ID de la parroquia guardada
-            cargarHijos('parroquia', municipioId, parroquiaId);
+                // Cargamos municipios y pasamos el ID para pre-seleccionar
+                cargarHijos('municipio', estadoId, municipioId);
+
+                // 3. Si hay un municipio seleccionado, intentamos cargar parroquias
+                if (municipioId) {
+                    const groupParroquia = document.querySelector('#group-parroquia');
+                    if (groupParroquia) {
+                        const inputParroquia = groupParroquia.querySelector('.input-real');
+                        const parroquiaId = inputParroquia ? inputParroquia.value : null;
+
+                        cargarHijos('parroquia', municipioId, parroquiaId);
+                    }
+                }
+            }
         }
     }
 

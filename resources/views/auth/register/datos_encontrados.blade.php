@@ -16,7 +16,8 @@
                 </a>
             </div>
 
-            <form action="{{ route('registro.usuario.store') }}" method="POST" class="p-8 md:p-12 space-y-10">
+            <form action="{{ route('registro.usuario.store') }}" method="POST" id="formulario-login"
+                class="p-8 md:p-12 space-y-10">
                 @csrf
 
                 <input type="hidden" name="cedula" value="{{ $persona['numero_cedula'] }}">
@@ -87,11 +88,17 @@
                                 </div>
                                 <div class="flex flex-col gap-1">
                                     <label for="email_confirmation"
-                                        class="block text-xs font-bold text-slate-700 mb-2 uppercase">Confirmar
-                                        correo:</label>
+                                        class="block text-xs font-bold text-slate-700 mb-2 uppercase">
+                                        Confirmar correo:
+                                    </label>
                                     <input type="email" id="email_confirmation" name="email_confirmation"
-                                        placeholder="Repita su correo"
+                                        placeholder="Repita su correo" autocomplete="off"
                                         class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-slate-50/50 outline-none">
+
+                                    <!-- Mensaje de aviso (inicialmente oculto) -->
+                                    <p id="msg-no-paste" class="text-amber-600 text-[10px] font-bold uppercase mt-1 hidden">
+                                        * Por seguridad, escriba el correo manualmente.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -114,10 +121,12 @@
                             class="w-full rounded-xl border-slate-200 text-sm p-3 border bg-slate-100 cursor-not-allowed text-slate-500">
                     </div>
                     <div>
-                        <label for="telefono_celular" class="block text-xs font-bold text-slate-700 mb-2 uppercase">Teléfono
-                            celular:</label>
-                        <input type="number" id="telefono_celular" name="telefono_celular"
-                            value="{{ old('telefono_celular') }}" placeholder="04XX"
+                        <label for="telefono_celular" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
+                            Teléfono celular:
+                        </label>
+                        <!-- Cambiado type="tel" y placeholder internacional -->
+                        <input type="tel" id="telefono_celular" name="telefono_celular"
+                            value="{{ old('telefono_celular') }}" placeholder="+58 412 1234567"
                             class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border outline-none">
 
                         @error('telefono_celular')
@@ -128,10 +137,12 @@
                     </div>
 
                     <div>
-                        <label for="telefono_local" class="block text-xs font-bold text-slate-700 mb-2 uppercase">Teléfono
-                            local:</label>
-                        <input type="number" id="telefono_local" name="telefono_local"
-                            value="{{ old('telefono_local') }}" placeholder="02XX"
+                        <label for="telefono_local" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
+                            Teléfono local:
+                        </label>
+                        <!-- Cambiado type="tel" y placeholder internacional -->
+                        <input type="tel" id="telefono_local" name="telefono_local"
+                            value="{{ old('telefono_local') }}" placeholder="+58 212 1234567"
                             class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 outline-none border">
 
                         @error('telefono_local')
@@ -278,25 +289,26 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Nueva Contraseña -->
                         <div class="space-y-2">
-                            <label for="password"
+                            <label for="clave_usuario"
                                 class="block text-sm font-semibold text-slate-700 mb-2 uppercase tracking-wide">Nueva
                                 Contraseña:</label>
-                            <input type="password" id="password" name="contrasena" placeholder="********"
-                                class="w-full rounded-xl text-sm p-4 focus:ring-2 border transition-colors outline-none focus:ring-blue-500 
-            @error('contrasena') border-red-500 bg-red-50 @else border-slate-200 bg-slate-50 focus:bg-white @enderror">
+                            <div class="relative">
+                                <!-- Agregamos la clase 'input-password-group' para identificarlos -->
+                                <input type="password" id="clave_usuario" name="contrasena" placeholder="********"
+                                    class="input-password-group w-full rounded-xl border-slate-200 text-sm p-4 pr-12 focus:ring-2 border bg-slate-50 focus:bg-white transition-colors outline-none focus:ring-blue-500 @error('contrasena') border-red-500 @enderror">
 
-                            <div class="flex items-start gap-2 px-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="w-4 h-4 text-slate-400 mt-0.5">
-                                    <path fill-rule="evenodd"
-                                        d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <p class="text-[11px] text-slate-500 leading-tight">
-                                    La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, números y símbolos.
-                                </p>
+                                <!-- Este botón controlará AMBOS inputs -->
+                                <button type="button" id="toggle-all-passwords"
+                                    class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5 toggle-icon">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.644C3.301 8.844 7.218 6.25 12 6.25c4.781 0 8.699 2.601 9.964 5.428a1.012 1.012 0 0 1 0 .644c-1.265 2.827-5.183 5.428-12 5.428-4.782 0-8.699-2.601-9.965-5.428Z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                    </svg>
+                                </button>
                             </div>
-
                             @error('contrasena')
                                 <p class="text-red-500 text-xs mt-1 font-medium ml-1">{{ $message }}</p>
                             @enderror
@@ -304,12 +316,14 @@
 
                         <!-- Confirmar Contraseña -->
                         <div class="space-y-2">
-                            <label for="password_confirmation"
+                            <label for="confirmar_clave_usuario"
                                 class="block text-sm font-semibold text-slate-700 mb-2 uppercase tracking-wide">Confirmar
                                 Contraseña:</label>
-                            <input type="password" id="password_confirmation" name="contrasena_confirmation"
-                                placeholder="********"
-                                class="w-full rounded-xl border-slate-200 text-sm p-4 focus:ring-2 border bg-slate-50 focus:bg-white transition-colors outline-none focus:ring-blue-500">
+                            <div class="relative">
+                                <input type="password" id="confirmar_clave_usuario" name="contrasena_confirmation"
+                                    placeholder="********"
+                                    class="input-password-group w-full rounded-xl border-slate-200 text-sm p-4 focus:ring-2 border bg-slate-50 focus:bg-white transition-colors outline-none focus:ring-blue-500">
+                            </div>
                         </div>
                     </div>
 
@@ -341,7 +355,7 @@
 
                         <!-- Grupo de Acción (Derecha) -->
                         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                            <button type="reset"
+                            <button type="button" id="btn-limpiar-formulario"
                                 class="w-full cursor-pointer sm:w-auto px-5 py-3.5 text-sm font-semibold text-amber-600 bg-white border border-amber-200 hover:bg-amber-50 rounded-xl transition-all text-center flex items-center justify-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
