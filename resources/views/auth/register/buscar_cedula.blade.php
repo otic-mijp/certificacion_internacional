@@ -18,8 +18,9 @@
                     <span class="text-[11px] font-black uppercase tracking-widest">Volver</span>
                 </a>
             </section>
-            <form action="{{ route('consulta.cedula') }}" method="POST" class="space-y-8">
+            <form action="{{ route('buscar.cedula') }}" method="post" class="space-y-8">
                 @csrf
+                
                 <section class="space-y-4">
                     <label for="cedula" class="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
                         Número de Cédula de Identidad
@@ -33,7 +34,7 @@
                             <input type="text" id="cedula" name="numero_cedula" value="{{ old('numero_cedula') }}" placeholder="Ej. 12345678" class="w-full bg-transparent py-4 px-5 text-lg font-bold text-slate-800 outline-none placeholder:text-slate-300 tracking-[0.1em]" maxlength="9">
                         </div>
 
-                        <button type="submit" class="bg-[#233C7E] hover:bg-slate-900 text-white px-8 py-4 rounded-[20px] transition-all active:scale-95 shadow-lg shadow-blue-900/30 flex items-center justify-center gap-3 group min-w-[160px]">
+                        <button type="submit" class="bg-[#233C7E] cursor-pointer hover:bg-slate-900 text-white px-8 py-4 rounded-[20px] transition-all active:scale-95 shadow-lg shadow-blue-900/30 flex items-center justify-center gap-3 group min-w-[160px]">
                             <span class="font-bold uppercase tracking-wider text-xs">Consultar</span>
                             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                                 <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z" />

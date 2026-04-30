@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
             MunicipiosSeeder::class,
             ParroquiasSeeder::class,
             ProfesionesSeeder::class,
-            // UserSeeder::class,
         ]);
     }
 }

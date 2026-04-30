@@ -13,31 +13,29 @@ return new class extends Migration
     {
         // Tabla de Usuarios
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->id(); // Esta es la UNICA llave primaria
-
-            # Datos personales
-            $table->string('nombres', 55);
+            $table->id();
+            $table->char('letra_cedula', 1);
+            $table->unsignedInteger('cedula')->unique();
+            $table->string('correo_electronico', 255)->unique()->index();
+            $table->string('nombres', 50);
             $table->string('primer_apellido', 100);
             $table->string('segundo_apellido', 100)->nullable();
-
-            // CORRECCIÓN AQUÍ:
-            // Usamos integer o bigInteger, con unique() para evitar duplicados
-            $table->integer('cedula')->unique()->index();
-
             $table->date('fecha_nacimiento');
-            $table->string('sexo', 1)->nullable();
+            $table->char('sexo', 1);
+            
+            // Ajuste: Cambiado de integer a string para evitar errores de longitud y ceros a la izquierda
+            $table->string('telefono_celular', 15); 
+            $table->string('telefono_local', 15); 
 
-            # Relaciones Geográficas
-            $table->foreignId('pais_id')->constrained('paises');
-            $table->foreignId('parroquia_id')->nullable()->constrained('parroquias');
-
-            // Relación de Profesión
-            $table->foreignId('profesion_id')->nullable()->constrained('profesiones');
-
-            # Autenticacion
-            $table->string('correo_electronico')->unique();
-            $table->timestamp('verificacion_correo_en')->nullable();
+            // Relaciones
+            $table->foreignId('estado_id')->constrained('estados');
+            $table->foreignId('municipio_id')->constrained('municipios');
+            $table->foreignId('parroquia_id')->constrained('parroquias');
+            $table->foreignId('profesion_id')->constrained('profesiones');
+            
+            $table->string('direccion', 500);
             $table->string('contrasena');
+            $table->timestamp('verificacion_correo_en')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -52,21 +50,21 @@ return new class extends Migration
         // Tabla de Sesiones de usuario
         Schema::create('sesiones', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index(); // Laravel busca 'user_id'
-            $table->string('ip_address', 45)->nullable();     // Laravel busca 'ip_address'
-            $table->text('user_agent')->nullable();           // Laravel busca 'user_agent'
-            $table->longText('payload');                      // Laravel busca 'payload'
-            $table->integer('last_activity')->index();        // Laravel busca 'last_activity'
+            $table->foreignId('user_id')->nullable()->index()->constrained('usuarios')->onDelete('cascade');
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
         });
     }
 
     /**
-     * Revierte las migraciones (Elimina las tablas).
+     * Revierte las migraciones.
      */
     public function down(): void
     {
-        Schema::dropIfExists('usuarios');
-        Schema::dropIfExists('tokens_restablecimiento_contrasena');
         Schema::dropIfExists('sesiones');
+        Schema::dropIfExists('tokens_restablecimiento_contrasena');
+        Schema::dropIfExists('usuarios');
     }
 };

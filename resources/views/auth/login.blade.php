@@ -29,7 +29,7 @@
 
                 <div class="w-full md:w-7/12 p-6 md:p-16 relative bg-white">
                     <div class="absolute top-6 right-6 md:top-8 md:right-10">
-                        <a href="{{ route('register') }}"
+                        <a href="{{ route('consulta.cedula') }}"
                             class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-cyan-700 hover:text-black transition-colors border-b-2 border-cyan-100 hover:border-black pb-1">
                             Registrarse
                         </a>

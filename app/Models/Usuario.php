@@ -14,14 +14,22 @@ class Usuario extends Authenticatable
     protected $table = 'usuarios';
 
     protected $fillable = [
-        'nombre',
+        'nombres',
+        'primer_apellido',
+        'segundo_apellido',
+        'letra_cedula',
+        'cedula',
+        'fecha_nacimiento',
+        'sexo',
         'correo_electronico',
         'contrasena',
-        'pais_id',
+        'telefono_celular',
+        'telefono_local',
         'estado_id',
         'municipio_id',
         'parroquia_id',
         'profesion_id',
+        'direccion',
     ];
 
     protected $hidden = [
@@ -51,14 +59,6 @@ class Usuario extends Authenticatable
     public function routeNotificationForMail($notification)
     {
         return $this->correo_electronico;
-    }
-
-    /**
-     * Relación: El usuario pertenece a un País.
-     */
-    public function pais(): BelongsTo
-    {
-        return $this->belongsTo(Pais::class);
     }
 
     /**

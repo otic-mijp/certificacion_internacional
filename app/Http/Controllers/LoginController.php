@@ -7,6 +7,14 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
+    /**
+     * Muestra la página de login.
+     */
+    public function index(): View
+    {
+        return view('auth.login');
+    }
+
     public function requisitos(): View
     {
         return view('layouts.requisitos_normas');
