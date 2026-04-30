@@ -24,7 +24,7 @@ class RegistroUsuarioRequest extends FormRequest
             'sexo'             => ['required', 'in:M,F'],
             'email'            => ['required', 'email', 'confirmed', 'max:255', 'unique:usuarios,email'],
             'telefono_celular' => ['required', 'string', 'min:7', 'max:15'],
-            'telefono_local'   => ['nullable', 'string', 'min:7', 'max:15'],
+            'telefono_local'   => ['required', 'string', 'min:7', 'max:15'],
 
             'profesion_id'     => ['required', 'exists:profesiones,id'],
             'estado_id'        => ['required', 'exists:estados,id'],
@@ -51,16 +51,21 @@ class RegistroUsuarioRequest extends FormRequest
             'fecha_nacimiento.required'  => 'La fecha de nacimiento es obligatoria.',
             'sexo.required'              => 'El sexo es obligatorio.',
             'sexo.in'                    => 'El sexo seleccionado no es válido.',
-
+            
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.confirmed' => 'La confirmación del correo no coincide.',
             'email.unique'   => 'Este correo ya está en uso.',
-
+            
             'telefono_celular.required'   => 'El teléfono celular es obligatorio.',
             'telefono_local.required'   => 'El teléfono local es obligatorio.',
+            
+            'estado_id.required'            => 'El estado es obligatorio para el registro.',
+            'municipio_id.required'         => 'El municipio es obligatorio para el registro.',
 
             'profesion_id.required'       => 'Debe seleccionar una profesión.',
             'parroquia_id.required'       => 'La parroquia es obligatoria para el registro.',
+
+            'direccion.required'          => 'La dirección de su residencia es obligatoria.',
 
             'contrasena.required'           => 'La contraseña es obligatoria.',
             'contrasena.confirmed'          => 'Las contraseñas no coinciden.',
