@@ -91,7 +91,7 @@
                                         class="block text-xs font-bold text-slate-700 mb-2 uppercase">
                                         Confirmar correo:
                                     </label>
-                                    <input type="email" id="email_confirmation" name="email_confirmation"
+                                    <input type="email" id="email_confirmation" name="email_confirmation" value="{{ old('email_confirmation') }}"
                                         placeholder="Repita su correo" autocomplete="off"
                                         class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-slate-50/50 outline-none">
 
