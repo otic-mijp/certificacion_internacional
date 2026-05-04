@@ -257,8 +257,9 @@
 
                             <input type="text"
                                 class="buscador w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-white outline-none"
-                                placeholder="Seleccione..." autocomplete="off"
-                                @if (!old('parroquia_id')) disabled @endif value="">
+                                placeholder="Seleccione..." autocomplete="off" {{-- CAMBIO AQUÍ: Habilitar si hay old de municipio o parroquia --}}
+                                @if (!old('municipio_id') && !old('parroquia_id')) disabled @endif
+                                value="{{ old('parroquia_id') ? mb_strtoupper($parroquiaSeleccionada->nombre ?? '') : '' }}">
 
                             <input type="hidden" name="parroquia_id" class="input-real"
                                 value="{{ old('parroquia_id') }}">

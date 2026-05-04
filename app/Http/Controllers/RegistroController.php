@@ -55,12 +55,22 @@ class RegistroController extends Controller
         $estados = Estado::all();
         $profesiones = Profesion::all();
 
-        // Variables para selects dependientes (vacíos en carga inicial)
-        $municipios = collect();
-        $parroquias = collect();
-        $estadoSeleccionado = null;
-        $municipioSeleccionado = null;
-        $parroquiaSeleccionada = null;
+        // Variables para selects dependientes
+        $estadoSeleccionado = old('estado_id') ? Estado::find(old('estado_id')) : null;
+        $municipioSeleccionado = old('municipio_id') ? Municipio::find(old('municipio_id')) : null;
+        $parroquiaSeleccionada = old('parroquia_id') ? Parroquia::find(old('parroquia_id')) : null;
+
+        $municipios = $estadoSeleccionado
+            ? Municipio::where('estado_id', $estadoSeleccionado->id)
+                ->orderBy('nombre', 'asc')
+                ->get()
+            : collect();
+
+        $parroquias = $municipioSeleccionado
+            ? Parroquia::where('municipio_id', $municipioSeleccionado->id)
+                ->orderBy('nombre', 'asc')
+                ->get()
+            : collect();
 
         return view('auth.register.datos_encontrados', compact(
             'persona',

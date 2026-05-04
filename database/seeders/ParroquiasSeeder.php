@@ -52,6 +52,350 @@ class ParroquiasSeeder extends Seeder
                 'simón rodríguez' => ['edmundo barrios', 'miguel otero silva'],
                 'sir arthur mcgregor' => ['el chaparro', 'tomás alfaro calatrava'],
             ],
+            'apure' => [
+                'achaguas' => [
+                    'achaguas',
+                    'apadure',
+                    'arihara',
+                    'el yagual',
+                    'guachara',
+                    'mucuritas',
+                    'queseras del medio'
+                ],
+                'biruaca' => [
+                    'biruaca'
+                ],
+                'muñoz' => [
+                    'bruzual',
+                    'mantecal',
+                    'quintero',
+                    'rincón hondo',
+                    'san vicente'
+                ],
+                'páez' => [
+                    'guasdualito',
+                    'amparo',
+                    'elzaraza',
+                    'palmarito',
+                    'san camilo'
+                ],
+                'pedro camejo' => [
+                    'san juan de payara',
+                    'cunaviche',
+                    'codazzi'
+                ],
+                'rómulo gallegos' => [
+                    'elorza',
+                    'la trinidad de orichuna'
+                ],
+                'san fernando' => [
+                    'san fernando',
+                    'peñalver',
+                    'el recreo',
+                    'san rafael de atamaica'
+                ],
+            ],
+            'aragua' => [
+                'bolívar' => ['san mateo'],
+                'camatagua' => ['camatagua', 'carmen de cura'],
+                'francisco linares alcántara' => ['santa rita', 'francisco de miranda', 'monseñor feliciano gonzález'],
+                'girardot' => ['pedro josé ovalles', 'joaquín crespo', 'josé casanova godoy', 'madre maría de san josé', 'andrés eloy blanco', 'los tacarigua', 'las delicias', 'choroní'],
+                'josé ángel lamas' => ['santa cruz'],
+                'josé félix ribas' => ['la victoria', 'castor nieves ríos', 'las guacamayas', 'pao de zárate', 'zuata'],
+                'josé rafael revenga' => ['el consejo'],
+                'libertador' => ['palo negro', 'san martín de porres'],
+                'mario briceño iragorry' => ['el limón', 'caña de azúcar'],
+                'ocumare de la costa de oro' => ['ocumare de la costa'],
+                'san casimiro' => ['san casimiro', 'güiripa', 'ollas de caramacate', 'valle morín'],
+                'san sebastián' => ['san sebastián'],
+                'santiago mariño' => ['turmero', 'arévalo aponte', 'chuao', 'samán de güere', 'alfredo pacheco miranda'],
+                'santos michelena' => ['las tejerías', 'tiara'],
+                'sucre' => ['cagua', 'bella vista'],
+                'tovar' => ['colonia tovar'],
+                'urdaneta' => ['barbacoas', 'san francisco de cara', 'taguay', 'las peñitas'],
+                'zamora' => ['villa de cura', 'magdaleno', 'san francisco de asís', 'valles de tucutunemo', 'augusto mijares'],
+            ],
+            'barinas' => [
+                'alberto arvelo torrealba' => [
+                    'sabaneta',
+                    'rodríguez domínguez'
+                ],
+                'andrés eloy blanco' => [
+                    'el cantón',
+                    'santa cruz de guacas',
+                    'puerto vivas'
+                ],
+                'antonio josé de sucre' => [
+                    'socopó',
+                    'nicolás pulido',
+                    'andrés bello'
+                ],
+                'arismendi' => [
+                    'arismendi',
+                    'guadarrama',
+                    'la unión',
+                    'san antonio'
+                ],
+                'barinas' => [
+                    'barinas',
+                    'alfredo arvelo larriva',
+                    'san silvestre',
+                    'santa inés',
+                    'santa lucía',
+                    'torumos',
+                    'el carmen',
+                    'rómulo betancourt',
+                    'ramón ignacio méndez',
+                    'alto barinas',
+                    'manuel palacio fajardo',
+                    'juan antonio rodríguez domínguez',
+                    'dominga ortiz de páez'
+                ],
+                'bolívar' => [
+                    'barinitas',
+                    'altamira de cáceres',
+                    'calderas'
+                ],
+                'cruz paredes' => [
+                    'barrancas',
+                    'el socorro',
+                    'mazparrito'
+                ],
+                'ezequiel zamora' => [
+                    'santa bárbara',
+                    'pedro briceño méndez',
+                    'ramón ignacio méndez',
+                    'josé ignacio del pumar'
+                ],
+                'obispos' => [
+                    'obispos',
+                    'guasimitos',
+                    'el real',
+                    'la luz'
+                ],
+                'pedraza' => [
+                    'ciudad bolivia',
+                    'josé félix ribas',
+                    'páez',
+                    'santa cruz del guaca'
+                ],
+                'rojas' => [
+                    'libertad',
+                    'dolores',
+                    'santa rosa',
+                    'palacio fajardo'
+                ],
+                'sosa' => [
+                    'ciudad de nutrias',
+                    'el regalado',
+                    'puerto de nutrias',
+                    'santa catalina'
+                ],
+            ],
+            'bolívar' => [
+                'angostura del orinoco' => [
+                    'catedral',
+                    'agua salada',
+                    'la sabanita',
+                    'vista hermosa',
+                    'marhuanta',
+                    'josé antonio páez',
+                    'orinoco',
+                    'panapana',
+                    'zea'
+                ],
+                'caroní' => [
+                    'cachamay',
+                    'chirica',
+                    'dalla costa',
+                    'once de abril',
+                    'simón bolívar',
+                    'unare',
+                    'universidad',
+                    'vista al sol',
+                    'pozo verde',
+                    'yocoima',
+                    'san félix'
+                ],
+                'cedeño' => [
+                    'caicara del orinoco',
+                    'ascanio rodríguez',
+                    'altagracia',
+                    'la urbana',
+                    'pijiguaos',
+                    'quiero'
+                ],
+                'el callao' => [
+                    'el callao'
+                ],
+                'gran sabana' => [
+                    'santa elena de uairén',
+                    'ikabarú'
+                ],
+                'padre pedro chién' => [
+                    'el palmito'
+                ],
+                'piar' => [
+                    'upata',
+                    'andrés eloy blanco',
+                    'pedro coba'
+                ],
+                'angostura' => [
+                    'ciudad piar',
+                    'san francisco',
+                    'barceloneta',
+                    'santa bárbara'
+                ],
+                'roscio' => [
+                    'guasipati',
+                    'salóm'
+                ],
+                'sifontes' => [
+                    'tumeremo',
+                    'dalla costa',
+                    'san isidro'
+                ],
+                'sucre' => [
+                    'maripa',
+                    'aripao',
+                    'guarataro',
+                    'las majestades',
+                    'moitaco'
+                ],
+            ],
+            'carabobo' => [
+                'bejuma' => [
+                    'bejuma',
+                    'canoabo',
+                    'simón bolívar'
+                ],
+                'carlos arvelo' => [
+                    'güigüe',
+                    'belén',
+                    'tacarigua'
+                ],
+                'diego ibarra' => [
+                    'mariara',
+                    'aguas calientes'
+                ],
+                'guacara' => [
+                    'guacara',
+                    'ciudad alianza',
+                    'yagua'
+                ],
+                'juan josé mora' => [
+                    'morón',
+                    'yagua'
+                ],
+                'libertador' => [
+                    'tocuyito',
+                    'independencia'
+                ],
+                'los guayos' => [
+                    'los guayos'
+                ],
+                'miranda' => [
+                    'miranda'
+                ],
+                'montalbán' => [
+                    'montalbán'
+                ],
+                'naguanagua' => [
+                    'naguanagua'
+                ],
+                'puerto cabello' => [
+                    'bartolomé salóm',
+                    'democracia',
+                    'fraternidad',
+                    'goaigoaza',
+                    'juan josé flores',
+                    'unión',
+                    'borburata',
+                    'patanemo'
+                ],
+                'san diego' => [
+                    'san diego'
+                ],
+                'san joaquín' => [
+                    'san joaquín'
+                ],
+                'valencia' => [
+                    'candelaria',
+                    'catedral',
+                    'el socorro',
+                    'miguel peña',
+                    'rafael urdaneta',
+                    'san blas',
+                    'san josé',
+                    'santa rosa',
+                    'negro primero'
+                ],
+            ],
+            'cojedes' => [
+                'anzoátegui' => [
+                    'cojedes',
+                    'juan de mata suárez'
+                ],
+                'falcón' => [
+                    'tinaquillo'
+                ],
+                'girardot' => [
+                    'el baúl',
+                    'sucre'
+                ],
+                'lima blanco' => [
+                    'macapo',
+                    'la aguadita'
+                ],
+                'pao de san juan bautista' => [
+                    'el pao'
+                ],
+                'ricaurte' => [
+                    'libertad',
+                    'santa cruz'
+                ],
+                'rómulo gallegos' => [
+                    'las vegas'
+                ],
+                'san carlos' => [
+                    'san carlos de austria',
+                    'juan ángel bravo',
+                    'manuel manrique'
+                ],
+                'tinaco' => [
+                    'general en jefe josé laurencio silva'
+                ],
+            ],
+            'delta amacuro' => [
+                'antonio díaz' => [
+                    'curiapo',
+                    'almirante luis brión',
+                    'areo',
+                    'manuel renaud',
+                    'padre barral',
+                    'sacupana'
+                ],
+                'casacoima' => [
+                    'sierra imataca',
+                    'juan bautista arismendi',
+                    'manuel piar',
+                    'rómulo gallegos'
+                ],
+                'pedernales' => [
+                    'pedernales',
+                    'luis beltrán prieto figueroa'
+                ],
+                'tucupita' => [
+                    'san josé',
+                    'josé vidal marcano',
+                    'juan millán',
+                    'leonardo ruíz pineda',
+                    'mariscal antonio josé de sucre',
+                    'monseñor argimiro garcía',
+                    'san rafael',
+                    'virgen del valle'
+                ],
+            ],
             'distrito capital' => [
                 'libertador' => ['santa rosalía', 'el recreo', 'el valle', 'coche', 'caricuao', 'macarao', 'antímano', 'la vega', 'el paraíso', 'san juan', 'santa teresa', '23 de enero', 'la pastora', 'altagracia', 'san josé', 'san bernardino', 'catedral', 'la candelaria', 'el junquito', 'sucre', 'san agustín', 'santa mónica'],
             ],

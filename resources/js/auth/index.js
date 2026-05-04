@@ -1,6 +1,6 @@
 // import './login';
-import './password';
+// import './password';
 import './selects-geograficos';
-import './btn-reset';
-import './correo-bloq';
+// import './btn-reset';
+// import './correo-bloq';
 import './telefonos-formateo';

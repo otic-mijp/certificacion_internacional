@@ -114,19 +114,21 @@ document.addEventListener("DOMContentLoaded", function () {
         const lista = targetGroup.querySelector('.lista');
         const inputReal = targetGroup.querySelector('.input-real');
 
+        // Si no hay un ID para seleccionar (carga manual), reseteamos los campos
         if (!idParaSeleccionar) {
             buscador.value = "";
             inputReal.value = "";
         }
 
-        // 1. Limpiar el campo actual
+        // Preparar el estado visual del selector
         buscador.disabled = false;
-        buscador.classList.remove('bg-gray-50', 'bg-gray-100', 'cursor-not-allowed');
+        buscador.classList.remove('bg-gray-100', 'cursor-not-allowed');
         buscador.classList.add('bg-white');
         lista.innerHTML = '<div class="p-3 text-sm text-slate-500 italic">Cargando...</div>';
 
-        // 2. Limpieza en cascada: Si cargo municipios, debo resetear y bloquear parroquias
-        if (tipo === 'municipio') {
+        // Limpieza en cascada: si cambiamos de municipio manualmente, reseteamos parroquia.
+        // En rehidratación con idParaSeleccionar no queremos borrar el old de parroquia.
+        if (tipo === 'municipio' && !idParaSeleccionar) {
             const parroquiaGroup = document.getElementById('group-parroquia');
             if (parroquiaGroup) {
                 const pBuscador = parroquiaGroup.querySelector('.buscador');
@@ -139,8 +141,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            // Ajuste de ruta plural para Laravel
             const segmentoRuta = tipo === 'municipio' ? 'municipios' : 'parroquias';
+            // URL dinámica basada en tu estructura actual
             const response = await fetch(`http://localhost/certificacion_internacional/public/ubicacion/${segmentoRuta}/${padreId}`);
             const datos = await response.json();
 
@@ -151,29 +153,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // Iterar sobre los datos y construir la lista
             datos.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'opcion-item p-3 text-sm cursor-pointer hover:bg-indigo-50 text-slate-600 border-b border-slate-50 last:border-0';
                 div.dataset.value = item.id;
                 div.textContent = item.nombre.toUpperCase();
 
-                // Si coincide con el valor que Laravel recordó, lo escribimos en el buscador visual
-                if (idParaSeleccionar && item.id == idParaSeleccionar) {
+                // CLAVE: Si el ID coincide con el 'old', actualizamos el buscador visual
+                // Usamos String() para asegurar que la comparación sea exitosa (ej: "1" === "1")
+                if (idParaSeleccionar && String(item.id) === String(idParaSeleccionar)) {
                     buscador.value = item.nombre.toUpperCase();
+                    inputReal.value = item.id;
                 }
 
                 lista.appendChild(div);
             });
 
-            // Re-añadir el div de no-results
+            // Añadir el contenedor de "sin resultados" para el filtro manual
             const nr = document.createElement('div');
             nr.className = 'no-results hidden p-4 text-sm text-slate-400 italic text-center bg-slate-50';
             nr.innerHTML = 'No hay resultados 🔍';
             lista.appendChild(nr);
 
         } catch (error) {
-            console.error("Error al cargar:", error);
-            lista.innerHTML = '<div class="p-3 text-sm text-red-500">Error al cargar datos</div>';
+            console.error("Error en el fetch:", error);
+            lista.innerHTML = '<div class="p-3 text-sm text-red-500">Error al obtener datos</div>';
         }
     }
 
@@ -184,39 +189,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    function rehidratarSelects() {
-        // 1. Verificamos si al menos el grupo de estado existe. Si no, no estamos en la vista correcta.
+    async function rehidratarSelects() {
         const groupEstado = document.querySelector('#group-estado');
-        if (!groupEstado) return; // Salida prematura si no existe el elemento
+        if (!groupEstado) return;
 
         const inputEstado = groupEstado.querySelector('.input-real');
-        if (!inputEstado) return;
+        const estadoId = inputEstado ? inputEstado.value : null;
 
-        const estadoId = inputEstado.value;
-
-        // 2. Si hay un estado seleccionado, intentamos cargar municipios
+        // 1. Si hay un Estado, cargamos sus Municipios
         if (estadoId) {
             const groupMunicipio = document.querySelector('#group-municipio');
+            const groupParroquia = document.querySelector('#group-parroquia');
+            const municipioId = groupMunicipio ? groupMunicipio.querySelector('.input-real')?.value : null;
+            const parroquiaId = groupParroquia ? groupParroquia.querySelector('.input-real')?.value : null;
+
             if (groupMunicipio) {
-                const inputMunicipio = groupMunicipio.querySelector('.input-real');
-                const municipioId = inputMunicipio ? inputMunicipio.value : null;
+                console.log("Rehidratando Municipios para el estado:", estadoId);
+                await cargarHijos('municipio', estadoId, municipioId);
+            }
 
-                // Cargamos municipios y pasamos el ID para pre-seleccionar
-                cargarHijos('municipio', estadoId, municipioId);
-
-                // 3. Si hay un municipio seleccionado, intentamos cargar parroquias
-                if (municipioId) {
-                    const groupParroquia = document.querySelector('#group-parroquia');
-                    if (groupParroquia) {
-                        const inputParroquia = groupParroquia.querySelector('.input-real');
-                        const parroquiaId = inputParroquia ? inputParroquia.value : null;
-
-                        cargarHijos('parroquia', municipioId, parroquiaId);
-                    }
-                }
+            // 2. Si hay un Municipio y una parroquia antigua, cargamos sus Parroquias
+            if (municipioId) {
+                console.log("Rehidratando Parroquias para el municipio:", municipioId);
+                await cargarHijos('parroquia', municipioId, parroquiaId);
             }
         }
     }
 
     rehidratarSelects();
+
+
 });
