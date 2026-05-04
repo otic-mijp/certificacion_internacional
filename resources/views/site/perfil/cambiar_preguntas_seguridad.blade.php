@@ -5,7 +5,7 @@
 @section('content')
     <div class="bg-slate-50 flex items-center justify-center p-4">
         <div
-            class="max-w-6xl w-full bg-white rounded-[3rem] shadow-2xl shadow-slate-200/60 overflow-hidden border border-slate-300">
+            class="max-w-6xl w-full bg-white rounded-[3rem] overflow-hidden border border-slate-400">
 
             <div class="flex flex-col lg:flex-row">
                 <!-- PANEL IZQUIERDO: Preguntas Actuales -->

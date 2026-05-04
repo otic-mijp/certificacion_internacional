@@ -5,7 +5,7 @@
 @section('content')
     <div class="flex items-center justify-center p-4">
         <div
-            class="max-w-4xl w-full rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xl flex flex-col md:flex-row">
+            class="max-w-4xl w-full rounded-3xl overflow-hidden border border-slate-400 bg-white flex flex-col md:flex-row">
 
             {{-- Lado Izquierdo: Información y Estado Actual --}}
             <div
