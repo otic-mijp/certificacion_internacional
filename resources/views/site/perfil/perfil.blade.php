@@ -34,7 +34,7 @@
             </div>
         </a>
 
-        <a href="{{ route('usuario.correo') }}"
+        <a href="{{ route('usuario.email') }}"
             class="group relative bg-white border border-slate-200 rounded-[40px] p-8 shadow-xl hover:shadow-2xl transition-all hover:-translate-y-2 overflow-hidden">
             <div
                 class="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-[80px] transition-colors group-hover:bg-orange-100">

@@ -92,4 +92,12 @@ class Usuario extends Authenticatable
     {
         return $this->belongsTo(Profesion::class, 'profesion_id');
     }
+
+    /**
+     * Relacion para respuestas de seguridad
+     */
+    public function respuestasSeguridad()
+    {
+        return $this->hasMany(RespuestaSeguridad::class);
+    }
 }

@@ -7,9 +7,9 @@
 
         <div class="text-center mb-10">
             <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
-                Bienvenido, <span class="text-[#233C7E]">{{ auth()->user()->name }}</span>
+                Bienvenido, <span class="text-[#233C7E] capitalize">{{ auth()->user()->nombres }} {{ auth()->user()->primer_apellido }} {{ auth()->user()->segundo_apellido }}</span>
             </h1>
-            <p class="text-slate-500 font-medium mt-4 text-lg max-w-2xl">
+            <p class="text-slate-500 font-medium mt-4 text-lg">
                 Sistema de Gestión de Certificación de Antecedentes Penales
             </p>
         </div>
