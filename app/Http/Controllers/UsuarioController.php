@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PerfilUsuario\CambioClaveRequest;
+use App\Http\Requests\PerfilUsuario\CambioCorreoRequest;
+use App\Http\Requests\PerfilUsuario\CambioPreguntasRequest;
 use App\Models\DVPersona;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
@@ -20,8 +22,7 @@ class UsuarioController extends Controller
     {
 
         $id_persona = Auth::user()->id_persona;
-        $data = DVPersona::select('nombres', 'primer_apellido', 'segundo_apellido')
-            ->find($id_persona);
+        $data = DVPersona::select('nombres', 'primer_apellido', 'segundo_apellido')->find($id_persona);
 
         $usuario = Auth::user()->estatus_contrasena_reiniciada;
 
@@ -47,22 +48,14 @@ class UsuarioController extends Controller
         return view('site.perfil.cambiar_preguntas_seguridad', compact('user', 'preguntas_disponibles'));
     }
 
-    public function preguntas_update(Request $request)
+    public function preguntas_update(CambioPreguntasRequest $request)
     {
-
-        $request->validate([
-            'pregunta_1_id' => 'required|exists:preguntas_seguridad,id',
-            'respuesta_1'   => 'required|string|min:3|max:255',
-            'pregunta_2_id' => 'required|exists:preguntas_seguridad,id|different:pregunta_1_id',
-            'respuesta_2'   => 'required|string|min:3|max:255',
-        ]);
 
         try {
 
             DB::transaction(function () use ($request) {
 
                 $user = auth()->user();
-
                 $user->respuestasSeguridad()->delete();
 
                 $user->respuestasSeguridad()->create([
@@ -77,8 +70,11 @@ class UsuarioController extends Controller
             });
 
             return back()->with('success', 'Tus preguntas de seguridad han sido configuradas con éxito.');
+
         } catch (\Exception $e) {
+
             return back()->withErrors(['error' => 'Hubo un problema al guardar los datos. Inténtalo de nuevo.']);
+
         }
     }
 
@@ -88,21 +84,12 @@ class UsuarioController extends Controller
         return view('site.perfil.cambiar_correo', compact('email'));
     }
 
-    public function email_update(Request $request)
+    public function email_update(CambioCorreoRequest $request)
     {
 
         $request->merge([
             'email' => Str::lower($request->email),
             'email_confirmation' => Str::lower($request->email_confirmation),
-        ]);
-
-        $request->validate([
-            'email' => 'required|email|unique:usuarios,email|confirmed',
-        ], [
-            'email.required' => 'El nuevo correo es obligatorio.',
-            'email.email' => 'Por favor, ingresa un formato de correo válido.',
-            'email.unique' => 'Este correo ya está registrado por otro usuario.',
-            'email.confirmed' => 'La confirmación del correo no coincide.',
         ]);
 
         $user = Auth::user();
