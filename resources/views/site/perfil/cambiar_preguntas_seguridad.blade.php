@@ -60,7 +60,7 @@
                                     <label class="block text-[10px] font-black text-[#233C7E] uppercase tracking-widest ml-1">
                                         Pregunta 1:
                                     </label>
-                                    <select name="pregunta_1_id" class="w-full px-4 py-4 bg-slate-50 border-2 rounded-2xl text-sm font-bold text-slate-700 outline-none transition-all  {{ $errors->has('pregunta_1_id') ? 'border-red-500 ring-4 ring-red-500/5' : 'border-slate-400 focus:border-[#233C7E]' }}">
+                                    <select name="pregunta_1_id" required class="w-full px-4 py-4 bg-slate-50 border-2 rounded-2xl text-sm font-bold text-slate-700 outline-none transition-all  {{ $errors->has('pregunta_1_id') ? 'border-red-500 ring-4 ring-red-500/5' : 'border-slate-400 focus:border-[#233C7E]' }}">
                                         <option value="" selected disabled>Seleccione...</option>
                                         @foreach ($preguntas_disponibles as $pregunta)
                                             <option value="{{ $pregunta->id }}"
@@ -77,7 +77,7 @@
                                     <label class="block text-[10px] font-black text-[#233C7E] uppercase tracking-widest ml-1">
                                         Nueva Pregunta 2
                                     </label>
-                                    <select name="pregunta_2_id" class="w-full px-4 py-4 bg-slate-50 border-2 rounded-2xl text-sm font-bold text-slate-700 outline-none transition-all  {{ $errors->has('pregunta_2_id') ? 'border-red-500 ring-4 ring-red-500/5' : 'border-slate-400 focus:border-[#233C7E]' }}">
+                                    <select name="pregunta_2_id" required class="w-full px-4 py-4 bg-slate-50 border-2 rounded-2xl text-sm font-bold text-slate-700 outline-none transition-all  {{ $errors->has('pregunta_2_id') ? 'border-red-500 ring-4 ring-red-500/5' : 'border-slate-400 focus:border-[#233C7E]' }}">
                                         <option value="" selected disabled>Seleccione...</option>
                                         @foreach ($preguntas_disponibles as $pregunta)
                                             <option value="{{ $pregunta->id }}" {{ old('pregunta_2_id') == $pregunta->id ? 'selected' : '' }}>
@@ -96,7 +96,7 @@
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                                         Nueva Respuesta 1:
                                     </label>
-                                    <input type="text" name="respuesta_1" value="{{ old('respuesta_1') }}" placeholder="Defina su respuesta" class="w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl outline-none transition-all  {{ $errors->has('respuesta_1') ? 'border-red-500 bg-red-50' : 'border-slate-400 focus:bg-white focus:border-[#233C7E]' }}">
+                                    <input type="text" name="respuesta_1" value="{{ old('respuesta_1') }}" required placeholder="Defina su respuesta" class="w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl outline-none transition-all  {{ $errors->has('respuesta_1') ? 'border-red-500 bg-red-50' : 'border-slate-400 focus:bg-white focus:border-[#233C7E]' }}">
                                     @error('respuesta_1')
                                         <p class="text-[12px] text-red-500 font-bold mt-1 ml-1">{{ $message }}</p>
                                     @enderror
@@ -105,7 +105,7 @@
                                     <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">
                                         Nueva Respuesta 2:
                                     </label>
-                                    <input type="text" name="respuesta_2" value="{{ old('respuesta_2') }}" placeholder="Defina su respuesta" class="w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl outline-none transition-all  {{ $errors->has('respuesta_2') ? 'border-red-500 bg-red-50' : 'border-slate-400 focus:bg-white focus:border-[#233C7E]' }}">
+                                    <input type="text" name="respuesta_2" value="{{ old('respuesta_2') }}" required placeholder="Defina su respuesta" class="w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl outline-none transition-all  {{ $errors->has('respuesta_2') ? 'border-red-500 bg-red-50' : 'border-slate-400 focus:bg-white focus:border-[#233C7E]' }}">
                                     @error('respuesta_2')
                                         <p class="text-[12px] text-red-500 font-bold mt-1 ml-1">{{ $message }}</p>
                                     @enderror
