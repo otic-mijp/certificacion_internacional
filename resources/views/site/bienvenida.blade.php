@@ -7,7 +7,8 @@
 
         <div class="text-center mb-10">
             <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight">
-                Bienvenido, <span class="text-[#233C7E] capitalize">{{ auth()->user()->nombres }} {{ auth()->user()->primer_apellido }} {{ auth()->user()->segundo_apellido }}</span>
+                Bienvenido, <span class="text-[#233C7E] capitalize">{{ auth()->user()->nombres }}
+                    {{ auth()->user()->primer_apellido }} {{ auth()->user()->segundo_apellido }}</span>
             </h1>
             <p class="text-slate-500 font-medium mt-4 text-lg">
                 Sistema de Gestión de Certificación de Antecedentes Penales
@@ -58,18 +59,13 @@
         </div>
     </div>
 
-    <section id="modal-container" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
+    <section id="modal-container"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500 ease-out">
+
         <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
 
-        <div
-            class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all">
-
-            <button id="modal-close-icon"
-                class="absolute top-4 right-4 z-10 bg-white/80 backdrop-blur-md p-2 rounded-full shadow-sm">
-                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+        <div id="modal-content"
+            class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all duration-500 ease-out scale-95 opacity-0">
 
             <div class="flex flex-col">
                 <img src="{{ asset('img/informacion.jpg') }}" alt="Información Importante"
@@ -84,7 +80,7 @@
                     </p>
 
                     <button id="modal-confirm-button"
-                        class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
+                        class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all hover:bg-[#1a2d5f]">
                         Entendido, continuar
                     </button>
                 </div>

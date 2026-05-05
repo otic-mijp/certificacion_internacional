@@ -1,8 +1,9 @@
 @extends('layouts.auth')
 
 @section('content')
-    <article class="min-h-screen flex items-center justify-center bg-slate-50 p-6">
-        <div class="max-w-md w-full bg-white border border-slate-200 rounded-[40px] shadow-2xl overflow-hidden">
+    <article class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div
+            class="w-full max-w-5xl bg-white shadow-2xl rounded-[2rem] overflow-hidden border border-slate-200 animate-fade-up">
 
             <section class="bg-emerald-50 px-8 py-10 text-center border-b border-emerald-100">
                 <div class="inline-flex p-4 bg-white rounded-3xl shadow-sm mb-6">
@@ -52,5 +53,5 @@
                 </section>
             </section>
         </div>
-    </article>
-@endsection
+        </article>
+    @endsection

@@ -17,7 +17,7 @@ use App\Mail\RegistroBienvenidaMail;
 use Illuminate\Support\Facades\Mail;
 
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
-use App\Http\Requests\RegistroUsuarioRequest;
+use App\Http\Requests\Auth\RegistroUsuarioRequest;
 
 class RegistroController extends Controller
 {

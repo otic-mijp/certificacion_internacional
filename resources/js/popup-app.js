@@ -1,31 +1,30 @@
-// document.addEventListener("DOMContentLoaded", () => {
-    
-//     // Referencias a los elementos usando los nuevos IDs
-//     const modalContainer = document.getElementById('modal-container');
-//     const modalBackdrop = document.getElementById('modal-backdrop');
-//     const modalCloseIcon = document.getElementById('modal-close-icon');
-//     const modalConfirmButton = document.getElementById('modal-confirm-button');
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('modal-container');
+    const content = document.getElementById('modal-content');
+    const btn = document.getElementById('modal-confirm-button');
 
-//     // Función para mostrar el modal
-//     const showModal = () => {
-//         if (modalContainer) {
-//             modalContainer.classList.remove('hidden');
-//         }
-//     };
+    // Si NO existen los elementos, salimos de la función sin hacer nada
+    if (!container || !content) return;
 
-//     // Función para ocultar el modal
-//     const hideModal = () => {
-//         if (modalContainer) {
-//             modalContainer.classList.add('hidden');
-//         }
-//     };
+    const openModal = () => {
+        container.classList.remove('opacity-0', 'pointer-events-none');
+        container.classList.add('opacity-100');
+        
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+    };
 
-//     // Ejecutar la función para mostrar el modal al cargar la página
-//     showModal();
+    const closeModal = () => {
+        container.classList.replace('opacity-100', 'opacity-0');
+        container.classList.add('pointer-events-none');
+        
+        content.classList.replace('scale-100', 'scale-95');
+        content.classList.replace('opacity-100', 'opacity-0');
+    };
 
-//     // Asignación de eventos de escucha (Click)
-//     // Usamos el operador ?. (optional chaining) para asegurar que el código no falle si falta un ID
-//     modalCloseIcon?.addEventListener('click', hideModal);
-//     modalConfirmButton?.addEventListener('click', hideModal);
-//     modalBackdrop?.addEventListener('click', hideModal);
-// });
+    // Abrir automáticamente con un pequeño delay para que se note la animación
+    setTimeout(openModal, 300);
+
+    // Cerrar al clickear el botón
+    if (btn) btn.addEventListener('click', closeModal);
+});

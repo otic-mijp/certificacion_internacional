@@ -1,11 +1,12 @@
 @extends('layouts.auth')
 
 @section('content')
-    <div class="w-full flex flex-col ">
+    <div class="w-full flex flex-col">
         <main class="flex-grow flex flex-col items-center justify-center px-4 py-8">
             <div
                 class="w-full max-w-4xl bg-white rounded-3xl md:rounded-[40px] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col md:flex-row border border-gray-50">
 
+                <!-- Columna Izquierda (Azul) -->
                 <div
                     class="w-full md:w-5/12 bg-[#233C7E] p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl hidden sm:block"></div>
@@ -27,15 +28,19 @@
                     </div>
                 </div>
 
+                <!-- Columna Derecha (Formulario) -->
                 <div class="w-full md:w-7/12 p-6 md:p-16 relative bg-white">
-                    <div class="absolute top-6 right-6 md:top-8 md:right-10">
+
+                    <!-- Ajuste Responsivo para "Registrarse" -->
+                    <div class="absolute top-6 right-6 md:top-8 md:right-10 z-20">
                         <a href="{{ route('consulta.cedula') }}"
-                            class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest text-cyan-700 hover:text-black transition-colors border-b-2 border-cyan-100 hover:border-black pb-1">
+                            class="text-[10px] font-bold uppercase tracking-widest text-cyan-700 hover:text-black transition-all border-b-2 border-cyan-100 hover:border-black pb-1 whitespace-nowrap">
                             Registrarse
                         </a>
                     </div>
 
-                    <header class="mb-8 md:mb-12 mt-4 md:mt-0">
+                    <header class="mb-8 md:mb-12 mt-8 md:mt-0">
+                        <!-- Margen superior extra en movil para no chocar con Registrarse -->
                         <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-2">
                             Acceso a usuarios
                         </h2>
@@ -70,23 +75,20 @@
                             @enderror
                         </div>
 
-                        <div class="flex flex-col items-center md:items-start gap-4 md:gap-6">
-                            <div class="flex justify-center gap-2 w-full">
+                        <div class="flex flex-col gap-6">
+                            <!-- Botones apilados en móvil, lado a lado en desktop -->
+                            <div class="flex flex-col sm:flex-row gap-3 w-full">
                                 <button type="submit"
-                                    class="group relative w-full md:w-auto cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-green-800 text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10">
+                                    class="group relative w-full cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-green-800 text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10">
                                     <span class="relative z-10">Entrar</span>
                                     <div
                                         class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform">
                                     </div>
                                 </button>
+
                                 <button type="reset"
-                                    class="group relative border border-gray-300 w-full md:w-auto cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-gray text-black text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 ">
-                                    <span class="relative z-10">
-                                        Limpiar
-                                    </span>
-                                    <div
-                                        class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform">
-                                    </div>
+                                    class="group relative border border-gray-300 w-full cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-white text-black text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95">
+                                    <span class="relative z-10">Limpiar</span>
                                 </button>
                             </div>
 
@@ -118,25 +120,32 @@
         </main>
     </div>
 
-    <div id="modal-imagen" class="fixed inset-0 z-50 flex items-center justify-center hidden p-4">
-        <div id="modal-overlay" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
-        <div
-            class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all">
+    <section id="modal-container"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-500 ease-out">
+
+        <div id="modal-backdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+
+        <div id="modal-content"
+            class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all duration-500 ease-out scale-95 opacity-0">
 
             <div class="flex flex-col">
                 <img src="{{ asset('img/informacion.jpg') }}" alt="Información Importante"
-                    class="w-full h-auto object-cover max-h-[50vh] md:max-h-[650px]">
+                    class="w-full h-auto object-cover max-h-[50vh] md:max-h-[600px]">
+
                 <div class="p-6 md:p-8 text-center">
-                    <h3 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">Aviso
-                        Importante</h3>
-                    <p class="text-[11px] md:text-sm text-slate-500 mb-6 font-medium">Lea detenidamente antes de continuar.
+                    <h3 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">
+                        Aviso Importante
+                    </h3>
+                    <p class="text-[11px] md:text-sm text-slate-500 mb-6 font-medium">
+                        Lea detenidamente antes de continuar.
                     </p>
-                    <button id="btn-entendido"
-                        class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
+
+                    <button id="modal-confirm-button"
+                        class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all hover:bg-[#1a2d5f]">
                         Entendido, continuar
                     </button>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection
