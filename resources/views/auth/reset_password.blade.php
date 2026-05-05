@@ -22,22 +22,37 @@
                 </p>
             </section>
 
-            <form action="#" method="POST" class="p-6 md:p-10 space-y-6">
+            <form action="{{ route('recuperar.clave.update') }}" method="POST" class="p-6 md:p-10 space-y-6">
                 @csrf
+                @method('PUT')
+
+                @if (session('status'))
+                    <div class="text-green-500 text-xs mb-4">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <div>
                     <label for="email"
                         class="block text-[10px] md:text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-1">
-                        Correo Electrónico
+                        Correo Electrónico:
                     </label>
                     <div class="relative">
-                        <input type="email" name="email" id="email" required placeholder="ejemplo@correo.com"
-                            class="w-full px-5 py-3 md:px-6 md:py-4 border-2 border-slate-100 rounded-xl md:rounded-2xl text-slate-700 font-medium focus:outline-none focus:border-[#233C7E] focus:bg-white transition-all placeholder:text-slate-300 text-sm md:text-base">
+                        <input type="email" name="email" id="email"  placeholder="correo@correo.com"
+                            value="{{ old('email') }}" required
+                            class="w-full px-5 py-3 md:px-6 md:py-4 border-2 @error('email') border-red-500 @else border-slate-400 @enderror rounded-xl md:rounded-2xl text-slate-700 font-medium focus:outline-none focus:border-[#233C7E] focus:bg-white transition-all placeholder:text-slate-300 text-sm md:text-base">
+
+                        @error('email')
+                            <span class="text-red-500 text-[12px] font-bold mt-2 ml-1 block text-center">
+                                {{ $message }}
+                            </span>
+                        @enderror
                     </div>
                 </div>
 
                 <button type="submit"
                     class="w-full cursor-pointer py-4 md:py-5 bg-[#233C7E] text-white text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] rounded-xl md:rounded-2xl shadow-lg shadow-blue-900/20 hover:bg-slate-900 hover:shadow-none transition-all active:scale-95">
-                    Enviar enlace
+                    Enviar correo
                 </button>
             </form>
 

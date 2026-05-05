@@ -15,9 +15,12 @@
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-base font-black uppercase text-slate-800 tracking-tight">Nueva Solicitud</h1>
-                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">Registro de
-                                Certificación</p>
+                            <h1 class="text-base font-black uppercase text-slate-800 tracking-tight">
+                                Nueva Solicitud
+                            </h1>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">
+                                Registro de Certificación
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -25,8 +28,9 @@
                     @csrf
                     <div class="mb-10">
                         <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-3">
-                            <h2 class="text-xs font-black text-slate-600 uppercase tracking-[0.2em]">01. Información del
-                                Titular</h2>
+                            <h2 class="text-xs font-black text-slate-600 uppercase tracking-[0.2em]">
+                                01. Información del Titular
+                            </h2>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -76,14 +80,14 @@
                                 </select>
                             </div>
                             <div class="space-y-2">
-                                <label for="pais"
-                                    class="text-[11px] font-black text-slate-700 uppercase ml-1 tracking-widest">País de
-                                    Destino</label>
-                                <select id="pais" name="pais" required
-                                    class="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 transition-all outline-none">
-                                    <option value="">Seleccione el país...</option>
-                                    <option value="españa">España</option>
-                                    <option value="chile">Chile</option>
+                                <label for="pais" class="text-[11px] font-black text-slate-700 uppercase ml-1 tracking-widest">
+                                    País de destino:
+                                </label>
+                                <select id="pais" name="pais" required class="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 transition-all outline-none">
+                                    <option value="" selected disabled>Seleccione el país...</option>
+                                    @foreach ($paises as $pais)
+                                        <option value="">{{ $pais->nombre_oficial }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

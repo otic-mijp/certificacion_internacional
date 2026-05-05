@@ -63,6 +63,7 @@ class UsuarioController extends Controller
                     'pregunta_seguridad_id' => $request->pregunta_2_id,
                     'respuesta' => Hash::make(strtolower($request->respuesta_2)),
                 ]);
+                
             });
 
             return back()->with('success', 'Tus preguntas de seguridad han sido configuradas con éxito.');

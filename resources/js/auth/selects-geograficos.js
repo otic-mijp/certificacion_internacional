@@ -204,13 +204,11 @@ document.addEventListener("DOMContentLoaded", function () {
             const parroquiaId = groupParroquia ? groupParroquia.querySelector('.input-real')?.value : null;
 
             if (groupMunicipio) {
-                console.log("Rehidratando Municipios para el estado:", estadoId);
                 await cargarHijos('municipio', estadoId, municipioId);
             }
 
             // 2. Si hay un Municipio y una parroquia antigua, cargamos sus Parroquias
             if (municipioId) {
-                console.log("Rehidratando Parroquias para el municipio:", municipioId);
                 await cargarHijos('parroquia', municipioId, parroquiaId);
             }
         }

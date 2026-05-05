@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
 
-use App\Models\DVPais;
 use App\Models\DVPersona;
 use App\Models\Estado;
 use App\Models\Municipio;
 use App\Models\Profesion;
 use App\Models\Parroquia;
 use App\Models\Usuario;
+
+use App\Mail\RegistroBienvenidaMail;
+use Illuminate\Support\Facades\Mail;
 
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
 use App\Http\Requests\RegistroUsuarioRequest;
@@ -62,14 +63,14 @@ class RegistroController extends Controller
 
         $municipios = $estadoSeleccionado
             ? Municipio::where('estado_id', $estadoSeleccionado->id)
-                ->orderBy('nombre', 'asc')
-                ->get()
+            ->orderBy('nombre', 'asc')
+            ->get()
             : collect();
 
         $parroquias = $municipioSeleccionado
             ? Parroquia::where('municipio_id', $municipioSeleccionado->id)
-                ->orderBy('nombre', 'asc')
-                ->get()
+            ->orderBy('nombre', 'asc')
+            ->get()
             : collect();
 
         return view('auth.register.datos_encontrados', compact(
@@ -116,9 +117,12 @@ class RegistroController extends Controller
             'parroquia_id'       => $request->input('parroquia_id'),
             'direccion'          => mb_strtolower($request->input('direccion')),
             'contrasena'         => $request->input('contrasena'),
+            'estatus_contrasena_reiniciada' => false,
         ]);
 
         session()->forget('persona_validada');
+
+        Mail::to($request->input('email'))->send(new RegistroBienvenidaMail());
 
         return $this->get_vista_exitosa();
     }

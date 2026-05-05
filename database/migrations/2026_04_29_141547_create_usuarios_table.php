@@ -14,7 +14,7 @@ return new class extends Migration
         // Tabla de Usuarios
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
-            
+
             $table->char('letra_cedula', 1);
             $table->unsignedInteger('cedula')->unique();
 
@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('segundo_apellido', 100)->nullable();
             $table->date('fecha_nacimiento');
             $table->char('sexo', 1);
-            $table->boolean('actualizar_datos')->default(false);
 
             // String es mejor para manejar formatos de teléfono
             $table->string('telefono_celular', 35);
@@ -38,6 +37,8 @@ return new class extends Migration
 
             $table->string('direccion', 500);
             $table->string('contrasena');
+
+            $table->boolean('estatus_contrasena_reiniciada')->default(false);
             $table->timestamp('verificacion_correo_en')->nullable();
             $table->rememberToken();
             $table->timestamps();

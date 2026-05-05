@@ -20,18 +20,34 @@
             </div>
 
             <form action="#" method="POST" class="p-10 space-y-6">
-                <div>
+                <div class="max-w-sm">
                     <label for="cedula"
-                        class="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-1">
+                        class="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">
                         Número de Cédula
                     </label>
-                    <div class="relative">
-                        <input type="text" name="cedula" id="cedula" required placeholder="V-00000000"
-                            class="w-full px-6 py-4  border-2 border-slate-100 rounded-2xl text-slate-700 font-bold text-lg focus:outline-none focus:border-[#233C7E] focus:bg-white transition-all placeholder:text-slate-300">
+
+                    <div
+                        class="group relative flex items-center border-2 border-slate-100 rounded-2xl bg-slate-50 focus-within:border-[#233C7E] focus-within:bg-white transition-all duration-200">
+                        <div class="relative flex items-center">
+                            <select name="letra_cedula"
+                                class="appearance-none bg-transparent pl-4 pr-8 py-4 text-slate-700 font-bold text-lg focus:outline-none cursor-pointer z-10">
+                                <option value="v">V</option>
+                                <option value="e">E</option>
+                            </select>
+                            <div class="absolute right-2 pointer-events-none">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="h-8 w-[1px] bg-slate-200"></div>
+
+                        <input type="text" name="cedula" id="cedula" required placeholder="00000000" autofocus
+                            class="w-full px-4 py-4 bg-transparent text-slate-700 font-bold text-lg focus:outline-none placeholder:text-slate-300">
                     </div>
-                    <p class="mt-3 ml-1 text-[10px] text-slate-400 font-medium italic">
-                        * Ingrese solo números o el formato requerido por la institución.
-                    </p>
                 </div>
 
                 <button type="submit"

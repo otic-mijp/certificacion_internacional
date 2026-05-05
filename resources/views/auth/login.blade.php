@@ -53,7 +53,7 @@
                                 autofocus placeholder="usuario@correo.gob.ve"
                                 class="w-full bg-transparent border-b {{ $errors->has('email') ? 'border-red-500' : 'border-gray-400' }} py-2 md:py-3 px-1 text-sm focus:outline-none focus:border-cyan-500 transition-all placeholder:text-gray-400">
                             @error('email')
-                                <p class="text-[10px] text-red-500 font-bold mt-1 italic">{{ $message }}</p>
+                                <p class="text-[11px] text-red-500 font-bold mt-1">{{ $message }}</p>
                             @enderror
                         </div>
 
@@ -64,6 +64,9 @@
                             </label>
                             <input type="password" name="password" id="password" required placeholder="••••••••"
                                 class="w-full bg-transparent border-b {{ $errors->has('email') ? 'border-red-500' : 'border-gray-400' }} py-2 md:py-3 px-1 text-sm focus:outline-none focus:border-cyan-500 transition-all placeholder:text-gray-400">
+                            @error('password')
+                                <p class="text-[11px] text-red-500 font-bold mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="flex flex-col items-center md:items-start gap-4 md:gap-6 pt-4">

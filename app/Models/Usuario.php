@@ -30,6 +30,7 @@ class Usuario extends Authenticatable
         'parroquia_id',
         'profesion_id',
         'direccion',
+        'estatus_contrasena_reiniciada',
     ];
 
     protected $hidden = [
