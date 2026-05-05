@@ -2,7 +2,7 @@
 
 @section('content')
     <div
-        class="max-w-4xl mx-auto m-4 bg-white border border-slate-200 rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden">
+        class="max-w-4xl mx-auto m-4 bg-white border border-slate-300 rounded-3xl md:rounded-[40px]  overflow-hidden">
 
         <div class="bg-slate-50 px-6 py-6 md:px-10 md:py-8 border-b border-slate-100">
             <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-center md:text-left">
@@ -89,7 +89,7 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Volver al panel
+                Volver al ingreso
             </a>
         </div>
     </div>

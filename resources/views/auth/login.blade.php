@@ -36,8 +36,9 @@
                     </div>
 
                     <header class="mb-8 md:mb-12 mt-4 md:mt-0">
-                        <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-2">Acceso a
-                            usuarios</h2>
+                        <h2 class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-gray-400 mb-2">
+                            Acceso a usuarios
+                        </h2>
                         <div class="h-1 w-8 bg-black"></div>
                     </header>
 
@@ -69,14 +70,25 @@
                             @enderror
                         </div>
 
-                        <div class="flex flex-col items-center md:items-start gap-4 md:gap-6 pt-4">
-                            <button type="submit"
-                                class="group relative w-full md:w-auto cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-black text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10">
-                                <span class="relative z-10">Entrar</span>
-                                <div
-                                    class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform">
-                                </div>
-                            </button>
+                        <div class="flex flex-col items-center md:items-start gap-4 md:gap-6">
+                            <div class="flex justify-center gap-2 w-full">
+                                <button type="submit"
+                                    class="group relative w-full md:w-auto cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-green-800 text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-xl shadow-black/10">
+                                    <span class="relative z-10">Entrar</span>
+                                    <div
+                                        class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform">
+                                    </div>
+                                </button>
+                                <button type="reset"
+                                    class="group relative border border-gray-300 w-full md:w-auto cursor-pointer inline-flex items-center justify-center px-10 py-3.5 bg-gray text-black text-[11px] font-bold uppercase tracking-[0.2em] rounded-full overflow-hidden transition-all hover:scale-105 active:scale-95 ">
+                                    <span class="relative z-10">
+                                        Limpiar
+                                    </span>
+                                    <div
+                                        class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform">
+                                    </div>
+                                </button>
+                            </div>
 
                             <div class="flex flex-col gap-3 text-center md:text-left">
                                 <a href="{{ route('recuperar.clave') }}"
@@ -110,23 +122,17 @@
         <div id="modal-overlay" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
         <div
             class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all">
-            <button id="btn-cerrar-x"
-                class="absolute top-4 right-4 z-10 bg-white/80 backdrop-blur-md p-2 rounded-full shadow-sm">
-                <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
 
             <div class="flex flex-col">
                 <img src="{{ asset('img/informacion.jpg') }}" alt="Información Importante"
-                    class="w-full h-auto object-cover max-h-[50vh] md:max-h-[600px]">
+                    class="w-full h-auto object-cover max-h-[50vh] md:max-h-[650px]">
                 <div class="p-6 md:p-8 text-center">
                     <h3 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">Aviso
                         Importante</h3>
                     <p class="text-[11px] md:text-sm text-slate-500 mb-6 font-medium">Lea detenidamente antes de continuar.
                     </p>
                     <button id="btn-entendido"
-                        class="w-full py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
+                        class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
                         Entendido, continuar
                     </button>
                 </div>

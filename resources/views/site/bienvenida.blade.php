@@ -84,7 +84,7 @@
                     </p>
 
                     <button id="modal-confirm-button"
-                        class="w-full py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
+                        class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all">
                         Entendido, continuar
                     </button>
                 </div>
