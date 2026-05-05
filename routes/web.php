@@ -50,6 +50,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/cambio_clave', 'clave_nueva')->name('clave');
         Route::put('/clave/update', 'clave_update')->name('clave.update');
 
+        Route::get('/cambio_clave_obligatorio', 'clave_obligatoria')->name('clave.obligatoria');
+        Route::put('/cambio_clave_obligatorio_update', 'cambio_clave_obligatorio_update')->name('clave.obligatoria.update');
     });
 
     Route::controller(SolicitudController::class)->prefix('solicitud')->name('solicitud.')->group(function () {

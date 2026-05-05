@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PerfilUsuario\CambioClaveRequest;
 use App\Models\DVPersona;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
@@ -22,7 +23,14 @@ class UsuarioController extends Controller
         $data = DVPersona::select('nombres', 'primer_apellido', 'segundo_apellido')
             ->find($id_persona);
 
-        return view('site.bienvenida', compact('data'));
+        $usuario = Auth::user()->estatus_contrasena_reiniciada;
+
+        if ($usuario === true) {
+
+            return view('site.perfil.contrasena_obligatoria');
+        } else {
+            return view('site.bienvenida', compact('data'));
+        }
     }
 
     public function perfil(): View
@@ -31,9 +39,6 @@ class UsuarioController extends Controller
         return view('site.perfil.perfil', compact('user'));
     }
 
-    /**
-     * Muestra el formulario para actualizar las preguntas de seguridad.
-     */
     public function preguntas_seguridad(): View
     {
         $user = Auth::user()->load('respuestasSeguridad.pregunta');
@@ -77,10 +82,6 @@ class UsuarioController extends Controller
         }
     }
 
-    /**
-     * Muestra el formulario para actualizar el correo electrónico.
-     */
-
     public function email_nuevo(): View
     {
         $email = Auth::user()->email;
@@ -105,7 +106,6 @@ class UsuarioController extends Controller
         ]);
 
         $user = Auth::user();
-
         $user->email = $request->email;
         $user->save();
 
@@ -120,37 +120,35 @@ class UsuarioController extends Controller
     public function clave_update(Request $request)
     {
 
-        $request->validate([
-            'current_password' => ['required', 'string'],
-            'password' => [
-                'required',
-                'string',
-                'confirmed',
-                Password::min(8)
-            ],
-        ], [
-
-            'current_password.required' => 'Debes ingresar tu clave actual.',
-            'password.required' => 'La nueva clave es obligatoria.',
-            'password.confirmed' => 'La confirmación de la nueva clave no coincide.',
-            'password.min' => 'La nueva clave debe tener al menos 8 caracteres.',
-        ]);
-
         $user = Auth::user();
 
-        // 2. Verificar que la clave actual sea correcta
         if (!Hash::check($request->current_password, $user->contrasena)) {
             return back()->withErrors([
-                'current_password' => 'La clave actual no es correcta.'
+                'current_password' => 'La clave actual es incorrecta.'
             ]);
         }
 
-        // 3. Actualizar la clave
         $user->update([
             'contrasena' => Hash::make($request->password),
         ]);
 
-        // 4. Redireccionar con éxito
         return back()->with('status', '¡Contraseña actualizada correctamente!');
+    }
+
+    public function cambio_clave_obligatorio_update(CambioClaveRequest $request)
+    {
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->contrasena)) {
+            return back()->withErrors(['current_password' => 'La clave actual es incorrecta.']);
+        }
+
+        $user->update([
+            'estatus_contrasena_reiniciada' => false,
+            'contrasena' => Hash::make($request->password)
+        ]);
+
+        return to_route('usuario.bienvenida');
     }
 }
