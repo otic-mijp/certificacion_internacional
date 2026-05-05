@@ -14,16 +14,8 @@ return new class extends Migration
         // Tabla de Usuarios
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
-
-            $table->char('letra_cedula', 1);
-            $table->unsignedInteger('cedula')->unique();
-
-            $table->string('email', 255)->unique()->index();
-            $table->string('nombres', 100); // Aumentado para evitar truncado
-            $table->string('primer_apellido', 100);
-            $table->string('segundo_apellido', 100)->nullable();
-            $table->date('fecha_nacimiento');
-            $table->char('sexo', 1);
+            $table->string('email', 255)->unique();
+             $table->string('id_persona', 35);
 
             // String es mejor para manejar formatos de teléfono
             $table->string('telefono_celular', 35);

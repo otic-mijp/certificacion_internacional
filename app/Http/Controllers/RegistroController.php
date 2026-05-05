@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 use App\Models\DVPersona;
 use App\Models\Estado;
 use App\Models\Municipio;
-use App\Models\Profesion;
 use App\Models\Parroquia;
+use App\Models\Profesion;
 use App\Models\Usuario;
 
 use App\Mail\RegistroBienvenidaMail;
@@ -28,11 +29,9 @@ class RegistroController extends Controller
 
     public function get_cedula(ConsultaCedulaRegistroRequest $request): RedirectResponse
     {
-        $cedula = $request->input('numero_cedula');
-        $letra = $request->input('letra_cedula');
+        $data =  trim($request->input('letra_cedula') . $request->input('numero_cedula'));
 
-        $persona = DVPersona::where('numero_cedula', $cedula)
-            ->where('letra_cedula', $letra)
+        $persona = DVPersona::where('id_persona', $data)
             ->first();
 
         if (!$persona) {
@@ -93,19 +92,8 @@ class RegistroController extends Controller
             return redirect()->route('consulta.cedula');
         }
 
-        // Convertimos a array y mapeamos en una sola línea (datos a minusculas)
-        $personaProcesada = array_map(function ($v) {
-            return is_string($v) ? mb_strtolower($v) : $v;
-        }, (array) $persona);
-
         Usuario::create([
-            'letra_cedula'     => $personaProcesada['letra_cedula'],
-            'cedula'           => $personaProcesada['numero_cedula'],
-            'nombres'          => $personaProcesada['nombres'],
-            'primer_apellido'  => $personaProcesada['primer_apellido'],
-            'segundo_apellido' => $personaProcesada['segundo_apellido'] ?? null,
-            'fecha_nacimiento' => $personaProcesada['fecha_nacimiento'],
-            'sexo'             => $personaProcesada['sexo'],
+            'id_persona'     => Str::upper($persona['id_persona']),
 
             # Datos del request (también en minúsculas)
             'email' => mb_strtolower($request->input('email')),

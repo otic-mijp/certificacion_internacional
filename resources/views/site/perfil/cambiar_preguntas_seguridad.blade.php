@@ -36,7 +36,7 @@
                                 <p class="text-xs text-slate-400 mt-1 italic">********</p>
                             </div>
                         @empty
-                            <div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl">
+                            <div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl mb-3">
                                 <p class="text-xs text-blue-600 font-medium italic">Aún no has configurado tus preguntas.
                                 </p>
                             </div>

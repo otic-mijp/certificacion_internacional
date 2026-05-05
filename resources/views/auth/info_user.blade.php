@@ -2,7 +2,7 @@
 
 @section('content')
     <div class=" flex items-center justify-center p-6">
-        <div class="max-w-md w-full bg-white border border-slate-200 rounded-[40px] shadow-2xl overflow-hidden">
+        <div class="max-w-md w-full bg-white border border-slate-300 rounded-[40px] overflow-hidden">
 
             <div class="px-8 py-10 text-center border-b border-slate-100">
                 <div class="inline-flex p-4 bg-white rounded-3xl shadow-sm mb-6">

@@ -14,13 +14,7 @@ class Usuario extends Authenticatable
     protected $table = 'usuarios';
 
     protected $fillable = [
-        'nombres',
-        'primer_apellido',
-        'segundo_apellido',
-        'letra_cedula',
-        'cedula',
-        'fecha_nacimiento',
-        'sexo',
+        'id_persona',
         'email',
         'contrasena',
         'telefono_celular',

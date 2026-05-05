@@ -7,7 +7,7 @@
             <!-- Encabezado -->
             <div class="bg-blue-900 px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
-                    <h3 class="text-3xl font-bold text-white tracking-tight">Registro de Cuenta Única</h3>
+                    <h3 class="text-3xl font-bold text-white tracking-tight">Registro de cuenta única</h3>
                     <p class="text-blue-300 text-sm font-medium mt-1">Complete sus datos para el acceso oficial al panel.</p>
                 </div>
                 <a href="{{ route('login') }}"
@@ -16,15 +16,10 @@
                 </a>
             </div>
 
-            <form action="{{ route('registro.usuario.store') }}" method="POST" id="formulario-login"
-                class="p-8 md:p-12 space-y-10">
+            <form action="{{ route('registro.usuario.store') }}" method="POST" id="formulario-login" class="p-8 md:p-12 space-y-10">
                 @csrf
 
-                <input type="hidden" name="cedula" value="{{ $persona['numero_cedula'] }}">
-                <input type="hidden" name="nombres" value="{{ $persona['nombres'] }}">
-                <input type="hidden" name="primer_apellido" value="{{ $persona['primer_apellido'] }}">
-                <input type="hidden" name="segundo_apellido" value="{{ $persona['segundo_apellido'] ?? '' }}">
-                <input type="hidden" name="letra_cedula" value="{{ $persona['letra_cedula'] }}">
+                <input type="hidden" name="id_persona" value="{{ $persona['id_persona'] }}">
 
                 <!-- SECCIÓN 1: Identidad -->
                 <section class="space-y-6">
@@ -46,7 +41,7 @@
                             <label for="cedula" class="block text-xs font-bold text-slate-700 mb-2 uppercase">Cédula de
                                 identidad:</label>
                             <div class="flex shadow-sm">
-                                <select style="pointer-events: none;" readonly tabindex="-1" id="cedula"
+                                <select style="pointer-events: none;" disabled tabindex="-1" id="cedula"
                                     class="rounded-l-xl bg-slate-700 text-slate-200 text-sm p-3 outline-none border-none">
                                     <option value="V" {{ $persona['letra_cedula'] == 'V' ? 'selected' : '' }}>V
                                     </option>
@@ -109,16 +104,13 @@
                 <section class="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 rounded-2xl border border-slate-200">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-2 uppercase">Fecha de nacimiento:</label>
-                        <input type="date" name="fecha_nacimiento"
-                            value="{{ \Carbon\Carbon::parse($persona['fecha_nacimiento'])->format('Y-m-d') }}" readonly
+                        <input type="date" value="{{ \Carbon\Carbon::parse($persona['fecha_nacimiento'])->format('Y-m-d') }}" disabled
                             class="w-full rounded-xl border-slate-200 text-sm p-3 border text-slate-500 bg-slate-100 cursor-not-allowed">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-2 uppercase">Sexo:</label>
-                        <input type="hidden" name="sexo" value="{{ $persona['sexo'] }}">
-                        <input type="text" readonly tabindex="-1"
-                            value="{{ $persona['sexo'] == 'M' ? 'Masculino' : 'Femenino' }}"
-                            class="w-full rounded-xl border-slate-200 text-sm p-3 border bg-slate-100 cursor-not-allowed text-slate-500">
+                        <input type="hidden" value="{{ $persona['sexo'] }}">
+                        <input type="text" disabled tabindex="-1" value="{{ $persona['sexo'] == 'M' ? 'Masculino' : 'Femenino' }}" class="w-full rounded-xl border-slate-200 text-sm p-3 border bg-slate-100 cursor-not-allowed text-slate-500">
                     </div>
                     <div>
                         <label for="telefono_celular" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
@@ -307,7 +299,7 @@
                                     class="input-password-group w-full rounded-xl border-slate-200 text-sm p-4 pr-12 focus:ring-2 border bg-slate-50 focus:bg-white transition-colors outline-none focus:ring-blue-500 @error('contrasena') border-red-500 @enderror">
 
                                 <!-- Este botón controlará AMBOS inputs -->
-                                <button type="button" id="toggle-all-passwords"
+                                <button type="button" id="toggle-all-passwords" tabindex="-1"
                                     class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-5 h-5 toggle-icon">

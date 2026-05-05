@@ -31,13 +31,6 @@ class RegistroUsuarioRequest extends FormRequest
         $phoneRegex = 'regex:/^\+?[0-9\s]+$/';
 
         return [
-            'letra_cedula'     => ['required', 'string', 'size:1'],
-            'cedula'           => ['required', 'numeric', 'unique:usuarios,cedula'],
-            'nombres'          => ['required', 'string', 'max:100'], 
-            'primer_apellido'  => ['required', 'string', 'max:100'],
-            'segundo_apellido' => ['nullable', 'string', 'max:100'],
-            'fecha_nacimiento' => ['required', 'date'],
-            'sexo'             => ['required', 'in:M,F'],
             'email'            => ['required', 'email', 'confirmed', 'max:255', 'unique:usuarios,email'],
             
             // Reglas actualizadas para teléfonos
@@ -60,14 +53,6 @@ class RegistroUsuarioRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'cedula.required'            => 'La cédula es obligatoria.',
-            'cedula.unique'              => 'Esta cédula ya se encuentra registrada.',
-            'nombres.required'           => 'Los nombres son obligatorios.',
-            'primer_apellido.required'   => 'El primer apellido es obligatorio.',
-            'fecha_nacimiento.required'  => 'La fecha de nacimiento es obligatoria.',
-            'sexo.required'              => 'El sexo es obligatorio.',
-            'sexo.in'                    => 'El sexo seleccionado no es válido.',
-            
             'email.required'             => 'El correo electrónico es obligatorio.',
             'email.confirmed'            => 'La confirmación del correo no coincide.',
             'email.unique'               => 'Este correo ya está en uso.',

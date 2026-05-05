@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DVPersona;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -16,7 +17,12 @@ class UsuarioController extends Controller
 {
     public function index()
     {
-        return view('site.bienvenida');
+
+        $id_persona = Auth::user()->id_persona;
+        $data = DVPersona::select('nombres', 'primer_apellido', 'segundo_apellido')
+            ->find($id_persona);
+
+        return view('site.bienvenida', compact('data'));
     }
 
     public function perfil(): View
@@ -63,7 +69,6 @@ class UsuarioController extends Controller
                     'pregunta_seguridad_id' => $request->pregunta_2_id,
                     'respuesta' => Hash::make(strtolower($request->respuesta_2)),
                 ]);
-                
             });
 
             return back()->with('success', 'Tus preguntas de seguridad han sido configuradas con éxito.');
@@ -114,17 +119,17 @@ class UsuarioController extends Controller
 
     public function clave_update(Request $request)
     {
-       
+
         $request->validate([
             'current_password' => ['required', 'string'],
             'password' => [
                 'required',
                 'string',
                 'confirmed',
-                Password::min(8) 
+                Password::min(8)
             ],
         ], [
-         
+
             'current_password.required' => 'Debes ingresar tu clave actual.',
             'password.required' => 'La nueva clave es obligatoria.',
             'password.confirmed' => 'La confirmación de la nueva clave no coincide.',
