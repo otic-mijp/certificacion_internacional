@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('contrasena');
 
             $table->boolean('estatus_contrasena_reiniciada')->default(false);
-            $table->timestamp('verificacion_correo_en')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
