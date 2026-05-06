@@ -92,7 +92,7 @@ class RegistroController extends Controller
             return redirect()->route('consulta.cedula');
         }
 
-        Usuario::create([
+        $usuario = Usuario::create([
             'id_persona'     => Str::upper($persona['id_persona']),
 
             # Datos del request (también en minúsculas)
@@ -110,14 +110,15 @@ class RegistroController extends Controller
 
         session()->forget('persona_validada');
 
-        Mail::to($request->input('email'))->send(new RegistroBienvenidaMail());
+        // Enviar notificación de verificación de email
+        $usuario->sendEmailVerificationNotification();
 
         return $this->get_vista_exitosa();
     }
 
     private function get_vista_exitosa(): View
     {
-        return view('auth.register.usuario_registrado');
+        return view('auth.register.verificacion_pendiente');
     }
 
     public function getMunicipios(int $estado_id): JsonResponse

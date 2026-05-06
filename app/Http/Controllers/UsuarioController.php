@@ -21,8 +21,6 @@ class UsuarioController extends Controller
     public function index()
     {
 
-        $id_persona = Auth::user()->id_persona;
-        $data = DVPersona::select('nombres', 'primer_apellido', 'segundo_apellido')->find($id_persona);
 
         $usuario = Auth::user()->estatus_contrasena_reiniciada;
 
@@ -30,6 +28,12 @@ class UsuarioController extends Controller
 
             return view('site.perfil.contrasena_obligatoria');
         } else {
+
+            $user = Auth::user();
+
+            $data = DVPersona::where('id_persona', $user->id_persona)->first();
+           
+
             return view('site.bienvenida', compact('data'));
         }
     }
@@ -70,11 +74,9 @@ class UsuarioController extends Controller
             });
 
             return back()->with('success', 'Tus preguntas de seguridad han sido configuradas con éxito.');
-
         } catch (\Exception $e) {
 
             return back()->withErrors(['error' => 'Hubo un problema al guardar los datos. Inténtalo de nuevo.']);
-
         }
     }
 

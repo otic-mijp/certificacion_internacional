@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Auth\MustVerifyEmail;
 
 class Usuario extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, MustVerifyEmail;
 
     protected $table = 'usuarios';
 
@@ -31,6 +32,20 @@ class Usuario extends Authenticatable
         'contrasena',
         'remember_token',
     ];
+
+    protected $emailVerifiedAtColumn = 'verificacion_correo_en';
+
+    public function getEmailVerifiedAtColumn()
+    {
+        return 'verificacion_correo_en';
+    }
+
+    public function markEmailAsVerified()
+    {
+        return $this->forceFill([
+            $this->getEmailVerifiedAtColumn() => $this->freshTimestamp(),
+        ])->save();
+    }
 
     protected function casts(): array
     {
@@ -54,6 +69,14 @@ class Usuario extends Authenticatable
     public function routeNotificationForMail($notification)
     {
         return $this->email;
+    }
+
+    /**
+     * Send the email verification notification.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        $this->notify(new \App\Notifications\VerificarEmailNotification);
     }
 
     /**
