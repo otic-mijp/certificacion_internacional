@@ -1,6 +1,6 @@
 @extends('site.app')
 
-@section('title', 'Solicitud de Certificación de Antecedentes Penales')
+@section('title', 'Listado de certificaciones de Antecedentes Penales')
 
 @section('content')
     <article class="max-w-6xl mx-auto px-4 py-8">

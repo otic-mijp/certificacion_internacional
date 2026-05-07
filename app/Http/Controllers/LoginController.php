@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 use App\Mail\RecuperarPasswordMail;
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
@@ -44,8 +45,7 @@ class LoginController extends Controller
         ]);
 
         $usuario = Usuario::where('email', $request->email)->first();
-
-        $clave = \Illuminate\Support\Str::random(10);
+        $clave = Str::random(10);
 
         $usuario->contrasena = Hash::make($clave);
         $usuario->estatus_contrasena_reiniciada = true;

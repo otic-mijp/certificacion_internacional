@@ -55,8 +55,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::controller(SolicitudController::class)->prefix('solicitud')->name('solicitud.')->group(function () {
+        
         Route::get('/nueva_solicitud', 'index')->name('crear');
-        Route::get('/solicitud/registro', 'solicitud_store')->name('store');
+        Route::post('/nueva_solicitud/registro', 'solicitud_store')->name('store');
         
         Route::get('/tramites', 'listado_tramites')->name('listado');
     });

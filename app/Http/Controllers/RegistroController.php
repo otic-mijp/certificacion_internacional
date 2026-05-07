@@ -89,6 +89,7 @@ class RegistroController extends Controller
 
     public function store(RegistroUsuarioRequest $request)
     {
+
         $persona = session('persona_validada');
 
         if (!$persona) {
@@ -114,8 +115,6 @@ class RegistroController extends Controller
         session()->forget('persona_validada');
 
         // Enviar notificación de verificación de email
-        event(new Registered($usuario));
-
         event(new Registered($usuario));
 
         Auth::login($usuario);
