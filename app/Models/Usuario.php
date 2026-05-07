@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 
-class Usuario extends Authenticatable
+
+class Usuario extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'usuarios';
 
@@ -25,6 +28,7 @@ class Usuario extends Authenticatable
         'profesion_id',
         'direccion',
         'estatus_contrasena_reiniciada',
+        'email_verified_at',
     ];
 
     protected $hidden = [
