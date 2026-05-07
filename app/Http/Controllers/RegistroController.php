@@ -14,6 +14,8 @@ use App\Models\Parroquia;
 use App\Models\Profesion;
 use App\Models\Usuario;
 
+use Illuminate\Auth\Events\Registered;
+
 use App\Mail\RegistroBienvenidaMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -111,7 +113,7 @@ class RegistroController extends Controller
         session()->forget('persona_validada');
 
         // Enviar notificación de verificación de email
-        $usuario->sendEmailVerificationNotification();
+        event(new Registered($usuario));
 
         return $this->get_vista_exitosa();
     }

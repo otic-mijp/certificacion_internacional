@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Auth\MustVerifyEmail;
 
-class Usuario extends Authenticatable
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Auth\Notifications\VerifyEmail;
+
+class Usuario extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, MustVerifyEmail;
+    use HasFactory, Notifiable;
 
     protected $table = 'usuarios';
 
@@ -26,6 +28,9 @@ class Usuario extends Authenticatable
         'profesion_id',
         'direccion',
         'estatus_contrasena_reiniciada',
+        'token_2fa',
+        'token_2fa_expira_en',
+        'email_verified_at',
     ];
 
     protected $hidden = [
@@ -33,26 +38,19 @@ class Usuario extends Authenticatable
         'remember_token',
     ];
 
-    protected $emailVerifiedAtColumn = 'verificacion_correo_en';
-
-    public function getEmailVerifiedAtColumn()
-    {
-        return 'verificacion_correo_en';
-    }
-
-    public function markEmailAsVerified()
-    {
-        return $this->forceFill([
-            $this->getEmailVerifiedAtColumn() => $this->freshTimestamp(),
-        ])->save();
-    }
-
     protected function casts(): array
     {
         return [
-            'verificacion_correo_en' => 'datetime',
             'contrasena' => 'hashed',
         ];
+    }
+
+    // Metodos para verififacion de correo (login)
+
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail);
     }
 
     /**
@@ -69,14 +67,6 @@ class Usuario extends Authenticatable
     public function routeNotificationForMail($notification)
     {
         return $this->email;
-    }
-
-    /**
-     * Send the email verification notification.
-     */
-    public function sendEmailVerificationNotification(): void
-    {
-        $this->notify(new \App\Notifications\VerificarEmailNotification);
     }
 
     /**

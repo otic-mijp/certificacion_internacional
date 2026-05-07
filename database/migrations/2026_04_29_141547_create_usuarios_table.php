@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
             $table->string('email', 255)->unique();
-             $table->string('id_persona', 35);
+             $table->string('id_persona', 10);
 
             // String es mejor para manejar formatos de teléfono
             $table->string('telefono_celular', 35);
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('contrasena');
 
             $table->boolean('estatus_contrasena_reiniciada')->default(false);
-            $table->timestamp('verificacion_correo_en')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -21,7 +21,6 @@ class UsuarioController extends Controller
     public function index()
     {
 
-
         $usuario = Auth::user()->estatus_contrasena_reiniciada;
 
         if ($usuario === true) {
@@ -30,9 +29,7 @@ class UsuarioController extends Controller
         } else {
 
             $user = Auth::user();
-
             $data = DVPersona::where('id_persona', $user->id_persona)->first();
-           
 
             return view('site.bienvenida', compact('data'));
         }

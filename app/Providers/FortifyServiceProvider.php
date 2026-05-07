@@ -30,13 +30,18 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
+        Fortify::registerView(function () {
+            return view('auth.register.buscar_cedula');
+        });
+
         Fortify::loginView(function () {
             return view('auth.login');
         });
 
-        Fortify::registerView(function () {
-            return view('auth.register.buscar_cedula');
+        Fortify::verifyEmailView(function () {
+            return view('auth.verificar-email');
         });
+
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
