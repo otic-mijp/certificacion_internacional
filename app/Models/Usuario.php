@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
-
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Notifications\VerifyEmail;
+
 
 class Usuario extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'usuarios';
 
@@ -28,8 +29,6 @@ class Usuario extends Authenticatable implements MustVerifyEmail
         'profesion_id',
         'direccion',
         'estatus_contrasena_reiniciada',
-        'token_2fa',
-        'token_2fa_expira_en',
         'email_verified_at',
     ];
 
@@ -41,6 +40,7 @@ class Usuario extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
+            'email_verified_at' => 'datetime',
             'contrasena' => 'hashed',
         ];
     }

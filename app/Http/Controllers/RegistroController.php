@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
@@ -17,7 +19,6 @@ use App\Models\Usuario;
 use Illuminate\Auth\Events\Registered;
 
 use App\Mail\RegistroBienvenidaMail;
-use Illuminate\Support\Facades\Mail;
 
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
 use App\Http\Requests\Auth\RegistroUsuarioRequest;
@@ -115,7 +116,11 @@ class RegistroController extends Controller
         // Enviar notificación de verificación de email
         event(new Registered($usuario));
 
-        return $this->get_vista_exitosa();
+        event(new Registered($usuario));
+
+        Auth::login($usuario);
+
+        return to_route('usuario.bienvenida');
     }
 
     private function get_vista_exitosa(): View
