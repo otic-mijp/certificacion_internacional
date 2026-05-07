@@ -113,6 +113,20 @@ return [
             'sslmode' => 'prefer',
         ],
 
+        'pgsql_recaudos' => [ 
+            'driver' => 'pgsql',
+            'host' => env('DB_HOST_RECAUDOS', '127.0.0.1'),
+            'port' => env('DB_PORT_RECAUDOS', '5432'),
+            'database' => env('DB_DATABASE_RECAUDOS', 'forge'),
+            'username' => env('DB_USERNAME_RECAUDOS', 'forge'),
+            'password' => env('DB_PASSWORD_RECAUDOS', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

@@ -3,136 +3,184 @@
 @section('title', 'Solicitud de Certificación de Antecedentes Penales')
 
 @section('content')
-    <div class="flex items-center justify-center p-2 md:p-6 bg-slate-50">
-        <div class="max-w-5xl w-full">
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="bg-slate-50 px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="p-2.5 bg-white border border-slate-200 rounded-xl shadow-sm text-slate-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
+    <div
+        class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl shadow-slate-200/60 overflow-hidden border border-slate-200">
+
+        <!-- Sección 01: Información del Titular (Lectura) -->
+        <div class="p-8 md:p-10 bg-slate-50/50">
+            <div class="flex items-center gap-3 mb-8">
+                <span
+                    class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-[10px] font-black text-white shadow-lg shadow-blue-200">01</span>
+                <h2 class="text-xs font-black text-slate-800 uppercase tracking-[0.2em] border-b-2 border-blue-600 pb-1">
+                    Información del Titular
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Nombres</label>
+                    <input type="text" value="{{ $data->nombres }}" readonly
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Primer
+                        Apellido</label>
+                    <input type="text" value="{{ $data->primer_apellido }}" readonly
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Segundo
+                        Apellido</label>
+                    <input type="text" value="{{ $data->segundo_apellido }}" readonly
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Cédula de
+                        Identidad</label>
+                    <input type="text" value="{{ $data->id_persona }}" readonly
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
+                </div>
+
+                <div class="sm:col-span-2 space-y-2">
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Correo
+                        Electrónico</label>
+                    <input type="text" value="{{ auth()->user()->email }}" readonly
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario Activo -->
+        <form action="{{ route('solicitud.store') }}" method="POST" class="p-8 md:p-10 border-t border-slate-100">
+            @csrf
+
+            <!-- Sección 02 -->
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-8">
+                    <span
+                        class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-[10px] font-black text-white shadow-lg shadow-blue-200">02</span>
+                    <h2
+                        class="text-xs font-black text-slate-800 uppercase tracking-[0.2em] border-b-2 border-blue-600 pb-1">
+                        Selección del Trámite
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div class="group space-y-2">
+                        <label for="motivo"
+                            class="text-[10px] font-black text-slate-700 uppercase ml-1 tracking-widest group-focus-within:text-blue-600">
+                            Motivo de Solicitud
+                        </label>
+                        <select id="motivo" name="motivo" required
+                            class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-blue-50 focus:border-blue-400 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
+                            <option value="" selected disabled>Seleccione el motivo...</option>
+                            @foreach ($motivos as $motivo)
+                                <option value="{{ $motivo->id }}">{{ $motivo->motivo }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="group space-y-2" id="custom-select-container">
+                        <label for="pais_solicitud"
+                            class="text-[10px] font-black text-slate-700 uppercase ml-1 tracking-widest group-focus-within:text-blue-600">
+                            País de Destino
+                        </label>
+
+                        <div class="relative">
+                            <!-- El Select Original (Oculto pero funcional para Laravel) -->
+                            <select id="pais_solicitud" name="pais" required class="hidden">
+                                <option value="" disabled selected>Seleccione el país...</option>
+                                @foreach ($paises as $pais)
+                                    <option value="{{ $pais->id }}" {{ old('pais') == $pais->id ? 'selected' : '' }}>
+                                        {{ $pais->nombre_oficial }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- El Buscador Visual -->
+                            <div class="relative w-full">
+                                <input type="text" id="custom-search-input" placeholder="Escriba para buscar país..."
+                                    class="w-full pr-12 px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-blue-50 focus:border-blue-400 focus:bg-white transition-all outline-none appearance-none cursor-pointer"
+                                    autocomplete="off">
+
+                                <span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </span>
+
+                                <!-- Lista de opciones desplegable -->
+                                <ul id="custom-options-list"
+                                    class="absolute z-50 w-full mt-2 max-h-60 overflow-y-auto bg-white border border-slate-200 rounded-2xl shadow-xl hidden">
+                                    <!-- Se llena dinámicamente con JS -->
+                                </ul>
+                            </div>
                         </div>
-                        <div>
-                            <h1 class="text-base font-black uppercase text-slate-800 tracking-tight">
-                                Nueva Solicitud
-                            </h1>
-                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">
-                                Registro de Certificación
-                            </p>
+                    </div>
+
+                    <!-- Caja de Apostilla Mejorada -->
+                    <div class="bg-blue-50/30 rounded-3xl border-2 border-dashed border-blue-100 p-6 md:p-8">
+                        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                            <div class="space-y-1 text-center md:text-left">
+                                <h4 class="text-sm font-black text-blue-900 uppercase tracking-tight">¿Desea apostillar el
+                                    documento?</h4>
+                                <p class="text-[11px] text-blue-600/70 font-medium">La apostilla otorga validez legal
+                                    internacional a sus antecedentes.</p>
+                            </div>
+
+                            <div class="flex bg-white p-1.5 rounded-2xl shadow-sm border border-blue-100">
+                                <label class="relative flex-1">
+                                    <input type="radio" name="desea_apostillar" value="si" required
+                                        class="peer hidden">
+                                    <span
+                                        class="block px-8 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 cursor-pointer transition-all peer-checked:bg-blue-600 peer-checked:text-white peer-checked:shadow-md">Sí</span>
+                                </label>
+                                <label class="relative flex-1">
+                                    <input type="radio" name="desea_apostillar" value="no" selected checked
+                                        class="peer hidden">
+                                    <span
+                                        class="block px-8 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 cursor-pointer transition-all peer-checked:bg-slate-800 peer-checked:text-white peer-checked:shadow-md">No</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <form action="#" method="POST" class="p-6 md:p-10">
-                    @csrf
-                    <div class="mb-10">
-                        <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-3">
-                            <h2 class="text-xs font-black text-slate-600 uppercase tracking-[0.2em]">
-                                01. Información del Titular
-                            </h2>
-                        </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                            <div class="space-y-2">
-                                <label
-                                    class="text-[11px] font-black text-slate-600 uppercase ml-1 tracking-wider">Nombres</label>
-                                <input type="text" value="Pedro Jose" readonly
-                                    class="w-full px-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 cursor-not-allowed outline-none">
-                            </div>
-                            <div class="space-y-2">
-                                <label
-                                    class="text-[11px] font-black text-slate-600 uppercase ml-1 tracking-wider">Apellidos</label>
-                                <input type="text" value="Pérez Pérez" readonly
-                                    class="w-full px-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 cursor-not-allowed outline-none">
-                            </div>
-                            <div class="space-y-2">
-                                <label
-                                    class="text-[11px] font-black text-slate-600 uppercase ml-1 tracking-wider">Cédula</label>
-                                <input type="text" value="V-00000000" readonly
-                                    class="w-full px-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 cursor-not-allowed outline-none">
-                            </div>
-                            <div class="space-y-2">
-                                <label
-                                    class="text-[11px] font-black text-slate-600 uppercase ml-1 tracking-wider">Correo</label>
-                                <input type="text" value="usuario@ejemplo.com" readonly
-                                    class="w-full px-4 py-3 bg-slate-50/80 border border-slate-200 rounded-xl text-sm font-bold text-slate-500 cursor-not-allowed outline-none">
-                            </div>
-                        </div>
+                <!-- Acciones Finales -->
+                <div class="space-y-6 pt-4">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+
+                        <!-- Botón Principal -->
+                        <button type="submit"
+                            class="w-full md:w-auto px-12 py-5 bg-blue-900 hover:bg-blue-700 text-white text-[11px] font-black uppercase tracking-[0.25em] rounded-2xl transition-all active:scale-95 shadow-2xl shadow-blue-200 flex items-center justify-center gap-3">
+                            Finalizar Solicitud
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
                     </div>
 
-                    <div class="mb-12">
-                        <div class="flex items-center gap-2 mb-6 border-b border-slate-100 pb-3">
-                            <h2 class="text-xs font-black text-slate-600 uppercase tracking-[0.2em]">02. Selección del
-                                Trámite</h2>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="space-y-2">
-                                <label for="motivo"
-                                    class="text-[11px] font-black text-slate-700 uppercase ml-1 tracking-widest">Motivo de
-                                    Solicitud</label>
-                                <select id="motivo" name="motivo" required
-                                    class="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 transition-all outline-none">
-                                    <option value="">Seleccione el motivo...</option>
-                                    <option value="trabajo">Oferta de Trabajo</option>
-                                    <option value="estudios">Estudios Internacionales</option>
-                                </select>
+                    <!-- Link Menores -->
+                    <div class="flex justify-center border-t border-slate-50 pt-6">
+                        <a href="#" class="group flex items-center gap-3 opacity-70 hover:opacity-100 transition-all">
+                            <div class="bg-slate-100 p-2 rounded-lg group-hover:bg-blue-100 transition-colors">
+                                <svg class="w-4 h-4 text-slate-500 group-hover:text-blue-600" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                             </div>
-                            <div class="space-y-2">
-                                <label for="pais" class="text-[11px] font-black text-slate-700 uppercase ml-1 tracking-widest">
-                                    País de destino:
-                                </label>
-                                <select id="pais" name="pais" required class="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-slate-100 focus:border-slate-400 transition-all outline-none">
-                                    <option value="" selected disabled>Seleccione el país...</option>
-                                    @foreach ($paises as $pais)
-                                        <option value="">{{ $pais->nombre_oficial }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                ¿Trámite para menores de edad? <span
+                                    class="text-blue-600 underline underline-offset-4 ml-1">Click aquí</span>
+                            </span>
+                        </a>
                     </div>
-
-                    <div class="flex flex-col gap-8 pt-8 border-t border-slate-100">
-                        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <input type="checkbox" required
-                                    class="w-6 h-6 rounded border-slate-300 text-slate-800 focus:ring-slate-200 transition-all">
-                                <span
-                                    class="text-xs font-black text-slate-500 uppercase tracking-tight group-hover:text-slate-700 transition-colors">
-                                    He verificado que los datos son correctos
-                                </span>
-                            </label>
-
-                            <button type="submit"
-                                class="w-full md:w-auto px-12 py-4 bg-slate-800 hover:bg-slate-900 text-white text-xs font-black uppercase tracking-[0.25em] rounded-xl transition-all active:scale-95 shadow-xl shadow-slate-200">
-                                Confirmar Solicitud
-                            </button>
-                        </div>
-
-                        <div
-                            class="bg-slate-200 p-4 rounded-2xl border border-slate-200 flex justify-center transition-all hover:bg-blue-50/50 hover:border-blue-100">
-                            <a href="#" class="group flex items-center gap-3">
-                                <div
-                                    class="bg-white p-1.5 rounded-full shadow-sm border border-slate-200 group-hover:border-blue-200 transition-colors animate-pulse">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-
-                                <span
-                                    class="text-[11px] font-black text-slate-500 uppercase tracking-wider group-hover:text-slate-700 transition-colors">
-                                    ¿Requiere trámite para menores de edad?
-                                    <span class="text-blue-600 decoration-2 underline underline-offset-4 ml-1">Haga clic
-                                        aquí</span>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </div>
+        </form>
     </div>
 @endsection

@@ -28,9 +28,9 @@
                     Inicio
                 </a>
 
-                <a href="{{ route('solicitud.certificado') }}"
+                <a href="{{ route('solicitud.crear') }}"
                     class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10.9px] font-black uppercase tracking-[0.15em] transition-all duration-300
-                    {{ request()->routeIs('solicitud.certificado') ? 'bg-[#274294] text-white shadow-lg shadow-blue-900/20' : 'text-slate-300 hover:text-white hover:bg-slate-800' }}">
+                    {{ request()->routeIs('solicitud.crear') ? 'bg-[#274294] text-white shadow-lg shadow-blue-900/20' : 'text-slate-300 hover:text-white hover:bg-slate-800' }}">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -72,7 +72,7 @@
         <div class="px-4 py-6 space-y-3">
             <a href="{{ route('usuario.bienvenida') }}"
                 class="block px-4 py-3 rounded-xl text-[10.9px] font-black uppercase tracking-widest {{ request()->is('/') ? 'bg-[#274294] text-white' : 'text-slate-200' }}">Inicio</a>
-            <a href="{{ route('solicitud.certificado') }}"
+            <a href="{{ route('solicitud.crear') }}"
                 class="block px-4 py-3 rounded-xl text-[10.9px] font-black uppercase tracking-widest {{ request()->is('solicitud*') ? 'bg-[#274294] text-white' : 'text-slate-200' }}">Nueva
                 Solicitud</a>
             <a href="{{ route('solicitud.listado') }}"

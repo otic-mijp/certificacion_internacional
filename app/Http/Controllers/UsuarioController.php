@@ -26,6 +26,7 @@ class UsuarioController extends Controller
         if ($usuario === true) {
 
             return view('site.perfil.contrasena_obligatoria');
+            
         } else {
 
             $user = Auth::user();
