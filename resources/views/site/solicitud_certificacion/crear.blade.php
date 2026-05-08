@@ -85,6 +85,11 @@
                         ✅ {{ session('success') }}, haga <a href="{{ route('solicitud.listado') }}" class="text-blue-500 underline">click aqui</a> para ver sus trámites.
                     </div>
                 @endif
+                @if (session('error'))
+                    <div class="mb-6 p-4 bg-emerald-100 text-center border border-emerald-100 text-emerald-600 rounded-2xl text-sm font-bold animate-pulse">
+                        ✅ {{ session('error') }}.
+                    </div>
+                @endif
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
 

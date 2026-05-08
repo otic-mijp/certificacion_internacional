@@ -122,11 +122,6 @@ class RegistroController extends Controller
         return to_route('usuario.bienvenida');
     }
 
-    private function get_vista_exitosa(): View
-    {
-        return view('auth.register.verificacion_pendiente');
-    }
-
     public function getMunicipios(int $estado_id): JsonResponse
     {
         $municipios = Municipio::where('estado_id', $estado_id)
