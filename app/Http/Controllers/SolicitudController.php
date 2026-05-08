@@ -51,8 +51,11 @@ class SolicitudController extends Controller
 
         try {
             RecaudoTramite::create([
-                'id_dato' => 2,
+                'id_correlativo' => 2,
+                'num_tramite' => 7777,
+                'id_persona' => $persona['id_persona'],
                 'create_at' => now(),
+                'updated_at' => now(),
                 'cedula_titular' => $persona['numero_cedula'],
                 'nacionalidad' => Str::upper($persona['letra_cedula']),
                 'nombres' => Str::lower($persona['nombres']),
@@ -61,7 +64,7 @@ class SolicitudController extends Controller
                 'pais' => Str::lower($request['pais']),
                 'tipo_solicitante' => 999999,
                 'tipo_titular' => 1,
-                'apostilla' => Str::lower($request->desea_apostillar) === 'si',
+                'apostilla' => filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN),
                 'id_motivo' => $request['motivo'],
                 'id_estatus' => 1,
                 'id_descargas' => null,
@@ -72,7 +75,7 @@ class SolicitudController extends Controller
 
             session()->forget('persona_validada');
 
-            return back()->with('status', 'Se ha generado la solicitud con éxito.');
+            return back()->with('success', 'Se ha generado la solicitud con éxito.');
         } catch (Exception $e) {
 
             DB::rollBack();

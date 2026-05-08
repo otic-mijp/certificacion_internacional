@@ -26,7 +26,7 @@ class SolicitudTramiteRequest extends FormRequest
         return [
             'motivo' => 'required',
             'pais' => 'required',
-            'desea_apostillar' => 'required|in:si,no',
+            'desea_apostillar' => 'required|in:true,false',
         ];
     }
 }
