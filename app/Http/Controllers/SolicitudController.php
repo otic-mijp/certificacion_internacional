@@ -22,7 +22,9 @@ class SolicitudController extends Controller
 {
     public function index(): View
     {
-        $paises = DVPais::all();
+        $paises = DVPais::select('id', 'nombre_oficial')
+            ->where('id', '!=', 'VEN')
+            ->get();
 
         $id_persona = auth()->user()->id_persona;
         $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula'])
@@ -135,5 +137,4 @@ class SolicitudController extends Controller
 
         return $pdf->stream('Certificado nro-' . $tramite->num_tramite . '.pdf');
     }
-
 }
