@@ -195,7 +195,7 @@
 
                 <div class="space-y-6 pt-4">
                     <button type="submit"
-                        class="w-full md:w-auto px-12 py-5 bg-blue-900 hover:bg-blue-700 text-white text-[11px] font-black uppercase tracking-[0.25em] rounded-2xl transition-all active:scale-95 shadow-2xl shadow-blue-200 flex items-center justify-center gap-3">
+                        class="w-full cursor-pointer md:w-auto px-12 py-5 bg-blue-900 hover:bg-blue-700 text-white text-[11px] font-black uppercase tracking-[0.25em] rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-3">
                         Finalizar Solicitud
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
