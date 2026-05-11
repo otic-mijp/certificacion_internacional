@@ -77,29 +77,26 @@ class SolicitudController extends Controller
 
         DB::beginTransaction();
 
-        dd($request->all());
-
         try {
             RecaudoTramite::create([
-                'id_correlativo' => 2,
-                'num_tramite' => 7777,
-                'id_persona' => $idPersona,
-                'created_at' => now(), 
-                'updated_at' => now(),
+                'id_correlativo' => 1,
                 'cedula_titular' => $persona['numero_cedula'],
                 'nacionalidad' => Str::upper($persona['letra_cedula']),
                 'nombres' => Str::lower($persona['nombres']),
                 'primer_apellido' => Str::lower($persona['primer_apellido']),
                 'segundo_apellido' => Str::lower($persona['segundo_apellido']),
-                'pais' => $request['pais'],
-                'pais' => Str::lower($request['pais']),
+                'pais_nombre_oficial' => Str::lower($request['pais']),
                 'tipo_solicitante' => 999999,
-                'tipo_titular' => 1,
+                'tipo_titular' => 1, # Obligatorio
                 'apostilla' => filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN),
                 'id_motivo' => $request['motivo'],
-                'id_estatus' => 1,
+                'id_estatus' => 1, 
                 'id_descargas' => null,
                 'id_diseno_tramite' => $diseno->id,
+                'num_tramite' => 1111,
+                'id_persona' => $idPersona,
+                'created_at' => now(), 
+                'updated_at' => now(),
             ]);
 
             DB::commit();
@@ -107,13 +104,16 @@ class SolicitudController extends Controller
             session()->forget('persona_validada');
 
             return back()->with('success', 'Se ha generado la solicitud con éxito.');
+
         } catch (Exception $e) {
+
             DB::rollBack();
             Log::error("Error al crear solicitud: " . $e->getMessage());
 
             return back()
                 ->withInput()
                 ->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
+                
         }
     }
 

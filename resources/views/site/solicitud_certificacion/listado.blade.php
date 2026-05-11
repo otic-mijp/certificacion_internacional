@@ -60,9 +60,23 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-5">
-                                    <span class="text-xs font-medium text-slate-500">
-                                        {{ $tramite->created_at->translatedFormat('d \d\e F \d\e Y, h:i A') }}
-                                    </span>
+                                    <div class="relative flex items-center group cursor-help">
+                                        <!-- Texto de la fecha -->
+                                        <span
+                                            class="text-xs font-medium text-slate-500 border-b border-dotted border-slate-400">
+                                            {{ $tramite->created_at->translatedFormat('d \d\e F \d\e Y, h:i A') }}
+                                        </span>
+
+                                        <!-- Tooltip (Caja flotante) -->
+                                        <div
+                                            class="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center">
+                                            <div
+                                                class="bg-slate-800 text-white text-[10px] py-1 px-2 rounded shadow-lg whitespace-nowrap">
+                                                La fecha y la hora de solicitud es horario Caracas/Venezuela
+                                            </div>
+                                            <div class="w-2 h-2 bg-slate-800 rotate-45 -mt-1"></div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-5">
                                     <div class="flex items-center gap-2">
@@ -79,9 +93,9 @@
                                 </td>
                                 <td class="px-6 py-5">
                                     @if ($tramite->apostilla)
-                                        <span class="text-gren-500">Solicitada</span>
+                                        <span class="text-green-500">✅Solicitada</span>
                                     @else
-                                        <span class="text-rose-500">No solicitada</span>
+                                        <span class="text-rose-500">❌No solicitada</span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-5">
