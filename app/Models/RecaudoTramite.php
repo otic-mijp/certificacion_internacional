@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RecaudoTramite extends Model
 {
@@ -11,16 +12,13 @@ class RecaudoTramite extends Model
 
     protected $fillable = [
         'id_correlativo',
-        'num_tramite',
-        'id_persona',
-        'created_at',
-        'updated_at',
         'cedula_titular',
         'nacionalidad',
         'nombres',
         'primer_apellido',
         'segundo_apellido',
         'pais',
+        'pais_nombre_oficial',
         'tipo_solicitante',
         'tipo_titular',
         'apostilla',
@@ -28,5 +26,17 @@ class RecaudoTramite extends Model
         'id_estatus',
         'id_descargas',
         'id_diseno_tramite',
+        'num_tramite',
+        'id_persona',
     ];
+
+    public function diseno(): BelongsTo
+    {
+        return $this->belongsTo(RecaudoDiseno::class, 'id_diseno_tramite');
+    }
+
+    public function motivo(): BelongsTo
+    {
+        return $this->belongsTo(RecaudoMotivo::class, 'id_motivo');
+    }
 }

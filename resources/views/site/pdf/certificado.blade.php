@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Certificado nro - {{ $tramite->num_tramite }}</title>
+    <title>Certificación de Antecedentes Penales</title>
     <style>
         /* Configuración para DomPDF */
         @page {
@@ -21,11 +21,11 @@
         /* --- Marca de Agua / Fondo --- */
         .fondo-escudo {
             position: absolute;
-            top: 34%;
-            left: 5%;
-            width: 90%;
-            height: auto;
-            opacity: 0.60;
+            top: 22%;
+            left: 14%;
+            width: 500px;
+            height: 500px;
+            opacity: 0.30;
             z-index: -1;
         }
 
@@ -175,7 +175,9 @@
 
         .img-banner-footer {
             width: 100%;
-            height: 45px;
+            height: 38px;
+            padding: 0;
+            z-index: -1;
         }
 
         .footer-texto {
@@ -187,7 +189,7 @@
     </style>
 </head>
 <body>
- {{-- <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo">
+ <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo">
 
     <table class="tabla-header">
         <tr>
@@ -257,7 +259,7 @@
             tachaduras, modificaciones o superposiciones. Los datos de identificación del solicitante son
             suministrados por el Servicio Administrativo de Identificación, Migración y Extranjería (SAIME). La
             autenticidad de este certificado puede verificarse a través del portal: <br>
-            <span class="url-validacion">http://certificacioninternacional.mijp.gob.ve/validar/paginas/CU_login/</span> 
+            <a class="url-validacion" target="_blank">{{ $web }}/</a> 
             con el nro. <strong>{{ $nro_tramite }}</strong> o escaneando el código QR superior.
         </div>
 
@@ -281,6 +283,6 @@
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia La Candelaria, <br>
             Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
         </div>
-    </footer> --}}
+    </footer>
 </body>
 </html>

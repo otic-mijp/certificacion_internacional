@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
 
-use Exception;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Writer;
 use Illuminate\Support\Facades\Auth;
 
 class SolicitudController extends Controller
@@ -26,7 +29,7 @@ class SolicitudController extends Controller
             ->where('id', '!=', 'VEN')
             ->get();
 
-        $id_persona = auth()->user()->id_persona;
+        $id_persona = Auth::user()->id_persona;
         $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula'])
             ->where('id_persona', $id_persona)
             ->first();
@@ -74,18 +77,21 @@ class SolicitudController extends Controller
 
         DB::beginTransaction();
 
+        dd($request->all());
+
         try {
             RecaudoTramite::create([
                 'id_correlativo' => 2,
                 'num_tramite' => 7777,
                 'id_persona' => $idPersona,
-                'created_at' => now(), // Nota: corregido de 'create_at' a 'created_at' si usas convenciones Laravel
+                'created_at' => now(), 
                 'updated_at' => now(),
                 'cedula_titular' => $persona['numero_cedula'],
                 'nacionalidad' => Str::upper($persona['letra_cedula']),
                 'nombres' => Str::lower($persona['nombres']),
                 'primer_apellido' => Str::lower($persona['primer_apellido']),
                 'segundo_apellido' => Str::lower($persona['segundo_apellido']),
+                'pais' => $request['pais'],
                 'pais' => Str::lower($request['pais']),
                 'tipo_solicitante' => 999999,
                 'tipo_titular' => 1,
@@ -114,7 +120,7 @@ class SolicitudController extends Controller
     public function listado_tramites(): View
     {
 
-        $userId = auth()->user()->id_persona;
+        $userId = Auth::user()->id_persona;
         $ahora = Carbon::now();
 
         $listado_tramites = RecaudoTramite::where('id_persona', $userId)
@@ -132,9 +138,88 @@ class SolicitudController extends Controller
             ->where('id_persona', Auth::user()->id_persona)
             ->firstOrFail();
 
+        $diseno = $tramite->diseno;
 
-        $pdf = Pdf::loadView('site.pdf.certificado', compact('tramite'));
+        // Procesar imágenes
+        $imagenes = ['logo_encabezado', 'logo_fondo', 'sello', 'firma', 'banner_footer'];
+        $procesadas = [];
+
+        foreach ($imagenes as $campo) {
+            $valor = $diseno->$campo ?? null;
+
+            if (is_resource($valor)) {
+                $valor = stream_get_contents($valor);
+            }
+
+            if ($valor && !str_starts_with($valor, 'data:image')) {
+                $procesadas[$campo] = 'data:image/png;base64,' . base64_encode($valor);
+            } else {
+                $procesadas[$campo] = $valor;
+            }
+        }
+
+        // Configuración de QR
+        $renderer = new ImageRenderer(new RendererStyle(150), new SvgImageBackEnd());
+        $writer = new Writer($renderer);
+
+        $nro_tramite = $tramite->num_tramite;
+        $datos_identidad = $tramite->nacionalidad . '-' . $tramite->cedula_titular;
+        $nombre_completo = $tramite->nombres . ' ' . $tramite->primer_apellido . ' ' . $tramite->segundo_apellido;
+
+        $url_validacion = $diseno->web_consulta . $nro_tramite;
+
+        $qr_tramite = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString("Tramite: " . $nro_tramite));
+        $qr_cedula = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString("Cedula: " . $datos_identidad));
+        $qr_web = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString($url_validacion));
+
+        // Fechas
+        $fecha_actual = Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+        $fecha_gaceta = $diseno->fecha_gaceta ? Carbon::parse($diseno->fecha_gaceta)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '';
+        $fecha_decreto = $diseno->fecha_decreto ? Carbon::parse($diseno->fecha_decreto)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '';
+
+        // Datos para la vista
+        $data = [
+            'tramite' => $tramite,
+
+            // QR
+            'qr_pag_redirect' => $qr_web,
+            'qr_tramite' => $qr_tramite,
+            'qr_cedula' => $qr_cedula,
+
+            // Imágenes procesadas
+            'logo_ministerial' => $procesadas['logo_encabezado'],
+            'sello_direccion' => $procesadas['sello'],
+            'firma_viceministro' => $procesadas['firma'],
+            'banner_footer' => $procesadas['banner_footer'],
+            'logo_ministerial_fondo' => $procesadas['logo_fondo'],
+
+            // Datos de autoridad
+            'nombre_direccion' => $diseno->nombre_direccion,
+            'gaceta_cambio_pais' => $diseno->nro_gaceta,
+            'fecha_cambio_gaceta_pais' => $fecha_gaceta,
+            'nombre_viceministro' => $diseno->nombre_viceministro,
+            'nro_decreto_desgnacion' => $diseno->nro_designacion,
+            'fecha_decreto_desgnacion' => $fecha_decreto,
+            'viceministro_nombre_direccion' => $diseno->cargo_viceministro,
+            'nro_decreto_extraordinario' => $diseno->nro_extraordinaria,
+
+            // Localización
+            'telefono_ministerio' => $diseno->tlf,
+            'piso' => $diseno->piso,
+
+            // Datos del trámite
+            'fecha' => $tramite->created_at->format('d/m/Y'),
+            'nombre_solicitante' => strtoupper($nombre_completo),
+            'datos' => $datos_identidad,
+            'pais_solicitud' => strtoupper($tramite->pais),
+            'fecha_actual' => $fecha_actual,
+            'nro_tramite' => $nro_tramite,
+            'web' => $diseno->web_consulta ?? '',
+        ];
+
+        $pdf = Pdf::loadView('site.pdf.certificado', $data);
 
         return $pdf->stream('Certificado nro-' . $tramite->num_tramite . '.pdf');
     }
+    
 }

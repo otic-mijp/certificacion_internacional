@@ -19,7 +19,15 @@
                 </p>
             </div>
 
-            <form action="#" method="POST" class="p-10 space-y-6">
+            <form action="{{ route('busqueda.usuario') }}" method="POST" class="p-10 space-y-6">
+                @csrf
+
+                @if (session('status'))
+                    <div class="text-green-500 text-xs mb-4">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <div class="max-w-sm">
                     <label for="cedula"
                         class="block text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 ml-1">
@@ -31,8 +39,8 @@
                         <div class="relative flex items-center">
                             <select name="letra_cedula"
                                 class="appearance-none bg-transparent pl-4 pr-8 py-4 text-slate-700 font-bold text-lg focus:outline-none cursor-pointer z-10">
-                                <option value="v">V</option>
-                                <option value="e">E</option>
+                                <option value="V">V</option>
+                                <option value="E">E</option>
                             </select>
                             <div class="absolute right-2 pointer-events-none">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor"
@@ -45,9 +53,25 @@
 
                         <div class="h-8 w-[1px] bg-slate-200"></div>
 
-                        <input type="text" name="cedula" id="cedula" required placeholder="00000000" autofocus
+                        <input type="text" name="numero_cedula" id="cedula" placeholder="00000000" value="{{ old('numero_cedula') }}" autofocus
                             class="w-full px-4 py-4 bg-transparent text-slate-700 font-bold text-lg focus:outline-none placeholder:text-slate-300">
+
                     </div>
+                    @error('letra_cedula')
+                        <span class="text-red-500 text-[12px] font-bold mt-2 ml-1 block text-center">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                    @error('numero_cedula')
+                        <span class="text-red-500 text-[12px] font-bold mt-2 ml-1 block text-center">
+                            {{ $message }}
+                        </span>
+                    @enderror
+                     @error('status')
+                        <span class="text-red-500 text-[12px] font-bold mt-2 ml-1 block text-center">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
 
                 <button type="submit"
@@ -57,7 +81,7 @@
             </form>
 
             <div class="px-10 pb-10 text-center">
-                <a href="javascript:history.back()"
+                <a href="{{ route('login') }}"
                     class="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-[#233C7E] transition-colors">
                     ← Volver al inicio
                 </a>

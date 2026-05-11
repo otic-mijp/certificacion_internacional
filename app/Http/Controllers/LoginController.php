@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 
 use App\Mail\RecuperarPasswordMail;
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -62,6 +63,87 @@ class LoginController extends Controller
         return view('auth.info_user');
     }
 
+    public function consultar_usuario(ConsultaCedulaRegistroRequest $request)
+    {
+        $cedula = trim($request->input('numero_cedula'));
+        $letra = trim($request->input('letra_cedula'));
+
+        $persona = DVPersona::where('numero_cedula', $cedula)
+            ->where('letra_cedula', $letra)
+            ->first();
+
+        if (!$persona) {
+            return redirect()->back()->withErrors(['numero_cedula' => 'No se encontraron registros.']);
+        }
+
+        $auth_user = Usuario::where('id_persona', $persona->id_persona)
+            ->with('respuestasSeguridad.pregunta')
+            ->first();
+
+        if (!$auth_user) {
+            return redirect()->back()->withErrors(['status' => 'No se encuentra ningún usuario registrado en este sistema.']);
+        }
+
+        session(['recuperar_usuario_id' => $auth_user->id]);
+
+        return redirect()->route('recuperar.usuario.preguntas');
+    }
+
+    public function preguntas_seguridad(): View
+    {
+        $userId = session('recuperar_usuario_id');
+
+        if (!$userId) {
+            return redirect()->route('recuperar.usuario')
+                ->withErrors(['status' => 'La sesión expiró. Por favor, vuelve a intentar.']);
+        }
+
+        $user = Usuario::with('respuestasSeguridad.pregunta')->find($userId);
+
+        if (!$user) {
+            return redirect()->route('recuperar.usuario')
+                ->withErrors(['status' => 'Usuario no encontrado.']);
+        }
+
+        return view('auth.security_questions', [
+            'user' => $user,
+        ]);
+    }
+
+    public function recuperar_correo(Request $request)
+    {
+        $userId = $request->session()->get('recuperar_usuario_id');
+
+        if (!$userId) {
+            return redirect()->route('recuperar.usuario')
+                ->withErrors(['status' => 'La sesión expiró. Por favor, vuelve a intentar.']);
+        }
+
+        $user = Usuario::with('respuestasSeguridad.pregunta')->find($userId);
+
+        if (!$user) {
+            return redirect()->route('recuperar.usuario')
+                ->withErrors(['status' => 'Usuario no encontrado.']);
+        }
+
+        foreach ($user->respuestasSeguridad as $respuesta) {
+            $inputName = 'respuesta_' . $respuesta->id;
+            $valor = strtolower(trim($request->input($inputName, '')));
+
+            if ($valor === '' || ! Hash::check($valor, $respuesta->respuesta)) {
+                return back()
+                    ->withErrors(['respuestas' => 'Una o más respuestas son incorrectas.'])
+                    ->withInput();
+            }
+        }
+
+        $request->session()->forget('recuperar_usuario_id');
+
+        return view('auth.vista_correo_existente', [
+            'email' => $user->email,
+        ]);
+    }
+
     public function buscar_cedula(ConsultaCedulaRegistroRequest $request): RedirectResponse
     {
         $cedula = $request->input('numero_cedula');
@@ -76,16 +158,5 @@ class LoginController extends Controller
         }
 
         return redirect()->route('registro.final');
-    }
-
-    protected function preguntas_seguridad($data): View
-    {
-
-        $data = [
-            'correo' => 'ejemplo@ejemplo.com',
-            'password_temporal' => '123456789',
-        ];
-
-        return view('auth.security_questions', compact('data'));
     }
 }

@@ -31,6 +31,13 @@ Route::group(['prefix' => 'recuperar', 'controller' => LoginController::class], 
     Route::put('/clave/recuperar', 'recuperar_clave_update')->name('recuperar.clave.update');
 
     Route::get('/usuario', 'recuperar_usuario')->name('recuperar.usuario');
+    Route::get('/usuario/preguntas', 'preguntas_seguridad')->name('recuperar.usuario.preguntas');
+    Route::get('/usuario/info', function () {
+        return redirect()->route('recuperar.usuario');
+    });
+    Route::post('/usuario/info', 'consultar_usuario')->name('busqueda.usuario');
+    Route::post('/usuario/correo', 'recuperar_correo')->name('recuperar.correo.usuario');
+
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
