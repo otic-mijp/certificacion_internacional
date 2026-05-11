@@ -7,8 +7,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td align="center" style="padding: 40px 0;">
-                <table width="600" border="0" cellspacing="0" cellpadding="0"
-                    style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
+                <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e1e8ed;">
                     <tr>
                         <td align="center" style="padding: 30px 0 10px 0;">
                             <img src="{{ $message->embed(public_path('img/logo_pestana.png')) }}" alt="Logo" style="max-width: 150px; height: auto;">
@@ -29,13 +28,6 @@
                             <p style="color: #4a5568; font-size: 15px; line-height: 1.6; text-align: center; margin-bottom: 30px;">
                                 Esta herramienta te permitirá tramitar tu documentación de seguridad ante el Ministerio de Relaciones Interiores, Justicia y Paz de forma digital.
                             </p>
-
-                            <!-- Botón de Acción -->
-                            <div style="text-align: center; margin-bottom: 35px;">
-                                <a href="http://certificacioninternacional.mijp.gob.ve"  style="background-color: #233C7E; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block;">
-                                   Acceder al Sistema
-                                </a>
-                            </div>
 
                             <!-- Nota importante -->
                             <div style="background-color: #f8fafc; border-left: 4px solid #233C7E; padding: 15px; margin-bottom: 10px;">

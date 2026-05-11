@@ -36,18 +36,18 @@
                 <div
                     class="group p-8 rounded-2xl border border-slate-100 bg-white hover:border-blue-100 hover:bg-blue-50/30 transition-all duration-300">
                     <div class="flex flex-col md:flex-row md:items-center gap-6">
-                        <div
-                            class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-sm border border-slate-50 group-hover:scale-110 transition-transform duration-300">
+                        <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-sm border border-slate-50 group-hover:scale-110 transition-transform duration-300">
                             📊
                         </div>
 
                         <div class="flex-1">
-                            <h3 class="text-xs font-black text-[#233C7E] uppercase tracking-[0.2em] mb-2">Límites de
-                                Solicitud</h3>
+                            <h3 class="text-xs font-black text-[#233C7E] uppercase tracking-[0.2em] mb-2">
+                                Límites de Solicitud
+                            </h3>
                             <p class="text-slate-600 leading-relaxed text-lg">
-                                Solicitudes habilitadas de <span
-                                    class="text-slate-900 font-bold underline decoration-blue-200 decoration-4 underline-offset-2">lunes
-                                    a viernes</span>.
+                                Solicitudes habilitadas de <span class="text-slate-900 font-bold underline decoration-blue-200 decoration-4 underline-offset-2">
+                                    lunes a viernes
+                                </span>.
                                 Posee una restricción de <span class="text-slate-900 font-bold">3 trámites al mes</span> y
                                 <span class="text-slate-900 font-bold">10 anuales</span>.
                             </p>

@@ -89,7 +89,7 @@ class LoginController extends Controller
         return redirect()->route('recuperar.usuario.preguntas');
     }
 
-    public function preguntas_seguridad(): View
+    public function preguntas_seguridad()
     {
         $userId = session('recuperar_usuario_id');
 

@@ -114,6 +114,8 @@ class RegistroController extends Controller
 
         session()->forget('persona_validada');
 
+        Mail::to($request->input('email'))->send(new RegistroBienvenidaMail());
+
         // Enviar notificación de verificación de email
         event(new Registered($usuario));
 
