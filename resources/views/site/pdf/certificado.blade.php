@@ -242,8 +242,8 @@
 
         <div class="seccion-firmas">
             <div class="firma-container">
-                <img src="{{ $sello_direccion }}" class="sello-oficial">
-                <img src="{{ $firma_viceministro }}" class="firma-digital">
+                <img src="{{ $sello_direccion }}"  alt="Sello del viceministerio no registrado" class="sello-oficial">
+                <img src="{{ $firma_viceministro }}" alt="Firma del viceministro no registrada" class="firma-digital">
             </div>
             <div class="nombre-autoridad">{{ $nombre_viceministro }}</div>
             <div class="cargo-autoridad">{{ $viceministro_nombre_direccion }}</div>
@@ -259,18 +259,17 @@
             tachaduras, modificaciones o superposiciones. Los datos de identificación del solicitante son
             suministrados por el Servicio Administrativo de Identificación, Migración y Extranjería (SAIME). La
             autenticidad de este certificado puede verificarse a través del portal: <br>
-            <a class="url-validacion" target="_blank">{{ $web }}/</a> 
-            con el nro. <strong>{{ $nro_tramite }}</strong> o escaneando el código QR superior.
+            <a class="url-validacion" target="_blank">{{ $web }}/{{ $nro_tramite }}</a> escaneando el código QR superior.
         </div>
 
         <table class="tabla-qr-footer">
             <tr>
                 <td align="center" width="50%">
-                    <img src="{{ $qr_cedula }}" class="qr-final">
+                    <img src="{{ $qr_cedula }}" alt="Img QR" class="qr-final">
                     <span class="qr-etiqueta">ID SOLICITANTE</span>
                 </td>
                 <td align="center" width="50%">
-                    <img src="{{ $qr_tramite }}" class="qr-final">
+                    <img src="{{ $qr_tramite }}" alt="Img QR" class="qr-final">
                     <span class="qr-etiqueta">VALIDACIÓN TRÁMITE</span>
                 </td>
             </tr>
@@ -278,7 +277,7 @@
     </div>
 
     <footer class="footer-pagina">
-        <img src="{{ $banner_footer }}" class="img-banner-footer">
+        <img src="{{ $banner_footer }}" alt="Img Banner" class="img-banner-footer">
         <div class="footer-texto">
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia La Candelaria, <br>
             Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
