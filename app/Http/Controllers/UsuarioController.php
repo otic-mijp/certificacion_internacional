@@ -31,8 +31,9 @@ class UsuarioController extends Controller
 
             $user = Auth::user();
             $data = DVPersona::where('id_persona', $user->id_persona)->first();
+            $tiene_preguntas_seguridad = $user->respuestasSeguridad()->exists();
 
-            return view('site.bienvenida', compact('data'));
+            return view('site.bienvenida', compact('data', 'tiene_preguntas_seguridad'));
         }
     }
 

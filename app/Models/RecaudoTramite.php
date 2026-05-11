@@ -17,7 +17,6 @@ class RecaudoTramite extends Model
         'nombres',
         'primer_apellido',
         'segundo_apellido',
-        'pais',
         'pais_nombre_oficial',
         'tipo_solicitante',
         'tipo_titular',
