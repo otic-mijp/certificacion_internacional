@@ -75,6 +75,8 @@ class SolicitudController extends Controller
 
         $diseno = RecaudoDiseno::where('estado', true)->first();
 
+        $pais_validado = DVPais::where('id', $request->pais)->firstOrFail();
+
         DB::beginTransaction();
 
         try {
@@ -85,7 +87,7 @@ class SolicitudController extends Controller
                 'nombres' => Str::lower($persona['nombres']),
                 'primer_apellido' => Str::lower($persona['primer_apellido']),
                 'segundo_apellido' => Str::lower($persona['segundo_apellido']),
-                'pais_nombre_oficial' => Str::lower($request['pais']),
+                'pais_nombre_oficial' => Str::lower($pais_validado->nombre_oficial) ,
                 'tipo_solicitante' => 999999,
                 'tipo_titular' => 1, # Obligatorio
                 'apostilla' => filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN),
@@ -211,7 +213,7 @@ class SolicitudController extends Controller
             'fecha' => $tramite->created_at->format('d/m/Y'),
             'nombre_solicitante' => strtoupper($nombre_completo),
             'datos' => $datos_identidad,
-            'pais_solicitud' => strtoupper($tramite->pais),
+            'pais_solicitud' => strtoupper($tramite->pais_nombre_oficial),
             'fecha_actual' => $fecha_actual,
             'nro_tramite' => $nro_tramite,
             'web' => $diseno->web_consulta ?? '',

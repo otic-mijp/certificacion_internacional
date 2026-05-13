@@ -151,8 +151,7 @@
                             </div>
                         </div>
                         @error('pais')
-                            <p class="text-[10px] text-red-500 font-bold mt-1 ml-1 tracking-wide uppercase">{{ $message }}
-                            </p>
+                            <p class="text-[10px] text-red-500 font-bold mt-1 ml-1 tracking-wide uppercase">{{ $message }}</p>
                         @enderror
                     </div>
 
