@@ -97,6 +97,7 @@ class SolicitudController extends Controller
                 'id_diseno_tramite' => $diseno->id,
                 'num_tramite' => 1111,
                 'id_persona' => $idPersona,
+                'correo' => Auth::user()->email,
                 'created_at' => now(), 
                 'updated_at' => now(),
             ]);

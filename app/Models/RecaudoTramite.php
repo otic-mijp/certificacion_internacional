@@ -11,7 +11,7 @@ class RecaudoTramite extends Model
     protected $table = 'tramites';
 
     protected $fillable = [
-        'id_correlativo',
+       'id_correlativo',
         'cedula_titular',
         'nacionalidad',
         'nombres',
@@ -27,6 +27,7 @@ class RecaudoTramite extends Model
         'id_diseno_tramite',
         'num_tramite',
         'id_persona',
+        'correo',
     ];
 
     public function diseno(): BelongsTo
