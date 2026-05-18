@@ -14,13 +14,15 @@ use Illuminate\Support\Str;
 
 use App\Mail\RecuperarPasswordMail;
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
+use App\Models\PopupSetting;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     public function index(): View
     {
-        return view('auth.login');
+        $popupImg = PopupSetting::where('popup_principal', true)->first();
+        return view('auth.login', compact('popupImg'));
     }
 
     public function requisitos(): View

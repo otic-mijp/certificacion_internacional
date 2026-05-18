@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-ve">
 <head>
     <meta charset="UTF-8">
     <title>Certificación de Antecedentes Penales</title>
@@ -21,7 +21,7 @@
         /* --- Marca de Agua / Fondo --- */
         .fondo-escudo {
             position: absolute;
-            top: 22%;
+            top: 16%;
             left: 14%;
             width: 500px;
             height: 500px;
@@ -37,7 +37,8 @@
         }
 
         .texto-header {
-            width: 60%; /* Ajustado para dar espacio a los logos */
+            width: 63%;
+            /* Ajustado para dar espacio a los logos */
             text-align: center;
             font-size: 7pt;
             font-weight: bold;
@@ -47,8 +48,10 @@
         }
 
         .img-header-izq {
-            width: 110px;
-            height: auto;
+            width: 85px;
+            height: 85px;
+            object-position: center;
+            overflow: hidden;
         }
 
         .img-header-dere {
@@ -68,7 +71,8 @@
 
         .parrafo {
             text-align: justify;
-            text-indent: 30px; /* Sangría clásica oficial */
+            text-indent: 30px;
+            /* Sangría clásica oficial */
             margin-bottom: 10px;
         }
 
@@ -97,13 +101,15 @@
         }
 
         .sello-oficial {
-            width: 90px;
+            width: 120px;
+            height: 120px;
             vertical-align: middle;
             margin-right: 20px;
         }
 
         .firma-digital {
-            width: 150px;
+            max-width: 120px;
+            max-height: 120px;
             vertical-align: middle;
         }
 
@@ -175,7 +181,7 @@
 
         .img-banner-footer {
             width: 100%;
-            height: 38px;
+            height: 90px;
             padding: 0;
             z-index: -1;
         }
@@ -188,8 +194,9 @@
         }
     </style>
 </head>
+
 <body>
- <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo">
+    <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo">
 
     <table class="tabla-header">
         <tr>
@@ -212,7 +219,8 @@
             En nombre del ciudadano Ministro del Poder Popular para las Relaciones Interiores, Justicia y Paz,
             la <strong>{{ $nombre_direccion }}</strong>, en el ejercicio de sus funciones y cumpliendo la Ley de
             Registro de Antecedentes Penales publicada en la Gaceta Oficial de la República de Venezuela (hoy República
-            Bolivariana de Venezuela) <span style="font-weight: bold;">Nro. {{ $gaceta_cambio_pais }}, de fecha {{ $fecha_cambio_gaceta_pais }}</span>, a solicitud
+            Bolivariana de Venezuela) <span style="font-weight: bold;">Nro. {{ $gaceta_cambio_pais }}, de fecha
+                {{ $fecha_cambio_gaceta_pais }}</span>, a solicitud
             de parte interesada expide el presente certificado al ciudadano(a):
         </p>
 
@@ -242,15 +250,17 @@
 
         <div class="seccion-firmas">
             <div class="firma-container">
-                <img src="{{ $sello_direccion }}"  alt="Sello del viceministerio no registrado" class="sello-oficial">
+                <img src="{{ $sello_direccion }}" alt="Sello del viceministerio no registrado" class="sello-oficial">
                 <img src="{{ $firma_viceministro }}" alt="Firma del viceministro no registrada" class="firma-digital">
             </div>
             <div class="nombre-autoridad">{{ $nombre_viceministro }}</div>
             <div class="cargo-autoridad">{{ $viceministro_nombre_direccion }}</div>
             <div class="base-legal">
-                DESIGNADA SEGÚN DECRETO <span style="font-weight: bold;">NRO. {{ $nro_decreto_desgnacion }}</span> DE FECHA {{ $fecha_decreto_desgnacion }},<br>
+                DESIGNADA SEGÚN DECRETO <span style="font-weight: bold;">NRO. {{ $nro_decreto_desgnacion }}</span> DE
+                FECHA {{ $fecha_decreto_desgnacion }},<br>
                 PUBLICADO EN GACETA OFICIAL DE LA REPÚBLICA BOLIVARIANA DE VENEZUELA<br>
-                <span style="font-weight: bold;">{{ $nro_decreto_extraordinario }}</span> EXTRAORDINARIO DE LA MISMA FECHA.
+                <span style="font-weight: bold;">{{ $nro_decreto_extraordinario }}</span> EXTRAORDINARIO DE LA MISMA
+                FECHA.
             </div>
         </div>
 
@@ -259,7 +269,8 @@
             tachaduras, modificaciones o superposiciones. Los datos de identificación del solicitante son
             suministrados por el Servicio Administrativo de Identificación, Migración y Extranjería (SAIME). La
             autenticidad de este certificado puede verificarse a través del portal: <br>
-            <a class="url-validacion" target="_blank">{{ $web }}/{{ $nro_tramite }}</a> escaneando el código QR superior.
+            <a class="url-validacion" target="_blank">{{ $web }}/{{ $nro_tramite }}</a> escaneando el código
+            QR superior.
         </div>
 
         <table class="tabla-qr-footer">
@@ -279,9 +290,11 @@
     <footer class="footer-pagina">
         <img src="{{ $banner_footer }}" alt="Img Banner" class="img-banner-footer">
         <div class="footer-texto">
-            Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia La Candelaria, <br>
+            Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia
+            La Candelaria, <br>
             Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
         </div>
     </footer>
 </body>
+
 </html>

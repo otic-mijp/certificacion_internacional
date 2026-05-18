@@ -16,35 +16,35 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="space-y-2">
-                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Nombres</label>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Nombres:</label>
                     <input type="text" value="{{ $data->nombres }}" readonly
                         class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Primer
-                        Apellido</label>
+                        Apellido:</label>
                     <input type="text" value="{{ $data->primer_apellido }}" readonly
                         class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Segundo
-                        Apellido</label>
+                        Apellido:</label>
                     <input type="text" value="{{ $data->segundo_apellido }}" readonly
                         class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Cédula de
-                        Identidad</label>
+                        Identidad:</label>
                     <input type="text" value="{{ $data->id_persona }}" readonly
                         class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
                 </div>
 
                 <div class="sm:col-span-2 space-y-2">
                     <label class="text-[10px] font-bold text-slate-400 uppercase ml-1 tracking-wider">Correo
-                        Electrónico</label>
+                        Electrónico:</label>
                     <input type="text" value="{{ auth()->user()->email }}" readonly
                         class="w-full px-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 cursor-not-allowed focus:outline-none shadow-sm">
                 </div>
@@ -96,7 +96,7 @@
                     <div class="group space-y-2">
                         <label for="motivo"
                             class="text-[10px] font-black text-slate-700 uppercase ml-1 tracking-widest group-focus-within:text-blue-600">
-                            Motivo de Solicitud
+                            Motivo de Solicitud:
                         </label>
                         <select id="motivo" name="motivo" required
                             class="w-full px-4 py-4 bg-slate-50 border @error('motivo') border-red-500 @else border-slate-200 @enderror rounded-2xl text-sm font-bold text-slate-800 focus:ring-4 focus:ring-blue-50 focus:border-blue-400 focus:bg-white transition-all outline-none appearance-none cursor-pointer">
@@ -117,7 +117,7 @@
                     <div class="group space-y-2" id="custom-select-container">
                         <label for="pais_solicitud"
                             class="text-[10px] font-black text-slate-700 uppercase ml-1 tracking-widest group-focus-within:text-blue-600">
-                            País de Destino
+                            País de Destino:
                         </label>
 
                         <div class="relative">

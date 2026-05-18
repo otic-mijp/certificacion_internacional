@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ParroquiasSeeder::class,
             ProfesionesSeeder::class,
             PreguntasSeguridadSeeder::class,
+            PopupSettingSeeder::class,
         ]);
     }
 }

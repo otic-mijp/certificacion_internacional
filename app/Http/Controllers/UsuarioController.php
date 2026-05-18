@@ -6,6 +6,7 @@ use App\Http\Requests\PerfilUsuario\CambioClaveRequest;
 use App\Http\Requests\PerfilUsuario\CambioCorreoRequest;
 use App\Http\Requests\PerfilUsuario\CambioPreguntasRequest;
 use App\Models\DVPersona;
+use App\Models\PopupSetting;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -26,14 +27,15 @@ class UsuarioController extends Controller
         if ($usuario === true) {
 
             return view('site.perfil.contrasena_obligatoria');
-            
         } else {
 
             $user = Auth::user();
             $data = DVPersona::where('id_persona', $user->id_persona)->first();
             $tiene_preguntas_seguridad = $user->respuestasSeguridad()->exists();
+            $popupImg = PopupSetting::where('popup_principal', false)->first();
 
-            return view('site.bienvenida', compact('data', 'tiene_preguntas_seguridad'));
+
+            return view('site.bienvenida', compact('data', 'tiene_preguntas_seguridad', 'popupImg'));
         }
     }
 
