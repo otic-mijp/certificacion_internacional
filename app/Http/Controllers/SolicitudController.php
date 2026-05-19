@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SolictudTramite\SolicitudTramiteRequest;
 use App\Models\DVPais;
 use App\Models\DVPersona;
+use App\Models\DVReo;
 use App\Models\RecaudoDiseno;
 use App\Models\RecaudoMotivo;
 use App\Models\RecaudoTramite;
@@ -25,6 +26,13 @@ class SolicitudController extends Controller
 {
     public function index(): View
     {
+
+        $antecedente = $this->get_antedecente();
+
+        if (!$antecedente) {
+            return view('site.solicitud_certificacion.rechazo');
+        }
+
         $paises = DVPais::select('id', 'nombre_oficial')
             ->where('id', '!=', 'VEN')
             ->get();
@@ -55,7 +63,6 @@ class SolicitudController extends Controller
         $idPersona = $persona['id_persona'];
         $ahora = Carbon::now();
 
-        // 1. Contar trámites del mes actual
         $tramitesMes = RecaudoTramite::where('id_persona', $idPersona)
             ->whereYear('created_at', $ahora->year)
             ->whereMonth('created_at', $ahora->month)
@@ -87,18 +94,18 @@ class SolicitudController extends Controller
                 'nombres' => Str::lower($persona['nombres']),
                 'primer_apellido' => Str::lower($persona['primer_apellido']),
                 'segundo_apellido' => Str::lower($persona['segundo_apellido']),
-                'pais_nombre_oficial' => Str::lower($pais_validado->nombre_oficial) ,
+                'pais_nombre_oficial' => Str::lower($pais_validado->nombre_oficial),
                 'tipo_solicitante' => 999999,
                 'tipo_titular' => 1, # Obligatorio
                 'apostilla' => filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN),
                 'id_motivo' => $request['motivo'],
-                'id_estatus' => 1, 
+                'id_estatus' => 1,
                 'id_descargas' => null,
                 'id_diseno_tramite' => $diseno->id,
                 'num_tramite' => 1111,
                 'id_persona' => $idPersona,
                 'correo' => Auth::user()->email,
-                'created_at' => now(), 
+                'created_at' => now(),
                 'updated_at' => now(),
             ]);
 
@@ -107,8 +114,7 @@ class SolicitudController extends Controller
             session()->forget('persona_validada');
 
             return back()->with('success', 'Se ha generado la solicitud con éxito.');
-
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
 
             DB::rollBack();
             Log::error("Error al crear solicitud: " . $e->getMessage());
@@ -116,13 +122,24 @@ class SolicitudController extends Controller
             return back()
                 ->withInput()
                 ->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
-                
         }
+    }
+
+    private function get_antedecente()
+    {
+        $idPersona = Auth::user()->id_persona;
+
+        $validacion = DVReo::where('id_reo', $idPersona)->exists();
+
+        if ($validacion) {
+            return false;
+        }
+
+        return true;
     }
 
     public function listado_tramites(): View
     {
-
         $userId = Auth::user()->id_persona;
         $ahora = Carbon::now();
 
@@ -224,5 +241,4 @@ class SolicitudController extends Controller
 
         return $pdf->stream('Certificado nro-' . $tramite->num_tramite . '.pdf');
     }
-    
 }

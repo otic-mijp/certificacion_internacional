@@ -17,18 +17,16 @@ class PopupSettingSeeder extends Seeder
 
         $rutaImagen1 = public_path('img/informacion.jpg');
         PopupSetting::create([
-            'titulo' => '¡Promoción de Temporada y Avisos PC!',
+            'titulo' => 'Popup para mostrarse en el login',
             'popup_principal' => true,
-            // Usamos fopen para abrirlo como binario puro
             'imagen_data' => File::exists($rutaImagen1) ? fopen($rutaImagen1, 'r') : null,
         ]);
 
         // 2. Imagen Secundaria (Fila 2)
         $rutaImagen2 = public_path('img/informacion.jpg');
         PopupSetting::create([
-            'titulo' => 'Aviso Importante para Versión Móvil',
+            'titulo' => 'Popup para mostrarse adentro de la web (informativo).',
             'popup_principal' => false,
-            // Usamos fopen para abrirlo como binario puro
             'imagen_data' => File::exists($rutaImagen2) ? fopen($rutaImagen2, 'r') : null,
         ]);
     }
