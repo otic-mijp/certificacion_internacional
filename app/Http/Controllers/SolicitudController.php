@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
@@ -129,13 +130,26 @@ class SolicitudController extends Controller
     {
         $idPersona = Auth::user()->id_persona;
 
-        $validacion = DVReo::where('id_reo', $idPersona)->exists();
+        $url = 'https://api.externa.com/v1/usuarios/' . $idPersona;
 
-        if ($validacion) {
+        try {
+          
+            $respuesta = Http::get($url);
+
+            
+            if ($respuesta->successful()) {
+                return $respuesta->boolean();
+            }
+
+            return false;
+
+        } catch (\Exception $e) {
+           
+            Log::error('Error de conexión con la API: ' . $e->getMessage());
+
             return false;
         }
-
-        return true;
+        
     }
 
     public function listado_tramites(): View
