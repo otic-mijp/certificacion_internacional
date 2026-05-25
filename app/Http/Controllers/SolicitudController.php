@@ -202,7 +202,7 @@ class SolicitudController extends Controller
             $tramite->refresh();
             $anio = date('Y');
             // Nota: Asegúrate de que RecaudoTramite usa 'id_correlativo'. Si usa 'id', cámbialo a $tramite->id
-            $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}"; 
+            $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
             $tramite->save();
 
             DB::commit();
@@ -216,7 +216,6 @@ class SolicitudController extends Controller
             }
 
             return back()->with('success', 'Se ha generado la solicitud con éxito. Número de trámite: ' . $tramite->num_tramite);
-
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Error al crear solicitud: " . $e->getMessage());
@@ -227,30 +226,44 @@ class SolicitudController extends Controller
         }
     }
 
+    //Validacion por api
+    // private function get_antedecente()
+    // {
+    //     $idPersona = Auth::user()->id_persona;
+
+    //     $url = 'https://api.externa.com/v1/usuarios/' . $idPersona;
+
+    //     try {
+
+    //         $respuesta = Http::get($url);
+
+
+    //         if ($respuesta->successful()) {
+    //             return $respuesta->boolean();
+    //         }
+
+    //         return false;
+
+    //     } catch (\Exception $e) {
+
+    //         Log::error('Error de conexión con la API: ' . $e->getMessage());
+
+    //         return false;
+    //     }
+
+    // }
+
     private function get_antedecente()
     {
         $idPersona = Auth::user()->id_persona;
 
-        $url = 'https://api.externa.com/v1/usuarios/' . $idPersona;
+        $validacion = DVReo::where('id_reo', $idPersona)->exists();
 
-        try {
-          
-            $respuesta = Http::get($url);
-
-            
-            if ($respuesta->successful()) {
-                return $respuesta->boolean();
-            }
-
-            return false;
-
-        } catch (\Exception $e) {
-           
-            Log::error('Error de conexión con la API: ' . $e->getMessage());
-
+        if ($validacion) {
             return false;
         }
-        
+
+        return true;
     }
 
     public function listado_tramites(): View
