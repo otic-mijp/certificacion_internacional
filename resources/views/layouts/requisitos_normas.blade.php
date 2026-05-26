@@ -12,7 +12,7 @@
                 </div>
                 <div>
                     <h2 class="text-2xl md:text-3xl font-black text-slate-800 leading-tight tracking-tighter">
-                        Requisitos y Normas
+                        Requisitos y normas
                     </h2>
                     <p class="text-sm md:text-lg font-medium text-[#233C7E] uppercase tracking-[0.1em] md:tracking-[0.15em]">
                         Solicitud de Certificación
@@ -57,11 +57,19 @@
                         </div>
                     </div>
                 </li>
+                <li class="flex gap-4 md:gap-5 items-start">
+                    <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">4</span>
+                    <div class="w-full pt-0.5">
+                        <p class="text-slate-700 text-base md:text-lg font-medium mb-3">
+                           Este trámite es totalmente gratuito.
+                        </p>
+                    </div>
+                </li>
 
                 <li
                     class="flex gap-4 md:gap-5 items-start p-4 md:p-5 bg-orange-50/70 rounded-2xl border border-orange-200 shadow-sm transition-all">
                     <span
-                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-orange-600 text-white text-sm font-black shadow-sm select-none">4</span>
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-orange-600 text-white text-sm font-black shadow-sm select-none">5</span>
                     <p class="text-orange-900 text-base md:text-lg font-bold tracking-tight pt-0.5">
                         Evite realizar su trámite a través de gestores o terceros.
                     </p>
