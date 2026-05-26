@@ -16,15 +16,12 @@
         }
     </style>
 </head>
-
 <body class="min-h-screen flex flex-col font-sans antialiased bg-slate-50 text-slate-900">
     <header class="bg-white/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-gray-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center">
-            <div class="w-full max-w-[1200px]">
-                <img src="{{ asset('img/banner.png') }}" alt="Gobierno"
-                    class="w-full h-auto opacity-95 transition-all hover:opacity-100 mx-auto
-                            height-adaptive"
-                    style="height: clamp(60px, 10vw, 120px); object-fit: contain;">
+        <div class="max-w-7xl mx-auto  flex justify-center">
+            <div class="w-full">
+                <img src="{{ asset('img/banner.png') }}" alt="MRPPIJP" title="Banner informativo"
+                    class="h-auto opacity-95 transition-all hover:opacity-100 mx-auto">
             </div>
         </div>
     </header>

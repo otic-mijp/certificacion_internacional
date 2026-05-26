@@ -30,7 +30,7 @@
                     <div class="flex-1">
                         <h2 class="text-xl font-bold text-red-800">Configuración Requerida</h2>
                         <p class="text-sm text-red-600 font-medium">Debe establecer sus preguntas de seguridad
-                            **inmediatamente**. Esto es indispensable para recuperar su información en el futuro.
+                            <span class="underline">inmediatamente</span>.  Esto es indispensable para recuperar su información en el futuro.
                         </p>
                     </div>
                     <a href="{{ route('usuario.preguntas') }}"
@@ -68,11 +68,10 @@
                                 Límites de Solicitud
                             </h3>
                             <p class="text-slate-600 leading-relaxed text-lg">
-                                Solicitudes habilitadas de <span
-                                    class="text-slate-900 font-bold underline decoration-blue-200 decoration-4 underline-offset-2">
-                                    lunes a viernes
+                                Horario: <span class="text-slate-900 font-bold underline decoration-blue-200 decoration-4 underline-offset-2">
+                                    Lunes a viernes
                                 </span>.
-                                Posee una restricción de <span class="text-slate-900 font-bold">3 trámites al mes</span> y
+                                Límite de trámites <span class="text-slate-900 font-bold">3 trámites al mes</span> y
                                 <span class="text-slate-900 font-bold">10 anuales</span>.
                             </p>
                         </div>
