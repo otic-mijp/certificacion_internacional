@@ -135,7 +135,6 @@ class SolicitudController extends Controller
         try {
           
             $respuesta = Http::get($url);
-
             
             if ($respuesta->successful()) {
                 return $respuesta->boolean();
@@ -149,7 +148,7 @@ class SolicitudController extends Controller
 
             return false;
         }
-        
+
     }
 
     public function listado_tramites(): View
