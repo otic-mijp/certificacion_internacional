@@ -56,7 +56,7 @@
                                 Correo Electrónico
                             </label>
                             <input type="email" name="email" id="email" value="{{ old('email') }}" required
-                                autofocus placeholder="usuario@correo.gob.ve"
+                                autofocus placeholder="usuario@correo.gob.ve" autocomplete="off"
                                 class="w-full bg-transparent border-b {{ $errors->has('email') ? 'border-red-500' : 'border-gray-400' }} py-2 md:py-3 px-1 text-sm focus:outline-none focus:border-cyan-500 transition-all placeholder:text-gray-400">
                             @error('email')
                                 <p class="text-[11px] text-red-500 font-bold mt-1">{{ $message }}</p>
@@ -68,7 +68,7 @@
                                 class="text-[9px] font-black {{ $errors->has('email') ? 'text-red-500' : 'text-gray-400' }} uppercase tracking-widest ml-1 transition-colors">
                                 Contraseña
                             </label>
-                            <input type="password" name="password" id="password" required placeholder="••••••••"
+                            <input type="password" name="password" id="password" required placeholder="••••••••" autocomplete="off"
                                 class="w-full bg-transparent border-b {{ $errors->has('email') ? 'border-red-500' : 'border-gray-400' }} py-2 md:py-3 px-1 text-sm focus:outline-none focus:border-cyan-500 transition-all placeholder:text-gray-400">
                             @error('password')
                                 <p class="text-[11px] text-red-500 font-bold mt-1">{{ $message }}</p>
