@@ -28,33 +28,35 @@
                     </div>
                 @endif
 
-                @if($user->respuestasSeguridad->isEmpty())
+                @if ($user->respuestasSeguridad->isEmpty())
                     <div class="rounded-2xl border border-yellow-300 bg-yellow-50 px-6 py-4 text-sm text-yellow-700">
                         No hay preguntas de seguridad registradas para este usuario.
                     </div>
                 @else
-                    @foreach($user->respuestasSeguridad as $respuesta)
+                    @foreach ($user->respuestasSeguridad as $respuesta)
                         <div class="space-y-3">
                             <label for="respuesta_{{ $respuesta->id }}"
                                 class="block text-[11px] font-black text-[#233C7E] uppercase tracking-[0.2em] ml-1">
                                 {{ $loop->iteration }}. {{ $respuesta->pregunta->pregunta }}
                             </label>
-                            <input type="text" name="respuesta_{{ $respuesta->id }}" id="respuesta_{{ $respuesta->id }}" required placeholder="Escriba su respuesta aquí"
+                            <input type="text" name="respuesta_{{ $respuesta->id }}" id="respuesta_{{ $respuesta->id }}"
+                                required placeholder="Escriba su respuesta aquí"
                                 class="w-full px-6 py-4 border-2 border-slate-100 rounded-2xl text-slate-700 font-medium focus:outline-none focus:border-[#233C7E] focus:bg-white transition-all placeholder:text-slate-300"
-                                value="{{ old('respuesta_'.$respuesta->id) }}">
+                                value="{{ old('respuesta_' . $respuesta->id) }}">
                         </div>
                     @endforeach
-                @endif
-
-                <div class="pt-4 space-y-4">
                     <button type="submit"
                         class="w-full py-5 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.25em] rounded-2xl shadow-lg shadow-blue-900/20 hover:bg-slate-900 transition-all active:scale-95">
                         Validar Respuestas
                     </button>
+                @endif
 
-                    <a href="{{ route('recuperar.usuario') }}" class="flex items-center justify-center gap-2 w-full py-4 bg-white border-2 border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover: hover:text-slate-600 transition-all">
+                <div class="pt-4 space-y-4">
+                    <a href="{{ route('recuperar.usuario') }}"
+                        class="flex items-center justify-center gap-2 w-full py-4 bg-white border-2 border-slate-100 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl hover: hover:text-slate-600 transition-all">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
                         Volver
                     </a>

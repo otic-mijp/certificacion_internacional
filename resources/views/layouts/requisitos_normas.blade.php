@@ -1,20 +1,22 @@
 @extends('layouts.auth')
 
 @section('content')
-    <div class="max-w-4xl mx-auto m-4 bg-white border border-slate-300 rounded-3xl md:rounded-[40px]  overflow-hidden">
+    <div class="max-w-4xl mx-auto m-4 bg-white border border-slate-300 rounded-3xl md:rounded-[40px] overflow-hidden">
 
         <div class="bg-slate-50 px-6 py-6 md:px-10 md:py-8 border-b border-slate-100">
             <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-center md:text-left">
                 <div class="p-3 bg-[#233C7E] rounded-2xl shadow-lg shadow-blue-900/20">
                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <div>
                     <h2 class="text-2xl md:text-3xl font-black text-slate-800 leading-tight tracking-tighter">
                         Requisitos y normas
                     </h2>
-                    <p class="text-sm md:text-lg font-medium text-[#233C7E] uppercase tracking-[0.1em] md:tracking-[0.15em]">
+                    <p
+                        class="text-sm md:text-lg font-medium text-[#233C7E] uppercase tracking-[0.1em] md:tracking-[0.15em]">
                         Solicitud de Certificación
                     </p>
                 </div>
@@ -25,7 +27,8 @@
             <ul class="space-y-6 md:space-y-8">
 
                 <li class="flex gap-4 md:gap-5 items-start">
-                    <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">1</span>
+                    <span
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">1</span>
                     <p class="text-slate-700 text-base md:text-lg leading-relaxed pt-0.5">
                         Verificar sus <strong class="text-slate-900 font-semibold">datos personales</strong> detalladamente
                         al momento de registrarse.
@@ -33,35 +36,48 @@
                 </li>
 
                 <li class="flex gap-4 md:gap-5 items-start">
-                    <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">2</span>
+                    <span
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">2</span>
                     <p class="text-slate-700 text-base md:text-lg leading-relaxed pt-0.5">
                         En caso de no recibir el correo de registro, verifique su carpeta de <strong
                             class="text-slate-900 font-semibold">correo no deseado (spam)</strong>.
                     </p>
                 </li>
 
-                <li class="flex gap-4 md:gap-5 items-start">
-                    <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">3</span>
+                <li class="flex gap-4 md:gap-5 items-start ">
+                    <span
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">3</span>
                     <div class="w-full pt-0.5">
                         <p class="text-slate-700 text-base md:text-lg font-medium mb-3">
                             La cantidad de solicitudes autorizadas <span class="font-semibold text-slate-900">es</span>:
                         </p>
-                      
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
-                            <span class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold tracking-wider text-center shadow-sm">
-                                TRES (3) AL MES
-                            </span>
-                            <span class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold tracking-wider text-center shadow-sm">
-                                DIEZ (10) AL AÑO
-                            </span>
+
+                        <div class="flex justify-center">
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl">
+                                <span
+                                    class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold tracking-wider text-center shadow-sm">
+                                    UNO (1) AL DÍA
+                                </span>
+                                <span
+                                    class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold tracking-wider text-center shadow-sm">
+                                    TRES (3) AL MES
+                                </span>
+                                <span
+                                    class="px-4 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold tracking-wider text-center shadow-sm">
+                                    DIEZ (10) AL AÑO
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </li>
+
                 <li class="flex gap-4 md:gap-5 items-start">
-                    <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">4</span>
+                    <span
+                        class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 text-[#233C7E] text-sm font-black select-none">4</span>
                     <div class="w-full pt-0.5">
-                        <p class="text-slate-700 text-base md:text-lg font-medium mb-3">
-                           Este trámite es totalmente gratuito.
+                        <p class="text-slate-700 text-base md:text-lg font-medium">
+                            Este trámite es totalmente gratuito.
                         </p>
                     </div>
                 </li>

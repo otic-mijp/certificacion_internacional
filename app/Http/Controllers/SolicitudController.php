@@ -100,7 +100,20 @@ class SolicitudController extends Controller
         $idPersona = $persona['id_persona'];
         $ahora = Carbon::now();
 
-        // Validación de límites de trámites
+        // ==========================================
+        // VALIDACIÓN DE LÍMITES DE TRÁMITES
+        // ==========================================
+
+        // 1. Validación Diaria: Máximo 1 trámite por día
+        $tramitesHoy = RecaudoTramite::where('id_persona', $idPersona)
+            ->whereDate('created_at', $ahora->toDateString())
+            ->count();
+
+        if ($tramitesHoy >= 1) {
+            return back()->withErrors(['error' => 'Ya has realizado un trámite el día de hoy. Solo se permite un (1) trámite por día.']);
+        }
+
+        // 2. Validación Mensual: Máximo 3 trámites por mes
         $tramitesMes = RecaudoTramite::where('id_persona', $idPersona)
             ->whereYear('created_at', $ahora->year)
             ->whereMonth('created_at', $ahora->month)
@@ -110,6 +123,7 @@ class SolicitudController extends Controller
             return back()->withErrors(['error' => 'Has alcanzado el límite máximo de 3 trámites para este mes.']);
         }
 
+        // 3. Validación Anual: Máximo 10 trámites por año
         $tramitesAnio = RecaudoTramite::where('id_persona', $idPersona)
             ->whereYear('created_at', $ahora->year)
             ->count();
@@ -118,18 +132,20 @@ class SolicitudController extends Controller
             return back()->withErrors(['error' => 'Has alcanzado el límite máximo de 10 trámites para este año.']);
         }
 
+        // ==========================================
+        // PROCESAMIENTO DEL TRÁMITE
+        // ==========================================
+
         $diseno = RecaudoDiseno::where('estado', true)->first();
         $pais_validado = DVPais::where('id', $request->pais)->firstOrFail();
         $titular = ($persona['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
 
-        // 1. LÓGICA DE STORE: Verificamos antecedentes penales usando el número de cédula
+        // Verificamos antecedentes penales usando el número de cédula
         $tieneAntecedentes = DVReo::where('id_reo', $persona['numero_cedula'])->exists();
 
         DB::beginTransaction();
 
         try {
-            // 2. LÓGICA DE STORE: Instanciamos el modelo en lugar de usar create() directo 
-            // para poder hacer el doble guardado y generar el num_tramite
             $tramite = new RecaudoTramite();
 
             $tramite->cedula_titular   = $persona['numero_cedula'];
@@ -146,7 +162,7 @@ class SolicitudController extends Controller
             $tramite->correo           = Auth::user()->email;
             $tramite->apostilla        = filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN);
 
-            // 3. LÓGICA DE STORE: Aplicamos la lógica de negocio según antecedentes
+            # En espera de repuesta...
             if ($tieneAntecedentes) {
                 $tramite->pais_nombre_oficial = '*';
                 $tramite->id_estatus          = 3; // Rechazado
@@ -156,13 +172,12 @@ class SolicitudController extends Controller
                 $tramite->id_estatus          = 2; // Aprobado
             }
 
-            // Guardado inicial para generar el ID / correlativo en la base de datos
+            // Guardado inicial
             $tramite->save();
 
-            // 4. LÓGICA DE STORE: Generación del número de trámite oficial (Doble guardado)
+            // Generación del número de trámite oficial (Doble guardado)
             $tramite->refresh();
             $anio = date('Y');
-            // Nota: Asegúrate de que RecaudoTramite usa 'id_correlativo'. Si usa 'id', cámbialo a $tramite->id
             $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
             $tramite->save();
 
@@ -170,13 +185,12 @@ class SolicitudController extends Controller
 
             session()->forget('persona_validada');
 
-            // 5. Retorno manteniendo la estructura de solicitud_store, pero adaptado al resultado
             if ($tieneAntecedentes) {
-                // Puedes cambiar esto por un redirect()->route(...) si prefieres mandar a una vista de rechazo
                 return back()->with('error', 'Su solicitud ha sido procesada, pero fue rechazada debido a inconsistencias en la validación.');
             }
 
             return back()->with('success', 'Se ha generado la solicitud con éxito. Número de trámite: ' . $tramite->num_tramite);
+            
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Error al crear solicitud: " . $e->getMessage());

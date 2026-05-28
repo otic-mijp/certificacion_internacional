@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DVPais extends Model 
 {
-    protected $connection = 'recaudos';
+    protected $connection = 'pgsql_venezuela';
     protected $table = 'n_pais';
 
     protected $primaryKey = 'id';
