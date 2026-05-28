@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
             const segmentoRuta = tipo === 'municipio' ? 'municipios' : 'parroquias';
             // URL dinámica basada en tu estructura actual
-            const response = await fetch(`http://127.0.0.1:8000/ubicacion/${segmentoRuta}/${padreId}`);
+            const response = await fetch(`http://localhost/certificacion_internacional/public/ubicacion/${segmentoRuta}/${padreId}`);
             const datos = await response.json();
 
             lista.innerHTML = '';

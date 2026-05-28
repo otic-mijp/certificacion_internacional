@@ -28,9 +28,53 @@ class SolicitudController extends Controller
     public function index(): View
     {
 
+        $id_persona = Auth::user()->id_persona;
+
+        $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula'])
+            ->where('id_persona', $id_persona)
+            ->first();
+
         $antecedente = $this->get_antedecente();
+        $tramite = $this->get_tramite_rechazado($id_persona);
+
+        if ($tramite) {
+            return view('site.solicitud_certificacion.rechazo');
+        }
+
+        $motivos = RecaudoMotivo::where('activo', true)->get();
 
         if (!$antecedente) {
+
+            $tramite = new RecaudoTramite();
+            $diseno = RecaudoDiseno::where('estado', true)->first();
+
+            $tramite->cedula_titular   = $data['numero_cedula'];
+            $tramite->nacionalidad     = Str::upper($data['letra_cedula']);
+            $tramite->nombres          = Str::lower($data['nombres']);
+            $tramite->primer_apellido  = Str::lower($data['primer_apellido']);
+            $tramite->segundo_apellido = Str::lower($data['segundo_apellido']);
+            $tramite->tipo_solicitante = 1; // Obligatorio web
+
+            $titular = ($data['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
+
+            $tramite->tipo_titular     = $titular;
+            $tramite->id_motivo        = 7; # Produccion 9
+            $tramite->id_descargas     = null;
+            $tramite->id_diseno_tramite = $diseno->id;
+            $tramite->id_persona       = $id_persona;
+            $tramite->correo           = Auth::user()->email;
+            $tramite->pais_nombre_oficial = '*';
+            $tramite->id_estatus       = 3;
+            $tramite->apostilla        = false;
+
+            $tramite->save();
+
+            // 4. LÓGICA DE STORE: Generación del número de trámite oficial (Doble guardado)
+            $tramite->refresh();
+            $anio = date('Y');
+            $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
+            $tramite->save();
+
             return view('site.solicitud_certificacion.rechazo');
         }
 
@@ -38,93 +82,10 @@ class SolicitudController extends Controller
             ->where('id', '!=', 'VEN')
             ->get();
 
-        $id_persona = Auth::user()->id_persona;
-        $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula'])
-            ->where('id_persona', $id_persona)
-            ->first();
-
-        $motivos = RecaudoMotivo::where('activo', true)->get();
-
-        session(['persona_validada' =>  $data]); # Persistencia de datos sess
+        session(['persona_validada' =>  $data]); # Persistencia de datos session
 
         return view('site.solicitud_certificacion.crear', compact('paises', 'data', 'motivos'));
     }
-
-    // public function solicitud_store(SolicitudTramiteRequest $request)
-    // {
-
-    //     $persona = session('persona_validada');
-
-    //     if (!$persona) {
-    //         return back()
-    //             ->withInput()
-    //             ->withErrors(['error' => 'No se encontró la información de la persona. Vuelva a iniciar el proceso.']);
-    //     }
-
-    //     $idPersona = $persona['id_persona'];
-    //     $ahora = Carbon::now();
-
-    //     $tramitesMes = RecaudoTramite::where('id_persona', $idPersona)
-    //         ->whereYear('created_at', $ahora->year)
-    //         ->whereMonth('created_at', $ahora->month)
-    //         ->count();
-
-    //     if ($tramitesMes >= 3) {
-    //         return back()->withErrors(['error' => 'Has alcanzado el límite máximo de 3 trámites para este mes.']);
-    //     }
-
-    //     $tramitesAnio = RecaudoTramite::where('id_persona', $idPersona)
-    //         ->whereYear('created_at', $ahora->year)
-    //         ->count();
-
-    //     if ($tramitesAnio >= 10) {
-    //         return back()->withErrors(['error' => 'Has alcanzado el límite máximo de 10 trámites para este año.']);
-    //     }
-
-    //     $diseno = RecaudoDiseno::where('estado', true)->first();
-
-    //     $pais_validado = DVPais::where('id', $request->pais)->firstOrFail();
-
-    //     DB::beginTransaction();
-
-    //     try {
-    //         RecaudoTramite::create([
-    //             'id_correlativo' => 1,
-    //             'cedula_titular' => $persona['numero_cedula'],
-    //             'nacionalidad' => Str::upper($persona['letra_cedula']),
-    //             'nombres' => Str::lower($persona['nombres']),
-    //             'primer_apellido' => Str::lower($persona['primer_apellido']),
-    //             'segundo_apellido' => Str::lower($persona['segundo_apellido']),
-    //             'pais_nombre_oficial' => Str::lower($pais_validado->nombre_oficial),
-    //             'tipo_solicitante' => 999999,
-    //             'tipo_titular' => 1, # Obligatorio
-    //             'apostilla' => filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN),
-    //             'id_motivo' => $request['motivo'],
-    //             'id_estatus' => 1,
-    //             'id_descargas' => null,
-    //             'id_diseno_tramite' => $diseno->id,
-    //             'num_tramite' => 1111,
-    //             'id_persona' => $idPersona,
-    //             'correo' => Auth::user()->email,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ]);
-
-    //         DB::commit();
-
-    //         session()->forget('persona_validada');
-
-    //         return back()->with('success', 'Se ha generado la solicitud con éxito.');
-    //     } catch (\Exception $e) {
-
-    //         DB::rollBack();
-    //         Log::error("Error al crear solicitud: " . $e->getMessage());
-
-    //         return back()
-    //             ->withInput()
-    //             ->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
-    //     }
-    // }
 
     public function solicitud_store(SolicitudTramiteRequest $request)
     {
@@ -226,33 +187,6 @@ class SolicitudController extends Controller
         }
     }
 
-    //Validacion por api
-    // private function get_antedecente()
-    // {
-    //     $idPersona = Auth::user()->id_persona;
-
-    //     $url = 'https://api.externa.com/v1/usuarios/' . $idPersona;
-
-    //     try {
-
-    //         $respuesta = Http::get($url);
-
-
-    //         if ($respuesta->successful()) {
-    //             return $respuesta->boolean();
-    //         }
-
-    //         return false;
-
-    //     } catch (\Exception $e) {
-
-    //         Log::error('Error de conexión con la API: ' . $e->getMessage());
-
-    //         return false;
-    //     }
-
-    // }
-
     private function get_antedecente()
     {
         $idPersona = Auth::user()->id_persona;
@@ -264,6 +198,13 @@ class SolicitudController extends Controller
         }
 
         return true;
+    }
+
+    private function get_tramite_rechazado(string $idPersona)
+    {
+        return RecaudoTramite::where('id_persona', $idPersona)
+            ->where('id_estatus', 3)
+            ->exists();
     }
 
     public function listado_tramites(): View
