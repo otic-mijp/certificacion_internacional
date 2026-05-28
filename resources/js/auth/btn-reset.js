@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2'; // Si instalaste sweetalert2 vía npm
+import Swal from 'sweetalert2'; 
 
 document.addEventListener('click', (e) => {
     const btnLimpiar = e.target.closest('#btn-limpiar-formulario');

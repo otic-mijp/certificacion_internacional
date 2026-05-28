@@ -69,5 +69,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/tramites', 'listado_tramites')->name('listado');
         Route::get('/tramite/certificado/{num_tramite}', 'get_certificado_seleccionado')->name('pdf');
         Route::get('/tramite/comprobante/{num_tramite}', 'get_comprobante_seleccionado')->name('pdf.comprobante');
+
+        Route::get('/tramite/informacion', 'informacion')->name('informacion');
     });
 });

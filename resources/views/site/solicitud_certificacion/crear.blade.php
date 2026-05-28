@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <form action="{{ route('solicitud.store') }}" method="POST" class="p-8 md:p-10 border-t border-slate-100">
+        <form action="{{ route('solicitud.store') }}" id="miFormulario" method="POST" class="p-8 md:p-10 border-t border-slate-100">
             @csrf
 
             @if ($errors->has('error'))
@@ -82,11 +82,13 @@
                 @if (session('success'))
                     <div
                         class="mb-6 p-4 bg-emerald-100 text-center border border-emerald-100 text-emerald-600 rounded-2xl text-sm font-bold animate-pulse">
-                        ✅ {{ session('success') }}, haga <a href="{{ route('solicitud.listado') }}" class="text-blue-500 underline">click aqui</a> para ver sus trámites.
+                        ✅ {{ session('success') }}, haga <a href="{{ route('solicitud.listado') }}"
+                            class="text-blue-500 underline">click aqui</a> para ver sus trámites.
                     </div>
                 @endif
                 @if (session('error'))
-                    <div class="mb-6 p-4 bg-emerald-100 text-center border border-emerald-100 text-emerald-600 rounded-2xl text-sm font-bold animate-pulse">
+                    <div
+                        class="mb-6 p-4 bg-emerald-100 text-center border border-emerald-100 text-emerald-600 rounded-2xl text-sm font-bold animate-pulse">
                         ✅ {{ session('error') }}.
                     </div>
                 @endif
@@ -151,7 +153,8 @@
                             </div>
                         </div>
                         @error('pais')
-                            <p class="text-[10px] text-red-500 font-bold mt-1 ml-1 tracking-wide uppercase">{{ $message }}</p>
+                            <p class="text-[10px] text-red-500 font-bold mt-1 ml-1 tracking-wide uppercase">{{ $message }}
+                            </p>
                         @enderror
                     </div>
 
@@ -192,32 +195,21 @@
                     </div>
                 </div>
 
-                <div class="space-y-6 pt-4">
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
                     <button type="submit"
-                        class="w-full cursor-pointer md:w-auto px-12 py-5 bg-blue-900 hover:bg-blue-700 text-white text-[11px] font-black uppercase tracking-[0.25em] rounded-2xl transition-all active:scale-95 flex items-center justify-center gap-3">
-                        Finalizar Solicitud
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-full sm:w-auto px-8 py-4 bg-blue-900 hover:bg-blue-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-95 flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow-md">
+                        <span>Finalizar Solicitud</span>
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </button>
 
-                    <div class="flex justify-center border-t border-slate-50 pt-6">
-                        <a href="#"
-                            class="group flex items-center gap-3 opacity-70 hover:opacity-100 transition-all">
-                            <div class="bg-slate-100 p-2 rounded-lg group-hover:bg-blue-100 transition-colors">
-                                <svg class="w-4 h-4 text-slate-500 group-hover:text-blue-600" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                ¿Trámite para menores de edad? <span
-                                    class="text-blue-600 underline underline-offset-4 ml-1">Click aquí</span>
-                            </span>
-                        </a>
-                    </div>
+                    <button type="button" id="btnLimpiar"
+                        class="w-full border sm:w-auto px-8 py-4 bg-transparent hover:bg-gray-100 text-gray-500 hover:text-gray-700 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-95 flex items-center justify-center cursor-pointer">
+                        Limpiar
+                    </button>
                 </div>
             </div>
         </form>

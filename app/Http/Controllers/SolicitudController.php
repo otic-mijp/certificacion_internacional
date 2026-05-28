@@ -30,7 +30,7 @@ class SolicitudController extends Controller
 
         $id_persona = Auth::user()->id_persona;
 
-        $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula'])
+        $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula', 'fecha_nacimiento'])
             ->where('id_persona', $id_persona)
             ->first();
 
@@ -95,6 +95,18 @@ class SolicitudController extends Controller
             return back()
                 ->withInput()
                 ->withErrors(['error' => 'No se encontró la información de la persona. Vuelva a iniciar el proceso.']);
+        }
+
+        // ==========================================
+        // VALIDACIÓN DE MAYORÍA DE EDAD (18 AÑOS)
+        // ==========================================
+        // NOTA: Asegúrate de que 'fecha_nacimiento' sea el nombre correcto del campo en tu sesión
+        $fechaNacimiento = Carbon::parse($persona['fecha_nacimiento']);
+
+        if ($fechaNacimiento->age < 18) {
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Lo sentimos, este trámite solo está disponible para personas mayores de edad (18 años o más).']);
         }
 
         $idPersona = $persona['id_persona'];
@@ -190,7 +202,6 @@ class SolicitudController extends Controller
             }
 
             return back()->with('success', 'Se ha generado la solicitud con éxito. Número de trámite: ' . $tramite->num_tramite);
-            
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Error al crear solicitud: " . $e->getMessage());
@@ -323,5 +334,10 @@ class SolicitudController extends Controller
         $pdf = Pdf::loadView('site.pdf.certificado', $data);
 
         return $pdf->stream('Certificado nro-' . $tramite->num_tramite . '.pdf');
+    }
+
+    public function informacion()
+    {
+        return view('site.solicitud_certificacion.informacion');
     }
 }
