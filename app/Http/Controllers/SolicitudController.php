@@ -241,7 +241,7 @@ class SolicitudController extends Controller
             ->whereYear('created_at', $ahora->year)
             ->latest()
             ->limit(10)
-            ->get();
+            ->paginate(10);
 
         return view('site.solicitud_certificacion.listado', compact('listado_tramites'));
     }
@@ -251,6 +251,14 @@ class SolicitudController extends Controller
         $tramite = RecaudoTramite::where('num_tramite', $num_tramite)
             ->where('id_persona', Auth::user()->id_persona)
             ->firstOrFail();
+
+        if ($tramite->id_estatus === 3) {
+            abort(403, 'El certificado no está disponible para trámites rechazados.');
+        }
+
+        if (!$tramite->created_at->addMonths(3)->isFuture()) {
+            abort(403, 'El certificado ha caducado (venció el plazo de 3 meses).');
+        }
 
         $diseno = $tramite->diseno;
 

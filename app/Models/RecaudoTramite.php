@@ -11,7 +11,7 @@ class RecaudoTramite extends Model
     protected $table = 'tramites';
 
     protected $fillable = [
-       'id_correlativo',
+        'id_correlativo',
         'cedula_titular',
         'nacionalidad',
         'nombres',

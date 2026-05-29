@@ -3,6 +3,10 @@
 @section('title', 'Listado de certificaciones de Antecedentes Penales')
 
 @section('content')
+    @php
+        use Carbon\Carbon;
+    @endphp
+
     <article class="max-w-6xl mx-auto px-4 py-8">
         <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
@@ -11,95 +15,111 @@
             </div>
         </div>
 
-        <section class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
+        <section class="bg-white rounded-3xl shadow-xl shadow-slate-100/80 border border-slate-100 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50/50 border-b border-slate-200">
-                            <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">Nro.
-                                Trámite</th>
-                            <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">Estatus
-                            </th>
-                            <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">Fecha
-                            </th>
-                            <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
-                                Documentos
-                            </th>
-                            <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
-                                Apostilla
-                            </th>
-                            <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
-                                Observación</th>
+                        <tr class="bg-slate-50/70 border-b border-slate-200/80 text-slate-500">
+                            <th class="px-6 py-4.5 text-[10px] font-bold uppercase tracking-[0.15em]">Nro. Trámite</th>
+                            <th class="px-6 py-4.5 text-[10px] font-bold uppercase tracking-[0.15em]">Estatus</th>
+                            <th class="px-6 py-4.5 text-[10px] font-bold uppercase tracking-[0.15em]">Fecha</th>
+                            <th class="px-6 py-4.5 text-[10px] font-bold uppercase tracking-[0.15em]">Documentos</th>
+                            <th class="px-6 py-4.5 text-[10px] font-bold uppercase tracking-[0.15em]">Apostilla</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-50">
+                    <tbody class="divide-y divide-slate-100 text-slate-700">
                         @foreach ($listado_tramites as $tramite)
-                            <tr class="hover:bg-slate-50/50 transition-colors group">
-                                <td class="px-6 py-5">
-                                    <span class="text-xs font-bold text-slate-700 tracking-tight">
+                            <tr class="hover:bg-slate-50/40 transition-colors duration-200">
+
+                                {{-- Nro. Trámite --}}
+                                <td class="px-6 py-4.5">
+                                    <span class="text-xs font-semibold font-mono text-slate-800 tracking-tight">
                                         {{ $tramite->num_tramite }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-5">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-wide">
-                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                        @if ($tramite->id_estatus === 1)
-                                            Iniciado
-                                        @endif
-                                        @if ($tramite->id_estatus === 2)
-                                            Procesado
-                                        @endif
-                                        @if ($tramite->id_estatus === 3)
-                                            Rechazado
-                                        @endif
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5">
-                                    <div class="relative flex items-center group cursor-help">
-                                        <!-- Texto de la fecha -->
+
+                                {{-- Estatus --}}
+                                <td class="px-6 py-4.5">
+                                    @if ($tramite->id_estatus === 1)
                                         <span
-                                            class="text-xs font-medium text-slate-500 border-b border-dotted border-slate-400">
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5 animate-pulse"></span>
+                                            Iniciado
+                                        </span>
+                                    @elseif ($tramite->id_estatus === 2)
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+                                            Procesado
+                                        </span>
+                                    @elseif ($tramite->id_estatus === 3)
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 text-[10px] font-bold uppercase tracking-wide">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span>
+                                            Rechazado
+                                        </span>
+                                    @endif
+                                </td>
+
+                                {{-- Fecha (Tooltip aislado del TR) --}}
+                                <td class="px-6 py-4.5">
+                                    <div class="relative inline-block group/fecha cursor-help">
+                                        <span
+                                            class="text-xs font-medium text-slate-500 border-b border-dotted border-slate-300 hover:text-slate-700 transition-colors pb-0.5">
                                             {{ $tramite->created_at->translatedFormat('d \d\e F \d\e Y, h:i A') }}
                                         </span>
 
-                                        <!-- Tooltip (Caja flotante) -->
-                                        <div
-                                            class="absolute bottom-full mb-2 hidden group-hover:flex flex-col items-center">
+                                        <span
+                                            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 hidden group-hover/fecha:flex flex-col items-center pointer-events-none z-10 transition-all duration-200">
                                             <div
-                                                class="bg-slate-800 text-white text-[10px] py-1 px-2 rounded shadow-lg whitespace-nowrap">
-                                                La fecha y la hora de solicitud es horario Caracas/Venezuela
+                                                class="bg-slate-900/95 backdrop-blur-sm text-white text-[10px] py-1.5 px-3 rounded-lg shadow-xl shadow-slate-900/10 whitespace-nowrap tracking-wide font-medium">
+                                                Horario Caracas / Venezuela
                                             </div>
-                                            <div class="w-2 h-2 bg-slate-800 rotate-45 -mt-1"></div>
-                                        </div>
+                                            <div class="w-2 h-2 bg-slate-900/95 rotate-45 -mt-1"></div>
+                                        </span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-2">
+
+                                <td class="px-6 py-4.5">
+                                    @if ($tramite->id_estatus === 3)
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 text-slate-400 rounded-lg text-[10px] font-bold uppercase tracking-wide select-none">
+                                            No disponible
+                                        </span>
+                                    @elseif ($tramite->created_at->addMonths(3)->isFuture())
                                         <a target="_blank" href="{{ route('solicitud.pdf', $tramite->num_tramite) }}"
-                                            class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-[10px] font-bold uppercase transition-all hover:bg-slate-800 hover:text-white">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-800 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all duration-200 hover:bg-slate-900 hover:text-white hover:shadow-md hover:shadow-slate-900/10">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"
                                                 viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                             </svg>
                                             Certificado
                                         </a>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5">
-                                    @if ($tramite->apostilla)
-                                        <span class="text-green-500">✅Solicitada</span>
                                     @else
-                                        <span class="text-rose-500">❌No solicitada</span>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-[10px] font-bold uppercase tracking-wide">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 6v6m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Caducado
+                                        </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-5">
-                                    <span>No requerida</span>
+                                <td class="px-6 py-4.5">
+                                    @if ($tramite->apostilla)
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wide">
+                                            Solicitada
+                                        </span>
+                                    @else
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold uppercase tracking-wide">
+                                            No solicitada
+                                        </span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -107,6 +127,13 @@
                 </table>
             </div>
         </section>
+
+        {{-- Paginación limpia fuera del contenedor overflow --}}
+        @if ($listado_tramites->hasPages())
+            <div class="mt-5 px-2">
+                {{ $listado_tramites->links() }}
+            </div>
+        @endif
         <section class="mt-8 p-6 bg-blue-50 rounded-[2rem] border border-blue-100 flex gap-4 shadow-sm">
             <div class="text-2xl select-none">💡</div>
             <div class="w-full">
