@@ -344,6 +344,49 @@ class SolicitudController extends Controller
         return $pdf->stream('Certificado nro-' . $tramite->num_tramite . '.pdf');
     }
 
+    public function get_comprobante_seleccionado(int $num_tramite)
+    {
+        $tramite = RecaudoTramite::where('num_tramite', $num_tramite)
+            ->where('id_persona', Auth::user()->id_persona)
+            ->firstOrFail();
+
+        $diseno = $tramite->diseno;
+
+        // Procesar imágenes
+        $imagenes = ['logo_encabezado', 'logo_fondo', 'sello', 'firma', 'banner_footer'];
+        $procesadas = [];
+
+        foreach ($imagenes as $campo) {
+            $valor = $diseno->$campo ?? null;
+
+            if (is_resource($valor)) {
+                $valor = stream_get_contents($valor);
+            }
+
+            if ($valor && !str_starts_with($valor, 'data:image')) {
+                $procesadas[$campo] = 'data:image/png;base64,' . base64_encode($valor);
+            } else {
+                $procesadas[$campo] = $valor;
+            }
+        }
+
+
+        $data = [
+            'tramite' => $tramite,
+            'telefono_ministerio' => $diseno->tlf,
+            'piso' => $diseno->piso,
+            'logo_ministerial' => $procesadas['logo_encabezado'],
+            'logo_ministerial_fondo' => $procesadas['logo_fondo'],
+            'sello_direccion' => $procesadas['sello'],
+            'firma_viceministro' => $procesadas['firma'],
+            'banner_footer' => $procesadas['banner_footer'],
+        ];
+
+        $pdf = Pdf::loadView('site.pdf.comprobante', $data);
+
+        return $pdf->stream('Comprobante nro-' . $tramite->num_tramite . '.pdf');
+    }
+
     public function informacion()
     {
         return view('site.solicitud_certificacion.informacion');

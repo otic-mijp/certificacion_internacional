@@ -81,6 +81,17 @@
                                 </td>
 
                                 <td class="px-6 py-4.5">
+
+                                    <a target="_blank" href="{{ route('solicitud.pdf.comprobante', $tramite->num_tramite) }}"
+                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-800 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all duration-200 hover:bg-slate-900 hover:text-white hover:shadow-md hover:shadow-slate-900/10">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                        Comprobante
+                                    </a>
+
                                     @if ($tramite->id_estatus === 3)
                                         <span
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 text-slate-400 rounded-lg text-[10px] font-bold uppercase tracking-wide select-none">
