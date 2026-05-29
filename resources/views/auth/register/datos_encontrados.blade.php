@@ -20,13 +20,6 @@
                 <input type="hidden" name="id_persona" value="{{ $persona['id_persona'] }}">
                 <section class="space-y-6">
                     <div class="flex items-center gap-4">
-                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                                stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
-                            </svg>
-                        </span>
                         <h2 class="text-xl font-bold text-blue-900">Información de Identidad:</h2>
                     </div>
 
@@ -148,7 +141,6 @@
 
                 <section class="border-2 border-slate-200 rounded-[2rem] p-6 md:p-8 bg-white shadow-inner">
                     <div class="flex items-center gap-3 mb-8">
-                        <div class="w-1.5 h-6 bg-blue-600 rounded-full"></div>
                         <h3 class="text-sm font-black text-blue-900 uppercase tracking-widest">
                             Ubicación de Residencia Venezolana:
                         </h3>

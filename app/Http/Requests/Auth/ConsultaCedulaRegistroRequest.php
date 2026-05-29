@@ -16,7 +16,7 @@ class ConsultaCedulaRegistroRequest extends FormRequest
     {
         return [
             'letra_cedula' => 'required|in:V,E',
-            'numero_cedula'      => 'required|numeric|digits_between:6,8',
+            'numero_cedula'      => 'required|numeric|digits_between:6,9',
         ];
     }
 

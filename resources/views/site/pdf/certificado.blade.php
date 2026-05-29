@@ -2,7 +2,7 @@
 <html lang="es-ve">
 <head>
     <meta charset="UTF-8">
-    <title>Certificación de Antecedentes Penales</title>
+    <title>Certificado de Antecedentes Penales</title>
     <style>
         /* Configuración para DomPDF */
         @page {

@@ -34,22 +34,42 @@ class SolicitudController extends Controller
             ->where('id_persona', $id_persona)
             ->first();
 
-        $antecedente = $this->get_antedecente();
-        $tramite = $this->get_tramite_rechazado($id_persona);
+        # Persistencia de datos session
+        session(['persona_validada' =>  $data]);
 
-        if ($tramite) {
-            return view('site.solicitud_certificacion.rechazo');
+        $antecedente = $this->get_estatus_antecedente($id_persona);
+
+        if ($antecedente) {
+            return $this->solicitud_rechazada($id_persona);
         }
 
         $motivos = RecaudoMotivo::where('activo', true)->get();
 
-        if (!$antecedente) {
+        $paises = DVPais::select('id', 'nombre_oficial')
+            ->where('id', '!=', 'VEN')
+            ->get();
+
+        return view('site.solicitud_certificacion.crear', compact('paises', 'data', 'motivos'));
+    }
+
+    private function get_estatus_antecedente(string $idPersona): bool
+    {
+        return DVReo::where('id_reo', $idPersona)->exists();
+    }
+
+    private function solicitud_rechazada(string $id_persona)
+    {
+        $data = session('persona_validada');
+
+        $tramiteExistente = $this->get_existencia_tramite_rechazado($id_persona);
+
+        if (!$tramiteExistente) { # Registro 1 sola vez por intento
 
             $tramite = new RecaudoTramite();
             $diseno = RecaudoDiseno::where('estado', true)->first();
 
             $tramite->cedula_titular   = $data['numero_cedula'];
-            $tramite->nacionalidad     = Str::upper($data['letra_cedula']);
+            $tramite->nacionalidad     = Str::lower($data['letra_cedula']);
             $tramite->nombres          = Str::lower($data['nombres']);
             $tramite->primer_apellido  = Str::lower($data['primer_apellido']);
             $tramite->segundo_apellido = Str::lower($data['segundo_apellido']);
@@ -57,16 +77,15 @@ class SolicitudController extends Controller
 
             $titular = ($data['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
 
-            $tramite->tipo_titular     = $titular;
-            $tramite->id_motivo        = 7; # Produccion 9
-            $tramite->id_descargas     = null;
-            $tramite->id_diseno_tramite = $diseno->id;
-            $tramite->id_persona       = $id_persona;
-            $tramite->correo           = Auth::user()->email;
-            $tramite->pais_nombre_oficial = '*';
-            $tramite->id_estatus       = 3;
-            $tramite->apostilla        = false;
-
+            $tramite->tipo_titular        = $titular;
+            $tramite->id_motivo           = 7; # 9 para produccion
+            $tramite->id_descargas        = null;
+            $tramite->id_diseno_tramite   = $diseno->id;
+            $tramite->id_persona          = $id_persona;
+            $tramite->correo              = Auth::user()->email;
+            $tramite->pais_nombre_oficial = 'null';
+            $tramite->id_estatus          = 3;
+            $tramite->apostilla           = false;
             $tramite->save();
 
             // 4. LÓGICA DE STORE: Generación del número de trámite oficial (Doble guardado)
@@ -74,17 +93,14 @@ class SolicitudController extends Controller
             $anio = date('Y');
             $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
             $tramite->save();
-
-            return view('site.solicitud_certificacion.rechazo');
         }
 
-        $paises = DVPais::select('id', 'nombre_oficial')
-            ->where('id', '!=', 'VEN')
-            ->get();
+        return view('site.solicitud_certificacion.rechazo');
+    }
 
-        session(['persona_validada' =>  $data]); # Persistencia de datos session
-
-        return view('site.solicitud_certificacion.crear', compact('paises', 'data', 'motivos'));
+    private function get_existencia_tramite_rechazado(string $idPersona): bool
+    {
+        return RecaudoTramite::where('id_persona', $idPersona)->where('id_estatus', 3)->exists();
     }
 
     public function solicitud_store(SolicitudTramiteRequest $request)
@@ -92,21 +108,16 @@ class SolicitudController extends Controller
         $persona = session('persona_validada');
 
         if (!$persona) {
-            return back()
-                ->withInput()
-                ->withErrors(['error' => 'No se encontró la información de la persona. Vuelva a iniciar el proceso.']);
+            return back()->withInput()->withErrors(['error' => 'No se encontró la información de la persona. Vuelva a iniciar el proceso.']);
         }
 
         // ==========================================
         // VALIDACIÓN DE MAYORÍA DE EDAD (18 AÑOS)
         // ==========================================
-        // NOTA: Asegúrate de que 'fecha_nacimiento' sea el nombre correcto del campo en tu sesión
         $fechaNacimiento = Carbon::parse($persona['fecha_nacimiento']);
 
         if ($fechaNacimiento->age < 18) {
-            return back()
-                ->withInput()
-                ->withErrors(['error' => 'Lo sentimos, este trámite solo está disponible para personas mayores de edad (18 años o más).']);
+            return back()->withInput()->withErrors(['error' => 'Lo sentimos, este trámite solo está disponible para personas mayores de edad (18 años o más).']);
         }
 
         $idPersona = $persona['id_persona'];
@@ -115,33 +126,31 @@ class SolicitudController extends Controller
         // ==========================================
         // VALIDACIÓN DE LÍMITES DE TRÁMITES
         // ==========================================
+        // Validar 1 por día, 3 por mes, 10 por año.
 
-        // 1. Validación Diaria: Máximo 1 trámite por día
         $tramitesHoy = RecaudoTramite::where('id_persona', $idPersona)
             ->whereDate('created_at', $ahora->toDateString())
             ->count();
 
         if ($tramitesHoy >= 1) {
-            return back()->withErrors(['error' => 'Ya has realizado un trámite el día de hoy. Solo se permite un (1) trámite por día.']);
+            return back()->withInput()->withErrors(['error' => 'Ya has realizado un trámite el día de hoy. Solo se permite un (1) trámite por día.']);
         }
 
-        // 2. Validación Mensual: Máximo 3 trámites por mes
         $tramitesMes = RecaudoTramite::where('id_persona', $idPersona)
             ->whereYear('created_at', $ahora->year)
             ->whereMonth('created_at', $ahora->month)
             ->count();
 
         if ($tramitesMes >= 3) {
-            return back()->withErrors(['error' => 'Has alcanzado el límite máximo de 3 trámites para este mes.']);
+            return back()->withInput()->withErrors(['error' => 'Has alcanzado el límite máximo de 3 trámites para este mes.']);
         }
 
-        // 3. Validación Anual: Máximo 10 trámites por año
         $tramitesAnio = RecaudoTramite::where('id_persona', $idPersona)
             ->whereYear('created_at', $ahora->year)
             ->count();
 
         if ($tramitesAnio >= 10) {
-            return back()->withErrors(['error' => 'Has alcanzado el límite máximo de 10 trámites para este año.']);
+            return back()->withInput()->withErrors(['error' => 'Has alcanzado el límite máximo de 10 trámites para este año.']);
         }
 
         // ==========================================
@@ -161,7 +170,7 @@ class SolicitudController extends Controller
             $tramite = new RecaudoTramite();
 
             $tramite->cedula_titular   = $persona['numero_cedula'];
-            $tramite->nacionalidad     = Str::upper($persona['letra_cedula']);
+            $tramite->nacionalidad     = Str::lower($persona['letra_cedula']);
             $tramite->nombres          = Str::lower($persona['nombres']);
             $tramite->primer_apellido  = Str::lower($persona['primer_apellido']);
             $tramite->segundo_apellido = Str::lower($persona['segundo_apellido']);
@@ -198,38 +207,17 @@ class SolicitudController extends Controller
             session()->forget('persona_validada');
 
             if ($tieneAntecedentes) {
-                return back()->with('error', 'Su solicitud ha sido procesada, pero fue rechazada debido a inconsistencias en la validación.');
+                return back()->withInput()->withErrors(['error' => 'Su solicitud ha sido procesada, pero fue rechazada debido a inconsistencias en la validación.']);
             }
 
-            return back()->with('success', 'Se ha generado la solicitud con éxito. Número de trámite: ' . $tramite->num_tramite);
+            return back()->withInput()->with('success', 'Se ha generado la solicitud con éxito. Número de trámite: ' . $tramite->num_tramite);
         } catch (\Exception $e) {
+
             DB::rollBack();
             Log::error("Error al crear solicitud: " . $e->getMessage());
 
-            return back()
-                ->withInput()
-                ->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
+            return back()->withInput()->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
         }
-    }
-
-    private function get_antedecente()
-    {
-        $idPersona = Auth::user()->id_persona;
-
-        $validacion = DVReo::where('id_reo', $idPersona)->exists();
-
-        if ($validacion) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function get_tramite_rechazado(string $idPersona)
-    {
-        return RecaudoTramite::where('id_persona', $idPersona)
-            ->where('id_estatus', 3)
-            ->exists();
     }
 
     public function listado_tramites(): View
@@ -246,7 +234,7 @@ class SolicitudController extends Controller
         return view('site.solicitud_certificacion.listado', compact('listado_tramites'));
     }
 
-    public function get_certificado_seleccionado(int $num_tramite)
+    public function get_certificado_seleccionado(int $num_tramite) # PDF
     {
         $tramite = RecaudoTramite::where('num_tramite', $num_tramite)
             ->where('id_persona', Auth::user()->id_persona)

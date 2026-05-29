@@ -26,7 +26,7 @@
                                 Documentos
                             </th>
                             <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
-                                ¿Apostilla?
+                                Apostilla
                             </th>
                             <th class="px-6 py-5 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em]">
                                 Observación</th>

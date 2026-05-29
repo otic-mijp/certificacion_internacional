@@ -38,7 +38,20 @@ class RegistroController extends Controller
             ->first();
 
         if (!$persona) {
-            return redirect()->back()->withErrors(['numero_cedula' => 'No se encontraron registros.']);
+            return redirect()->back()->withErrors(['numero_cedula' => 'Atención: No se encontraron registros. Debe dirigirse a la coordinación de antecedentes penales para actualizar su información.']);
+        }
+
+        $usuario = Usuario::where('id_persona', $data)->first();
+
+        if ($usuario) {
+            return redirect()
+                   ->back()
+                   ->withErrors(
+                    [
+                        'numero_cedula' => 
+                        'Este número de cédula ya se encuentra en proceso de registro. Por favor, revise su correo electrónico para confirmar la cuenta. Nota: Si el correo ingresado es incorrecto, el sistema liberará su cédula automáticamente en 24 horas para que pueda intentarlo de nuevo..'
+                    ]
+                    );
         }
 
         session(['persona_validada' => $persona]); # Persistencia de datos
