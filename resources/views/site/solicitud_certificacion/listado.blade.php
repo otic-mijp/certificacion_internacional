@@ -108,15 +108,16 @@
             </div>
         </section>
         <section class="mt-8 p-6 bg-blue-50 rounded-[2rem] border border-blue-100 flex gap-4 shadow-sm">
-            <div class="text-2xl">💡</div>
-            <div>
+            <div class="text-2xl select-none">💡</div>
+            <div class="w-full">
                 <h4 class="text-xs font-black text-[#274294] uppercase tracking-[0.1em] mb-2">
                     Nota Importante para la Impresión
                 </h4>
                 <ul
                     class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 text-[11px] text-slate-600 font-medium list-disc ml-4">
                     <li>Papel Bond Blanco (Tamaño Carta)</li>
-                    <li>Impresión en Escala de Grises</li>
+                    <li>Impresión a <strong class="font-bold text-[#274294]">color o escala de grises (opcional)</strong>
+                    </li>
                     <li>Hoja limpia, sin arrugas ni enmiendas</li>
                     <li>Sin tachaduras ni marcas adicionales</li>
                 </ul>
