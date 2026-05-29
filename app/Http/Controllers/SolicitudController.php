@@ -3,25 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SolictudTramite\SolicitudTramiteRequest;
+
 use App\Models\DVPais;
 use App\Models\DVPersona;
 use App\Models\DVReo;
 use App\Models\RecaudoDiseno;
 use App\Models\RecaudoMotivo;
 use App\Models\RecaudoTramite;
-use Illuminate\Support\Str;
+use App\Mail\CorreoSolicitudAntecedente;
+
 use Illuminate\View\View;
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Writer;
-use Illuminate\Support\Facades\Auth;
 
 class SolicitudController extends Controller
 {
@@ -203,6 +206,15 @@ class SolicitudController extends Controller
             $tramite->save();
 
             DB::commit();
+
+
+            $data = [
+                'nombre_completo' => $persona['nombres'] . ' ' . $persona['primer_apellido'] . ' ' . $persona['segundo_apellido'],
+                'num_tramite' => $tramite->num_tramite,
+                'pais_nombre_oficial' => $tramite->pais_nombre_oficial,
+            ];
+
+            Mail::to(Auth::user()->email)->send(new CorreoSolicitudAntecedente($data['num_tramite'], $data['pais_nombre_oficial'], $data['nombre_completo']));
 
             session()->forget('persona_validada');
 
