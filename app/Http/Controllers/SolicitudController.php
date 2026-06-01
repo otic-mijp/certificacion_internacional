@@ -326,7 +326,7 @@ class SolicitudController extends Controller
             'nro_decreto_extraordinario' => $diseno->nro_extraordinaria,
 
             // Localización
-            'telefono_ministerio' => $diseno->tlf,
+            'telefono_ministerio' => $diseno->telefono,
             'piso' => $diseno->piso,
 
             // Datos del trámite
@@ -377,7 +377,7 @@ class SolicitudController extends Controller
 
         $data = [
             'tramite' => $tramite,
-            'telefono_ministerio' => $diseno->tlf,
+            'telefono_ministerio' => $diseno->telefono,
             'piso' => $diseno->piso,
             'logo_ministerial' => $procesadas['logo_encabezado'],
             'logo_ministerial_fondo' => $procesadas['logo_fondo'],

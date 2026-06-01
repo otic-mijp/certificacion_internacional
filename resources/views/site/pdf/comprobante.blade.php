@@ -5,18 +5,16 @@
     <meta charset="UTF-8">
     <title>Comprobante de Solicitud de Antecedentes Penales</title>
     <style>
+        /* --- Configuración del Papel para DomPDF --- */
         @page {
+            size: letter; /* Asegura el tamaño Carta de forma estricta */
             margin: 0.8cm 1.5cm;
         }
 
-        /* Fuerza de manera estricta a que TODO el documento use exactamente la misma fuente */
-        * {
-            font-family: 'Helvetica', sans-serif;
-        }
-
         body {
-            line-height: 1.6;
-            font-size: 10.5pt;
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            line-height: 1.5;
+            font-size: 10pt; /* Normalizado para balance en tamaño Carta */
             color: #2c3e50;
             margin: 0;
             padding: 0;
@@ -38,17 +36,16 @@
         .tabla-header {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .texto-header {
-            width: 63%;
+            width: 60%;
             text-align: center;
             font-size: 7pt;
             font-weight: bold;
             color: #333;
-            line-height: 1.5;
+            line-height: 1.4;
             text-transform: uppercase;
         }
 
@@ -60,26 +57,28 @@
         /* --- Título y Trámite --- */
         .titulo-principal {
             text-align: center;
-            font-size: 14pt;
-            margin: 5px 0 15px 0;
+            font-size: 13pt;
+            margin: 10px 0 15px 0;
             font-weight: bold;
             color: #000000;
             width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        /* Corrección DomPDF: Centrado clásico usando tablas en lugar de inline-block */
+        .tabla-tramite {
+            width: 100%;
+            margin-bottom: 25px;
         }
 
         .numero-tramite {
-            text-align: center;
             font-size: 10.5pt;
             font-weight: bold;
             color: #d32f2f;
-            margin-bottom: 25px;
             background-color: #fdf2f2;
-            padding: 5px 15px;
+            padding: 6px 15px;
             border: 1px solid #ffcdd2;
-            display: inline-block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 320px;
+            text-align: center;
         }
 
         /* --- Bloque de Datos --- */
@@ -110,44 +109,49 @@
         .label-dato {
             font-weight: bold;
             width: 35%;
-            font-size: 10pt;
+            font-size: 9.5pt;
             color: #4f5f6f;
         }
 
         .valor-dato {
             color: #111111;
             text-transform: uppercase;
-            font-weight: normal;
+            font-size: 10pt;
+        }
+        
+        .negrita {
+            font-weight: bold;
         }
 
         /* --- Nota de Advertencia --- */
         .nota-advertencia {
-            font-size: 8.5pt;
+            font-size: 8pt;
             color: #7f8c8d;
             font-style: italic;
             margin-top: 10px;
         }
 
-        /* --- Footer Fijo abajo --- */
+        /* --- Footer Fijo Abajo --- */
         .footer-pagina {
             position: absolute;
-            bottom: 40px;
+            bottom: 0px; /* Ajustado al margen del @page */
             width: 100%;
             text-align: center;
         }
 
         .img-banner-footer {
             width: 100%;
-            height: 90px;
-            padding: 0;
-            z-index: -1;
+            height: auto;
+            max-height: 75px;
+            display: block;
+            margin: 0 auto;
         }
 
         .footer-texto {
-            font-size: 6.5pt;
-            margin-top: 10px;
+            font-size: 6pt;
+            margin-top: 5px;
             color: #444;
-            line-height: 1.1;
+            line-height: 1.2;
         }
     </style>
 </head>
@@ -175,11 +179,19 @@
 
     <div class="titulo-principal">COMPROBANTE DE SOLICITUD DE ANTECEDENTES PENALES</div>
 
-    <div style="text-align: center;">
-        <div class="numero-tramite">
-            N° DE TRÁMITE: {{ $tramite->num_tramite }}
-        </div>
-    </div>
+    <table class="tabla-tramite">
+        <tr>
+            <td align="center">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td class="numero-tramite">
+                            N° DE TRÁMITE: {{ $tramite->num_tramite }}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
     <div class="seccion-titulo">Datos del Ciudadano / Solicitante</div>
 
@@ -187,13 +199,13 @@
         <tr>
             <td class="label-dato">Nombres y Apellidos:</td>
             <td class="valor-dato">
-                <strong>{{ $nombres }} {{ $primer_apellido }} {{ $segundo_apellido }}.</strong>
+                <span class="negrita">{{ $nombres }} {{ $primer_apellido }} {{ $segundo_apellido }}.</span>
             </td>
         </tr>
         <tr>
             <td class="label-dato">Cédula de Identidad:</td>
             <td class="valor-dato">
-                {{ $tramite->nacionalidad }}-{{ number_format($tramite->cedula_titular ?? ($tramite->num_identificacion ?? 0), 0, ',', '.') }}.
+                <span class="negrita">{{ $tramite->nacionalidad }}-{{ number_format($tramite->cedula_titular ?? ($tramite->num_identificacion ?? 0), 0, ',', '.') }}.</span>
             </td>
         </tr>
         <tr>
@@ -214,7 +226,7 @@
 
     <footer class="footer-pagina">
         @if ($banner_footer)
-            <img src="{{ $banner_footer }}" alt="Img Banner" class="img-banner-footer">
+            <img src="{{ $banner_footer }}" alt="Banner Footer" class="img-banner-footer">
         @endif
         <div class="footer-texto">
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia
