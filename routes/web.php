@@ -6,6 +6,9 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\SolicitudController;
 
+# Para el banco:
+use App\Http\Controllers\PaymentController;
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -37,7 +40,6 @@ Route::group(['prefix' => 'recuperar', 'controller' => LoginController::class], 
     });
     Route::post('/usuario/info', 'consultar_usuario')->name('busqueda.usuario');
     Route::post('/usuario/correo', 'recuperar_correo')->name('recuperar.correo.usuario');
-
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -62,10 +64,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::controller(SolicitudController::class)->prefix('solicitud')->name('solicitud.')->group(function () {
-        
+
         Route::get('/nueva_solicitud', 'index')->name('crear');
         Route::post('/nueva_solicitud/registro', 'solicitud_store')->name('store');
-        
+
         Route::get('/tramites', 'listado_tramites')->name('listado');
         Route::get('/tramite/certificado/{num_tramite}', 'get_certificado_seleccionado')->name('pdf');
         Route::get('/tramite/comprobante/{num_tramite}', 'get_comprobante_seleccionado')->name('pdf.comprobante');

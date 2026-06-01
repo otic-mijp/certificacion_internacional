@@ -350,6 +350,10 @@ class SolicitudController extends Controller
             ->where('id_persona', Auth::user()->id_persona)
             ->firstOrFail();
 
+        if ($tramite->id_persona != Auth::user()->id_persona) {
+            abort(403, 'No tienes permiso para acceder a este comprobante.');
+        }
+
         $diseno = $tramite->diseno;
 
         // Procesar imágenes
@@ -380,6 +384,15 @@ class SolicitudController extends Controller
             'sello_direccion' => $procesadas['sello'],
             'firma_viceministro' => $procesadas['firma'],
             'banner_footer' => $procesadas['banner_footer'],
+
+            # Datos persona:
+            'nombres' => $tramite->nombres,
+            'nacionalidad' => $tramite->nacionalidad,
+            'cedula_titular' => $tramite->cedula_titular,
+            'primer_apellido' => $tramite->primer_apellido,
+            'segundo_apellido' => $tramite->segundo_apellido,
+            'pais_nombre_oficial' => $tramite->pais_nombre_oficial,
+            'created_at' => $tramite->created_at,
         ];
 
         $pdf = Pdf::loadView('site.pdf.comprobante', $data);

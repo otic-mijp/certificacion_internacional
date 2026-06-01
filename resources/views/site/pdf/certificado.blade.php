@@ -6,14 +6,14 @@
     <style>
         /* Configuración para DomPDF */
         @page {
-            margin: 0.5cm 1.5cm;
+            margin: 0.8cm 1.5cm;
         }
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
-            line-height: 1.5;
-            font-size: 11pt;
-            color: #1a1a1a;
+            line-height: 1.6;
+            font-size: 10.5pt;
+            color: #2c3e50;
             margin: 0;
             padding: 0;
         }
@@ -21,11 +21,12 @@
         /* --- Marca de Agua / Fondo --- */
         .fondo-escudo {
             position: absolute;
-            top: 16%;
-            left: 14%;
-            width: 500px;
-            height: 500px;
-            opacity: 0.30;
+            top: 25%;
+            left: 50%;
+            width: 450px;
+            height: 450px;
+            margin-left: -225px;
+            opacity: 0.08;
             z-index: -1;
         }
 
@@ -33,12 +34,12 @@
         .tabla-header {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
         }
 
         .texto-header {
             width: 63%;
-            /* Ajustado para dar espacio a los logos */
             text-align: center;
             font-size: 7pt;
             font-weight: bold;
@@ -48,10 +49,8 @@
         }
 
         .img-header-izq {
-            width: 85px;
-            height: 85px;
-            object-position: center;
-            overflow: hidden;
+            width: 75px;
+            height: auto;
         }
 
         .img-header-dere {
@@ -71,8 +70,6 @@
 
         .parrafo {
             text-align: justify;
-            text-indent: 30px;
-            /* Sangría clásica oficial */
             margin-bottom: 10px;
         }
 
@@ -234,17 +231,17 @@
         </div>
 
         <p class="parrafo">
-            Se constata, luego de revisada la base de datos de la Coordinación de Antecedentes Penales, y hasta la
+            Se certifica que, luego de revisada la fuente de los datos de la Oficina de Antecedentes Penales, y hasta la
             emisión del presente documento, que el referido ciudadano(a) <strong>NO REGISTRA ANTECEDENTES
-                PENALES</strong> en el territorio nacional.
+                PENALES</strong> en la REPÚBLICA BOLIVARIANA DE VENEZUELA.
         </p>
 
-        <p class="parrafo">
+        <p class="parrafo">REPÚBLICA BOLIVARIANA DE VENEZUELA
             El presente certificado se emite a efectos de ser presentado ante las autoridades de:
             <strong style="text-transform: uppercase;">{{ $pais_solicitud }}</strong>.
         </p>
 
-        <p style="margin-top: 10px; text-indent: 30px;">
+        <p style="margin-top: 10px">
             Certificación que se expide en la ciudad de Caracas, el <strong>{{ $fecha_actual }}</strong>.
         </p>
 

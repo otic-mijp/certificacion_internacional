@@ -44,7 +44,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateUsing(function (\Illuminate\Http\Request $request) {
-            
+
             $request->validate([
                 Fortify::username() => 'required|string',
                 'password' => 'required|string',
@@ -54,15 +54,15 @@ class FortifyServiceProvider extends ServiceProvider
 
             if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->contrasena)) {
 
-               
+
                 $activeSessions = \Illuminate\Support\Facades\DB::table('sesiones')
                     ->where('user_id', $user->id)
                     ->count();
 
                 if ($activeSessions > 0) {
-                   
+
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        Fortify::username() => ['Ya existe una sesión activa para este usuario en otro dispositivo.'],
+                        Fortify::username() => ['Ya existe una sesión activa para este usuario en otro dispositivo. Por favor, cierre la sesión en el otro dispositivo antes de iniciar sesión aquí o espere 20 minutos.'],
                     ]);
                 }
 
