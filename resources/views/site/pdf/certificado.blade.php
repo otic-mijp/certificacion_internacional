@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html lang="es-ve">
+
 <head>
     <meta charset="UTF-8">
     <title>Certificado de Antecedentes Penales</title>
     <style>
         /* --- Configuración del Papel para DomPDF --- */
         @page {
-            size: letter; /* Fuerza explícitamente el tamaño carta */
+            size: letter;
             margin: 0.8cm 1.5cm;
         }
 
+        * {
+            font-family: 'Times New Roman';
+        }
+
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
             line-height: 1.5;
-            font-size: 10pt; /* Ajustado ligeramente para mejorar balance en Carta */
+            font-size: 10pt;
             color: #2c3e50;
             margin: 0;
             padding: 0;
         }
 
-        /* --- Marca de Agua / Fondo --- */
         .fondo-escudo {
             position: absolute;
             top: 25%;
@@ -35,38 +38,64 @@
         .tabla-header {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            /* Crucial para PDFs */
             margin-bottom: 20px;
         }
 
-        .texto-header {
+        /* Distribución de la primera fila */
+        .col-vacia {
+            width: 20%;
+        }
+
+        .col-centro-superior {
             width: 60%;
             text-align: center;
-            font-size: 7pt;
+            vertical-align: top;
+            font-size: 12px;
             font-weight: bold;
-            color: #333;
+            color: #000000;
+            line-height: 1.3;
+        }
+
+        .col-qr {
+            width: 20%;
+            vertical-align: bottom;
+            text-align: right;
+        }
+
+        /* Configuración de imágenes */
+        .img-logo {
+            display: block;
+            margin: 8px auto 0 auto;
+            max-height: 50px;
+            width: auto;
+        }
+
+        .img-qr {
+            max-height: 75px;
+            width: auto;
+        }
+
+        /* Segunda fila: Bloque de ministerios */
+        .texto-ministerios {
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000000;
             line-height: 1.4;
-            text-transform: uppercase;
-        }
-
-        .img-header-izq {
-            width: 75px;
-            height: auto;
-        }
-
-        .img-header-dere {
-            width: 65px;
-            height: auto;
+            padding-top: 10px;
         }
 
         /* --- Títulos y Contenido --- */
         .titulo-principal {
             text-align: center;
             font-size: 13pt;
-            margin: 10px 0 15px 0;
+            margin: 5px 0 15px 0;
             font-weight: bold;
             color: #000;
             width: 100%;
-            letter-spacing: 0.5px; /* Suaviza el espaciado en títulos en mayúscula */
+            letter-spacing: 0.5px;
         }
 
         .parrafo {
@@ -76,7 +105,7 @@
 
         .contenedor-datos {
             text-align: left;
-            margin: 12px 0;
+            margin: 12px 12px;
         }
 
         .datos-usuario {
@@ -85,7 +114,7 @@
             color: #000;
             line-height: 1.8;
         }
-        
+
         .negrita {
             font-weight: bold;
         }
@@ -109,8 +138,8 @@
         }
 
         .firma-digital {
-            max-width: 110px;
-            max-height: 110px;
+            max-width: 150px;
+            max-height: 150px;
             vertical-align: middle;
         }
 
@@ -124,7 +153,7 @@
         .cargo-autoridad {
             text-transform: uppercase;
             font-size: 8.5pt;
-            font-weight: bold;
+            font-weight: normal;
             max-width: 85%;
             margin: 0 auto;
             line-height: 1.2;
@@ -134,7 +163,7 @@
             font-size: 8pt;
             text-transform: uppercase;
             line-height: 1.2;
-            margin-top: 8px;
+            /* margin-top: 3px; */
             color: #333;
         }
 
@@ -154,36 +183,77 @@
             font-weight: bold;
         }
 
-        .tabla-qr-footer {
+        .contenedor-qr-footer {
             width: 100%;
-            margin-top: 10px;
+            margin: 3px 0 0 0;
+            padding: 0;
+        }
+
+        .qr-bloque-izq {
+            float: left;
+            position: relative;
+            left: -8px;
+            width: 75px;
+            text-align: left;
+            margin: 0;
+            padding: 0;
+        }
+
+        .qr-bloque-der {
+            float: right;
+            width: 75px;
+            /* Ajusta al ancho de tu QR */
+            position: relative;
+            right: -8px;
+            border: solid 0px black;
+            text-align: right;
+            margin: 0;
+            padding: 0;
         }
 
         .qr-final {
-            width: 45px;
-            margin-bottom: 3px;
+            max-height: 65px;
+            width: auto;
+            display: block;
+            margin: 0;
+        }
+
+        /* Fuerza al QR derecho a alinearse al borde externo */
+        .qr-bloque-der .qr-final {
+            margin-left: auto;
         }
 
         .qr-etiqueta {
-            font-size: 6pt;
+            font-size: 8pt;
             font-weight: bold;
-            display: block;
-            color: #444;
+            color: #000;
+            margin-top: -2px;
+            margin-left: 6px;
+            line-height: 1;
+            text-align: left;
+        }
+
+        /* ESTO ES CRUCIAL: Limpia los floats para que el fondo rojo no se colapse */
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
         }
 
         /* --- Footer Fijo --- */
         .footer-pagina {
             position: absolute;
-            bottom: 0px; /* Ajustado al límite del margen del @page */
+            bottom: 0px;
             width: 100%;
-            text-align: center;
+            text-align: right;
         }
 
         .img-banner-footer {
             width: 100%;
-            height: auto; /* Evita deformaciones por forzar 90px */
-            max-height: 75px; 
+            height: auto;
+            max-height: 75px;
             display: block;
+            border-bottom: 1px solid #000;
             margin: 0 auto;
         }
 
@@ -198,18 +268,24 @@
 
 <body>
     <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo">
-
     <table class="tabla-header">
         <tr>
-            <td align="left" width="20%"><img src="{{ $logo_ministerial }}" class="img-header-izq"></td>
-            <td class="texto-header">
-                REPÚBLICA BOLIVARIANA DE VENEZUELA <br>
-                MINISTERIO DEL PODER POPULAR PARA LAS RELACIONES INTERIORES, JUSTICIA Y PAZ <br>
-                DESPACHO DEL VICEMINISTERIO DE POLÍTICA INTERIOR Y SEGURIDAD JURÍDICA <br>
-                DIRECCIÓN GENERAL DE ARTICULACIÓN PARA JUSTICIA Y PAZ <br>
+            <td class="col-vacia"></td>
+            <td class="col-centro-superior">
+                REPÚBLICA BOLIVARIANA DE VENEZUELA<br>
+                <img src="{{ $logo_ministerial }}" class="img-logo">
+            </td>
+            <td class="col-qr">
+                <img src="{{ $qr_pag_redirect }}" class="img-qr">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" class="texto-ministerios">
+                MINISTERIO DEL PODER POPULAR PARA RELACIONES INTERIORES, JUSTICIA Y PAZ<br>
+                DESPACHO DEL VICEMINISTERIO DE POLÍTICA INTERIOR Y SEGURIDAD JURÍDICA<br>
+                DIRECCIÓN GENERAL DE ARTICULACIÓN PARA JUSTICIA Y PAZ<br>
                 COORDINACIÓN DE ANTECEDENTES PENALES
             </td>
-            <td align="right" width="20%"><img src="{{ $qr_pag_redirect }}" class="img-header-dere"></td>
         </tr>
     </table>
 
@@ -218,10 +294,11 @@
 
         <p class="parrafo">
             En nombre del ciudadano Ministro del Poder Popular para las Relaciones Interiores, Justicia y Paz,
-            la <span class="negrita">{{ $nombre_direccion }}</span>, en el ejercicio de sus funciones y cumpliendo la Ley de
-            Registro de Antecedentes Penales publicada en la Gaceta Oficial de la República de Venezuela (hoy República
-            Bolivariana de Venezuela) <span class="negrita">Nro. {{ $gaceta_cambio_pais }}, de fecha
-            {{ $fecha_cambio_gaceta_pais }}</span>, a solicitud de parte interesada expide el presente certificado al ciudadano(a):
+            la <span class="negrita">{{ $nombre_direccion }}</span>, en el ejercicio de sus funciones y cumpliendo la
+            Ley de Registro de Antecedentes Penales publicada en la Gaceta Oficial de la República de Venezuela (hoy
+            República Bolivariana de Venezuela) <span class="negrita">Nro. {{ $gaceta_cambio_pais }}, de fecha
+                {{ $fecha_cambio_gaceta_pais }}</span>,
+            a solicitud de parte interesada expide el presente certificado al ciudadano(a):
         </p>
 
         <div class="contenedor-datos">
@@ -234,7 +311,7 @@
         <p class="parrafo">
             Se certifica que, luego de revisada la fuente de los datos de la Oficina de Antecedentes Penales, y hasta la
             emisión del presente documento, que el referido ciudadano(a) <span class="negrita">NO REGISTRA ANTECEDENTES
-            PENALES</span> en la REPÚBLICA BOLIVARIANA DE VENEZUELA.
+                PENALES</span> en la REPÚBLICA BOLIVARIANA DE VENEZUELA.
         </p>
 
         <p class="parrafo">
@@ -254,42 +331,42 @@
             <div class="nombre-autoridad">{{ $nombre_viceministro }}</div>
             <div class="cargo-autoridad">{{ $viceministro_nombre_direccion }}</div>
             <div class="base-legal">
-                DESIGNADA SEGÚN DECRETO <span class="negrita">NRO. {{ $nro_decreto_desgnacion }}</span> DE
-                FECHA {{ $fecha_decreto_desgnacion }},<br>
-                PUBLICADO EN GACETA OFICIAL DE LA REPÚBLICA BOLIVARIANA DE VENEZUELA<br>
-                <span class="negrita">{{ $nro_decreto_extraordinario }}</span> EXTRAORDINARIO DE LA MISMA FECHA.
+                DESIGNADO SEGÚN DECRETO <span class="negrita">N° {{ $nro_decreto_desgnacion }}</span> DE
+                FECHA {{ $fecha_decreto_desgnacion }},<br> PUBLICADO EN GACETA OFICIAL DE LA REPÚBLICA BOLIVARIANA DE
+                VENEZUELA <br>
+                <span class="negrita">N° {{ $nro_decreto_extraordinario }}</span> Fecha
+                {{ $fecha_decreto_extraordinario ?? 'N/A' }}.
             </div>
         </div>
 
         <div class="nota-atencion">
-            <span class="negrita">ATENCIÓN:</span> Este documento consta de una (1) hoja, la cual no debe contener enmiendas,
-            tachaduras, modificaciones o superposiciones. Los datos de identificación del solicitante son
+            <span class="negrita">ATENCIÓN:</span> Este documento consta de una (1) hoja, la cual no debe contener
+            enmiendas, tachaduras, modificaciones o superposiciones. Los datos de identificación del solicitante son
             suministrados por el Servicio Administrativo de Identificación, Migración y Extranjería (SAIME). La
-            autenticidad de este certificado puede verificarse a través del portal: <br>
-            <span class="url-validacion">{{ $web }}/{{ $nro_tramite }}</span> escaneando el código QR superior.
+            autenticidad de este certificado puede verificarse a través del portal: <span
+                class="url-validacion">{{ $web }}
+                <span style="font-weight: normal;">con el número</span> {{ $nro_tramite }}</span> o escaneando el
+            código QR superior.
         </div>
 
-        <table class="tabla-qr-footer">
-            <tr>
-                <td align="center" width="50%">
-                    <img src="{{ $qr_cedula }}" alt="QR Solicitante" class="qr-final">
-                    <span class="qr-etiqueta">ID SOLICITANTE</span>
-                </td>
-                <td align="center" width="50%">
-                    <img src="{{ $qr_tramite }}" alt="QR Trámite" class="qr-final">
-                    <span class="qr-etiqueta">VALIDACIÓN TRÁMITE</span>
-                </td>
-            </tr>
-        </table>
+        <div class="contenedor-qr-footer">
+            <div class="qr-bloque-izq">
+                <img src="{{ $qr_cedula }}" alt="QR Solicitante" class="qr-final">
+                <div class="qr-etiqueta">AP</div>
+            </div>
+            <div class="qr-bloque-der">
+                <img src="{{ $qr_tramite }}" alt="QR Trámite" class="qr-final">
+            </div>
+        </div>
     </div>
 
     <footer class="footer-pagina">
         <img src="{{ $banner_footer }}" alt="Banner Footer" class="img-banner-footer">
         <div class="footer-texto">
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia
-            La Candelaria, <br>
-            Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
+            La Candelaria, <br> Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
         </div>
     </footer>
 </body>
+
 </html>

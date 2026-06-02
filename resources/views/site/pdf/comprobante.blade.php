@@ -185,7 +185,7 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td class="numero-tramite">
-                            N° DE TRÁMITE: {{ $tramite->num_tramite }}
+                            N° DE TRÁMITE: {{ $tramite->num_tramite }} {{ $rechazado ? '- ' . $rechazado : '' }}
                         </td>
                     </tr>
                 </table>

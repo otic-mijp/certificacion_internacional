@@ -86,7 +86,7 @@ class SolicitudController extends Controller
             $tramite->id_diseno_tramite   = $diseno->id;
             $tramite->id_persona          = $id_persona;
             $tramite->correo              = Auth::user()->email;
-            $tramite->pais_nombre_oficial = 'null';
+            $tramite->pais_nombre_oficial = 'Asignación rechazada';
             $tramite->id_estatus          = 3;
             $tramite->apostilla           = false;
             $tramite->save();
@@ -384,7 +384,7 @@ class SolicitudController extends Controller
             'sello_direccion' => $procesadas['sello'],
             'firma_viceministro' => $procesadas['firma'],
             'banner_footer' => $procesadas['banner_footer'],
-
+            
             # Datos persona:
             'nombres' => $tramite->nombres,
             'nacionalidad' => $tramite->nacionalidad,
@@ -392,6 +392,7 @@ class SolicitudController extends Controller
             'primer_apellido' => $tramite->primer_apellido,
             'segundo_apellido' => $tramite->segundo_apellido,
             'pais_nombre_oficial' => $tramite->pais_nombre_oficial,
+            'rechazado' => $tramite->id_estatus === 3 ? 'Rechazado' : '',
             'created_at' => $tramite->created_at,
         ];
 
