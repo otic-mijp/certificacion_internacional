@@ -54,17 +54,30 @@ class FortifyServiceProvider extends ServiceProvider
 
             if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->contrasena)) {
 
+                // 1. Obtenemos el tiempo de vida de la sesión en segundos (por defecto de config/session.php)
+                // Convertimos los minutos a segundos. Ejemplo: 120 minutos = 7200 segundos.
+                $sessionLifetimeInSeconds = config('session.lifetime') * 60;
 
+                // 2. Calculamos el timestamp mínimo que se considera "activo"
+                $activityThreshold = time() - $sessionLifetimeInSeconds;
+
+                // 3. Contamos solo las sesiones cuya 'last_activity' sea mayor a ese umbral
                 $activeSessions = \Illuminate\Support\Facades\DB::table('sesiones')
                     ->where('user_id', $user->id)
+                    ->where('last_activity', '>=', $activityThreshold) // <-- FILTRO CRUCIAL
                     ->count();
 
                 if ($activeSessions > 0) {
-
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        Fortify::username() => ['Ya existe una sesión activa para este usuario en otro dispositivo. Por favor, cierre la sesión en el otro dispositivo antes de iniciar sesión aquí o espere 20 minutos.'],
+                        Fortify::username() => ['Ya existe una sesión activa para este usuario en otro dispositivo. Por favor, cierre la sesión en el otro dispositivo antes de iniciar sesión aquí o espere a que expire.'],
                     ]);
                 }
+
+                // OPCIONAL: Si quieres limpiar la basura de la tabla de una vez
+                \Illuminate\Support\Facades\DB::table('sesiones')
+                    ->where('user_id', $user->id)
+                    ->where('last_activity', '<', $activityThreshold)
+                    ->delete();
 
                 return $user;
             }
