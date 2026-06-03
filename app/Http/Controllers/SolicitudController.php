@@ -322,6 +322,7 @@ class SolicitudController extends Controller
             'nombre_viceministro' => $diseno->nombre_viceministro,
             'nro_decreto_desgnacion' => $diseno->nro_designacion,
             'fecha_decreto_desgnacion' => $fecha_decreto,
+            'fecha_decreto_extraordinario' => $diseno->fecha_extraordinaria ? Carbon::parse($diseno->fecha_extraordinaria)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '',
             'viceministro_nombre_direccion' => $diseno->cargo_viceministro,
             'nro_decreto_extraordinario' => $diseno->nro_extraordinaria,
 
@@ -384,7 +385,7 @@ class SolicitudController extends Controller
             'sello_direccion' => $procesadas['sello'],
             'firma_viceministro' => $procesadas['firma'],
             'banner_footer' => $procesadas['banner_footer'],
-            
+
             # Datos persona:
             'nombres' => $tramite->nombres,
             'nacionalidad' => $tramite->nacionalidad,
