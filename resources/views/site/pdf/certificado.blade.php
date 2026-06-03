@@ -345,7 +345,7 @@
             suministrados por el Servicio Administrativo de Identificación, Migración y Extranjería (SAIME). La
             autenticidad de este certificado puede verificarse a través del portal: <span
                 class="url-validacion">{{ $web }}
-                <span style="font-weight: normal;">con el número</span> {{ $nro_tramite }}</span> o escaneando el
+                <span style="font-weight: normal;">con el número de trámite </span> {{ $nro_tramite }}</span> o escaneando el
             código QR superior.
         </div>
 
