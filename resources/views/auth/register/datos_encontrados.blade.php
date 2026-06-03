@@ -54,7 +54,7 @@
                                     <label for="email" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
                                         Correo electrónico:
                                     </label>
-                                    <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="ejemplo@correo.com" class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border outline-none">
+                                    <input type="email" id="email" name="email" value="{{ old('email') }}" autocomplete="off" placeholder="ejemplo@correo.com" class="w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border outline-none">
                                     @error('email')
                                         <div class="text-red-500 text-center mt-1 text-xs">
                                             ¡Atención! {{ $message }}
