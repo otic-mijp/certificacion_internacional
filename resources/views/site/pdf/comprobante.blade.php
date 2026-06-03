@@ -7,15 +7,18 @@
     <style>
         /* --- Configuración del Papel para DomPDF --- */
         @page {
-            size: letter; /* Asegura el tamaño Carta de forma estricta */
-            margin: 0.8cm 1.5cm;
+            size: letter;
+            margin: 1.0cm 1.8cm;
+        }
+
+        * {
+            font-family: 'Times New Roman';
         }
 
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            line-height: 1.5;
-            font-size: 10pt; /* Normalizado para balance en tamaño Carta */
-            color: #2c3e50;
+            line-height: 1.6;
+            font-size: 10pt;
+            color: #2d3748;
             margin: 0;
             padding: 0;
         }
@@ -25,10 +28,10 @@
             position: absolute;
             top: 25%;
             left: 50%;
-            width: 450px;
-            height: 450px;
-            margin-left: -225px;
-            opacity: 0.08;
+            width: 420px;
+            height: 420px;
+            margin-left: -210px;
+            opacity: 0.06;
             z-index: -1;
         }
 
@@ -36,107 +39,135 @@
         .tabla-header {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
+            /* Crucial para PDFs */
             margin-bottom: 20px;
         }
 
-        .texto-header {
-            width: 60%;
-            text-align: center;
-            font-size: 7pt;
-            font-weight: bold;
-            color: #333;
-            line-height: 1.4;
-            text-transform: uppercase;
+        .col-vacia {
+            width: 20%;
         }
 
-        .img-header-izq {
-            width: 75px;
-            height: auto;
+        .col-centro-superior {
+            width: 60%;
+            text-align: center;
+            vertical-align: top;
+            font-size: 12px;
+            font-weight: bold;
+            color: #000000;
+            line-height: 1.3;
+        }
+
+        /* Configuración de imágenes */
+        .img-logo {
+            display: block;
+            margin: 8px auto 0 auto;
+            max-height: 50px;
+            width: auto;
+        }
+
+        /* Segunda fila: Bloque de ministerios */
+        .texto-ministerios {
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000000;
+            line-height: 1.4;
+            padding-top: 10px;
         }
 
         /* --- Título y Trámite --- */
         .titulo-principal {
             text-align: center;
-            font-size: 13pt;
-            margin: 10px 0 15px 0;
+            font-size: 14pt;
+            margin: 15px 0 20px 0;
             font-weight: bold;
-            color: #000000;
-            width: 100%;
+            color: #1a365d;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        /* Corrección DomPDF: Centrado clásico usando tablas en lugar de inline-block */
         .tabla-tramite {
             width: 100%;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .numero-tramite {
-            font-size: 10.5pt;
+            font-size: 11pt;
             font-weight: bold;
-            color: #d32f2f;
-            background-color: #fdf2f2;
-            padding: 6px 15px;
-            border: 1px solid #ffcdd2;
+            color: #9b2c2c;
+            background-color: #fff5f5;
+            padding: 8px 20px;
+            border: 1px dashed #feb2b2;
             text-align: center;
+            border-radius: 4px;
         }
 
         /* --- Bloque de Datos --- */
         .seccion-titulo {
             font-size: 11pt;
             font-weight: bold;
-            color: #002e63;
-            border-bottom: 1px solid #ced4da;
-            padding-bottom: 4px;
-            margin-top: 20px;
-            margin-bottom: 12px;
+            color: #1a365d;
+            border-bottom: 2px solid #2b6cb0;
+            padding-bottom: 5px;
+            margin-top: 10px;
+            margin-bottom: 15px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .tabla-datos {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-            background-color: #fafafa;
-            border: 1px solid #e0e0e0;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .tabla-datos tr:nth-child(even) {
+            background-color: #f7fafc;
         }
 
         .tabla-datos td {
-            padding: 10px 12px;
-            border-bottom: 1px solid #eeeeee;
+            padding: 10px 14px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
         }
 
         .label-dato {
             font-weight: bold;
             width: 35%;
             font-size: 9.5pt;
-            color: #4f5f6f;
+            color: #4a5568;
         }
 
         .valor-dato {
-            color: #111111;
+            color: #1a202c;
             text-transform: uppercase;
             font-size: 10pt;
         }
-        
+
         .negrita {
             font-weight: bold;
+            color: #000000;
         }
 
         /* --- Nota de Advertencia --- */
         .nota-advertencia {
-            font-size: 8pt;
-            color: #7f8c8d;
+            font-size: 8.5pt;
+            color: #718096;
+            background-color: #edf2f7;
+            border-left: 4px solid #cbd5e0;
+            padding: 10px 15px;
+            margin-top: 15px;
             font-style: italic;
-            margin-top: 10px;
         }
 
         /* --- Footer Fijo Abajo --- */
         .footer-pagina {
             position: absolute;
-            bottom: 0px; /* Ajustado al margen del @page */
+            bottom: 0px;
             width: 100%;
-            text-align: center;
+            text-align: right;
         }
 
         .img-banner-footer {
@@ -144,6 +175,7 @@
             height: auto;
             max-height: 75px;
             display: block;
+            border-bottom: 1px solid #000;
             margin: 0 auto;
         }
 
@@ -157,35 +189,40 @@
 </head>
 
 <body>
-    @if ($logo_ministerial_fondo)
-        <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo">
-    @endif
 
+    <!-- Escudo de Fondo de Agua -->
+    <img src="{{ $logo_ministerial_fondo }}" class="fondo-escudo" alt="Fondo Ministerial">
+
+    <!-- Encabezado -->
     <table class="tabla-header">
         <tr>
-            <td align="left" width="20%">
-                <img src="{{ $logo_ministerial }}" class="img-header-izq">
+            <td class="col-vacia"></td>
+            <td class="col-centro-superior">
+                REPÚBLICA BOLIVARIANA DE VENEZUELA<br>
+                <img src="{{ $logo_ministerial }}" class="img-logo">
             </td>
-            <td class="texto-header">
-                REPÚBLICA BOLIVARIANA DE VENEZUELA <br>
-                MINISTERIO DEL PODER POPULAR PARA LAS RELACIONES INTERIORES, JUSTICIA Y PAZ <br>
-                DESPACHO DEL VICEMINISTERIO DE POLÍTICA INTERIOR Y SEGURIDAD JURÍDICA <br>
-                DIRECCIÓN GENERAL DE ARTICULACIÓN PARA JUSTICIA Y PAZ <br>
+            <td class="col-vacia"></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="texto-ministerios">
+                MINISTERIO DEL PODER POPULAR PARA RELACIONES INTERIORES, JUSTICIA Y PAZ<br>
+                DESPACHO DEL VICEMINISTERIO DE POLÍTICA INTERIOR Y SEGURIDAD JURÍDICA<br>
+                DIRECCIÓN GENERAL DE ARTICULACIÓN PARA JUSTICIA Y PAZ<br>
                 COORDINACIÓN DE ANTECEDENTES PENALES
             </td>
-            <td align="right" width="20%"></td>
         </tr>
     </table>
 
-    <div class="titulo-principal">COMPROBANTE DE SOLICITUD DE ANTECEDENTES PENALES</div>
+    <div class="titulo-principal">Comprobante de Solicitud de Antecedentes Penales</div>
 
+    <!-- Número de Trámite -->
     <table class="tabla-tramite">
         <tr>
             <td align="center">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <table width="auto" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                     <tr>
                         <td class="numero-tramite">
-                            N° DE TRÁMITE: {{ $tramite->num_tramite }} 
+                            N° DE TRÁMITE: {{ $tramite->num_tramite }}
                         </td>
                     </tr>
                 </table>
@@ -193,6 +230,7 @@
         </tr>
     </table>
 
+    <!-- Sección Datos -->
     <div class="seccion-titulo">Datos del Ciudadano / Solicitante</div>
 
     <table class="tabla-datos">
@@ -205,7 +243,8 @@
         <tr>
             <td class="label-dato">Cédula de Identidad:</td>
             <td class="valor-dato">
-                <span class="negrita">{{ $tramite->nacionalidad }}-{{ number_format($tramite->cedula_titular ?? ($tramite->num_identificacion ?? 0), 0, ',', '.') }}.</span>
+                <span
+                    class="negrita">{{ $tramite->nacionalidad }}-{{ number_format($tramite->cedula_titular ?? ($tramite->num_identificacion ?? 0), 0, ',', '.') }}.</span>
             </td>
         </tr>
         <tr>
@@ -220,20 +259,22 @@
         </tr>
     </table>
 
+    <!-- Advertencia -->
     <div class="nota-advertencia">
-        * Advertencia: esta planilla no representa la aprobación de la solicitud.
+        <strong>Importante:</strong> Esta planilla representa un comprobante de registro y no garantiza ni constituye la
+        aprobación definitiva de la solicitud de antecedentes penales.
     </div>
 
+    <!-- Footer Fijo -->
     <footer class="footer-pagina">
-        @if ($banner_footer)
-            <img src="{{ $banner_footer }}" alt="Banner Footer" class="img-banner-footer">
-        @endif
+        <img src="{{ $banner_footer }}" alt="Banner Footer" class="img-banner-footer">
         <div class="footer-texto">
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia
-            La Candelaria, <br>
+            La Candelaria,<br>
             Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }}
         </div>
     </footer>
+
 </body>
 
 </html>

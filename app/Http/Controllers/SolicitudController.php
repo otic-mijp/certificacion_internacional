@@ -57,10 +57,7 @@ class SolicitudController extends Controller
 
     private function get_estatus_antecedente(string $idPersona): bool
     {
-        return RecaudoTramite::where('id_persona', $idPersona)
-            ->where('id_estatus', 3)
-            ->whereDate('created_at', now()->toDateString()) 
-            ->exists();
+        return DVReo::where('id_reo', $idPersona)->exists();
     }
 
     private function solicitud_rechazada(string $id_persona)
@@ -69,8 +66,8 @@ class SolicitudController extends Controller
 
         $tramiteExistente = $this->get_existencia_tramite_rechazado($id_persona);
 
-        if (!$tramiteExistente) { # Registro 1 sola vez por intento
-
+        if (!$tramiteExistente) {
+            
             $tramite = new RecaudoTramite();
             $diseno = RecaudoDiseno::where('estado', true)->first();
 
@@ -106,7 +103,10 @@ class SolicitudController extends Controller
 
     private function get_existencia_tramite_rechazado(string $idPersona): bool
     {
-        return RecaudoTramite::where('id_persona', $idPersona)->where('id_estatus', 3)->exists();
+        return RecaudoTramite::where('id_persona', $idPersona)
+            ->where('id_estatus', 3)
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
     }
 
     public function solicitud_store(SolicitudTramiteRequest $request)
