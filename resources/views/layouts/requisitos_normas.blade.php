@@ -112,7 +112,7 @@
                     <div class="w-full pt-1">
                         <p class="text-slate-600 text-sm md:text-base leading-relaxed mb-3">
                             Si no puede asistir personalmente a la oficina principal, podrá acudir un <strong
-                                class="text-slate-900 font-semibold">familiar directo</strong> (Madre, Padre o Hijo)
+                                class="text-slate-900 font-semibold">familiar directo</strong> (Madre, Padre, Hijo o Hermano)
                             consignando los siguientes requisitos:
                         </p>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">

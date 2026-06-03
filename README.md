@@ -9,4 +9,4 @@ PDF:
 - 450 x 450 (Marca de agua fondo)
 - 332 x 352 (Firma)
 - 337 x 331 (Sello)
-- 1080 x 185 (Footer)
+- 1080 x 75 (Footer)

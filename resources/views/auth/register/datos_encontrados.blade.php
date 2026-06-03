@@ -148,7 +148,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div class="relative custom-select-group" id="group-estado">
-                            <label for="estado_id" class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">Estado🌎:</label>
+                            <label for="estado_id" class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">Estado:</label>
                             <input type="text" id="estado_id" autocomplete="off" class="buscador w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-white outline-none" placeholder="Seleccione..." autocomplete="off" value="{{ old('estado_id') ? $estados->firstWhere('id', old('estado_id'))->nombre ?? '' : '' }}">
 
                             <input type="hidden" name="estado_id" class="input-real" value="{{ old('estado_id') }}">
