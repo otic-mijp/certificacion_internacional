@@ -57,7 +57,10 @@ class SolicitudController extends Controller
 
     private function get_estatus_antecedente(string $idPersona): bool
     {
-        return DVReo::where('id_reo', $idPersona)->exists();
+        return RecaudoTramite::where('id_persona', $idPersona)
+            ->where('id_estatus', 3)
+            ->whereDate('created_at', now()->toDateString()) 
+            ->exists();
     }
 
     private function solicitud_rechazada(string $id_persona)
