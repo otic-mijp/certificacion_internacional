@@ -8,4 +8,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('usuarios:eliminar-no-verificados')->twiceWithInAYear(1, 7);
+
+Schedule::command('usuarios:eliminar-no-verificados')->twiceWithInAYear(1, 7, '03:00'); # 3am

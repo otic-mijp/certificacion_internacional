@@ -13,13 +13,14 @@
 
         * {
             font-family: 'Times New Roman';
+            color: #000;
         }
 
         body {
             line-height: 1.5;
             font-size: 10pt;
-            color: #2c3e50;
             margin: 0;
+            font-size: 15px;
             padding: 0;
         }
 
@@ -39,7 +40,6 @@
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            /* Crucial para PDFs */
             margin-bottom: 20px;
         }
 
@@ -53,8 +53,6 @@
             text-align: center;
             vertical-align: top;
             font-size: 12px;
-            font-weight: bold;
-            color: #000000;
             line-height: 1.3;
         }
 
@@ -81,8 +79,6 @@
         .texto-ministerios {
             text-align: center;
             font-size: 11px;
-            font-weight: bold;
-            color: #000000;
             line-height: 1.4;
             padding-top: 10px;
         }
@@ -93,7 +89,7 @@
             font-size: 13pt;
             margin: 5px 0 15px 0;
             font-weight: bold;
-            color: #000;
+
             width: 100%;
             letter-spacing: 0.5px;
         }
@@ -110,12 +106,13 @@
 
         .datos-usuario {
             font-size: 10pt;
+            font-weight: bold;
             text-transform: uppercase;
-            color: #000;
             line-height: 1.8;
         }
 
-        .negrita {
+        .cedula-usuario {
+            text-transform: uppercase;
             font-weight: bold;
         }
 
@@ -169,7 +166,7 @@
 
         /* --- Notas y Verificación --- */
         .nota-atencion {
-            font-size: 7.5pt;
+            font-size: 8.5pt;
             text-align: justify;
             margin-top: 15px;
             padding-top: 8px;
@@ -283,7 +280,7 @@
             <td colspan="3" class="texto-ministerios">
                 MINISTERIO DEL PODER POPULAR PARA RELACIONES INTERIORES, JUSTICIA Y PAZ<br>
                 DESPACHO DEL VICEMINISTERIO DE POLÍTICA INTERIOR Y SEGURIDAD JURÍDICA<br>
-                DIRECCIÓN GENERAL DE ARTICULACIÓN PARA JUSTICIA Y PAZ<br>
+                DIRECCIÓN GENERAL DE LA ARTICULACIÓN PARA JUSTICIA Y PAZ<br>
                 COORDINACIÓN DE ANTECEDENTES PENALES
             </td>
         </tr>
@@ -294,33 +291,37 @@
 
         <p class="parrafo">
             En nombre del ciudadano Ministro del Poder Popular para las Relaciones Interiores, Justicia y Paz,
-            la <span class="negrita">{{ $nombre_direccion }}</span>, en el ejercicio de sus funciones y cumpliendo la
+            la {{ $nombre_direccion }}, en el ejercicio de sus funciones y cumpliendo la
             Ley de Registro de Antecedentes Penales publicada en la Gaceta Oficial de la República de Venezuela (hoy
-            República Bolivariana de Venezuela) <span class="negrita">Nro. {{ $gaceta_cambio_pais }}, de fecha
-                {{ $fecha_cambio_gaceta_pais }}</span>,
+            República Bolivariana de Venezuela) Nro. {{ $gaceta_cambio_pais }}, de fecha
+            {{ $fecha_cambio_gaceta_pais }},
             a solicitud de parte interesada expide el presente certificado al ciudadano(a):
         </p>
 
         <div class="contenedor-datos">
             <div class="datos-usuario">
-                <span class="negrita">{{ $nombre_solicitante }}</span><br>
-                cédula de identidad: <span class="negrita">{{ $datos }}.</span>
+                {{ $nombre_solicitante }}
+                <br>
             </div>
+            CÉDULA DE IDENTIDAD:
+            <span class="cedula-usuario">
+                {{ $datos }}.
+            </span>
         </div>
 
         <p class="parrafo">
             Se certifica que, luego de revisada la fuente de los datos de la Oficina de Antecedentes Penales, y hasta la
-            emisión del presente documento, que el referido ciudadano(a) <span class="negrita">NO REGISTRA ANTECEDENTES
-                PENALES</span> en la REPÚBLICA BOLIVARIANA DE VENEZUELA.
+            emisión del presente documento, que el referido ciudadano(a) NO REGISTRA ANTECEDENTES
+            PENALES EN LA REPÚBLICA BOLIVARIANA DE VENEZUELA.
         </p>
 
         <p class="parrafo">
-            El presente certificado se emite a efectos de ser presentado ante las autoridades de:
-            <span class="negrita" style="text-transform: uppercase;">{{ $pais_solicitud }}</span>.
+            El presente certificado se emite a efectos de ser presentado ante las autoridades de
+            <span class="" style="text-transform: uppercase;">{{ $pais_solicitud }}.
         </p>
 
         <p style="margin-top: 15px;">
-            Certificación que se expide en la ciudad de Caracas, el <span class="negrita">{{ $fecha_actual }}</span>.
+            Certificación que se expide en la ciudad de Caracas, el {{ $fecha_actual }}.
         </p>
 
         <div class="seccion-firmas">
@@ -331,22 +332,21 @@
             <div class="nombre-autoridad">{{ $nombre_viceministro }}</div>
             <div class="cargo-autoridad">{{ $viceministro_nombre_direccion }}</div>
             <div class="base-legal">
-                DESIGNADO SEGÚN DECRETO <span class="negrita">N° {{ $nro_decreto_desgnacion }}</span> DE
-                FECHA {{ $fecha_decreto_desgnacion }},<br> PUBLICADO EN GACETA OFICIAL DE LA REPÚBLICA BOLIVARIANA DE
-                VENEZUELA <br>
-                <span class="negrita">N° {{ $nro_decreto_extraordinario }}</span> Fecha
+                Designado según Decreto N° {{ $nro_decreto_desgnacion }} de
+                Fecha {{ $fecha_decreto_desgnacion }}. <br>
+                Publicado en Gaceta Oficial de la República Bolivariana de Venezuela <br>
+                N° {{ $nro_decreto_extraordinario }} Extraordinaria en la misma fecha
                 {{ $fecha_decreto_extraordinario ?? 'N/A' }}.
             </div>
         </div>
 
         <div class="nota-atencion">
-            <span class="negrita">ATENCIÓN:</span> Este documento consta de una (1) hoja, la cual no debe contener
+            Atención: Este documento consta de una (1) hoja, la cual no debe contener
             enmiendas, tachaduras, modificaciones o superposiciones. Los datos de identificación del solicitante son
             suministrados por el Servicio Administrativo de Identificación, Migración y Extranjería (SAIME). La
-            autenticidad de este certificado puede verificarse a través del portal: <span
-                class="url-validacion">{{ $web }}
-                <span style="font-weight: normal;">con el número de trámite </span> {{ $nro_tramite }}</span> o escaneando el
-            código QR superior.
+            autenticidad de este certificado puede verificarse a través del portal: {{ $web }} con el número
+            de trámite {{ $nro_tramite }}
+            o escaneando el código QR superior.
         </div>
 
         <div class="contenedor-qr-footer">
