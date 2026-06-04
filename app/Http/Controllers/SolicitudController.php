@@ -328,7 +328,7 @@ class SolicitudController extends Controller
             'fecha_decreto_extraordinario' => $diseno->fecha_extraordinaria ? Carbon::parse($diseno->fecha_extraordinaria)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '',
             'viceministro_nombre_direccion' => $diseno->cargo_viceministro,
             'nro_decreto_extraordinario' => $diseno->nro_extraordinaria,
-|
+
             // Localización
             'telefono_ministerio' => $diseno->telefono,
             'piso' => $diseno->piso,
