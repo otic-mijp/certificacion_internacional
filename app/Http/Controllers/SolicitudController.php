@@ -67,7 +67,7 @@ class SolicitudController extends Controller
         $tramiteExistente = $this->get_existencia_tramite_rechazado($id_persona);
 
         if (!$tramiteExistente) {
-            
+
             $tramite = new RecaudoTramite();
             $diseno = RecaudoDiseno::where('estado', true)->first();
 
@@ -340,7 +340,8 @@ class SolicitudController extends Controller
             'pais_solicitud' => strtoupper($tramite->pais_nombre_oficial),
             'fecha_actual' => $fecha_actual,
             'nro_tramite' => $nro_tramite,
-            'web' => $diseno->web_consulta ?? '',
+            'web' =>  Str::before($diseno->web_consulta, 'solicitud') ?? '',
+
         ];
 
         $pdf = Pdf::loadView('site.pdf.certificado', $data);

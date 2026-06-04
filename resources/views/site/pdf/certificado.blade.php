@@ -124,7 +124,7 @@
 
         .firma-container {
             width: 100%;
-            margin-bottom: 5px;
+            /* margin-bottom: 5px; */
         }
 
         .sello-oficial {
@@ -157,8 +157,7 @@
         }
 
         .base-legal {
-            font-size: 8pt;
-            text-transform: uppercase;
+            font-size: 12px;
             line-height: 1.2;
             /* margin-top: 3px; */
             color: #333;
@@ -209,7 +208,7 @@
         }
 
         .qr-final {
-            max-height: 65px;
+            max-height: 55px;
             width: auto;
             display: block;
             margin: 0;
@@ -335,7 +334,7 @@
                 Designado según Decreto N° {{ $nro_decreto_desgnacion }} de
                 Fecha {{ $fecha_decreto_desgnacion }}. <br>
                 Publicado en Gaceta Oficial de la República Bolivariana de Venezuela <br>
-                N° {{ $nro_decreto_extraordinario }} Extraordinaria en la misma fecha
+                N° {{ $nro_decreto_extraordinario }} Extraordinaria con fecha
                 {{ $fecha_decreto_extraordinario ?? 'N/A' }}.
             </div>
         </div>
