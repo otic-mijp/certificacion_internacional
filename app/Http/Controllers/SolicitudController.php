@@ -81,7 +81,7 @@ class SolicitudController extends Controller
             $titular = ($data['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
 
             $tramite->tipo_titular        = $titular;
-            $tramite->id_motivo           = 7; # 9 para produccion
+            $tramite->id_motivo           = 9; # 9 para produccion
             $tramite->id_descargas        = null;
             $tramite->id_diseno_tramite   = $diseno->id;
             $tramite->id_persona          = $id_persona;
