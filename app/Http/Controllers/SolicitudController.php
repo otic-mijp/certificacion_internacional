@@ -72,7 +72,7 @@ class SolicitudController extends Controller
             $diseno = RecaudoDiseno::where('estado', true)->first();
 
             $tramite->cedula_titular   = $data['numero_cedula'];
-            $tramite->nacionalidad     = Str::lower($data['letra_cedula']);
+            $tramite->nacionalidad     = Str::upper($data['letra_cedula']);
             $tramite->nombres          = Str::lower($data['nombres']);
             $tramite->primer_apellido  = Str::lower($data['primer_apellido']);
             $tramite->segundo_apellido = Str::lower($data['segundo_apellido']);
@@ -176,7 +176,7 @@ class SolicitudController extends Controller
             $tramite = new RecaudoTramite();
 
             $tramite->cedula_titular   = $persona['numero_cedula'];
-            $tramite->nacionalidad     = Str::lower($persona['letra_cedula']);
+            $tramite->nacionalidad     = Str::upper($persona['letra_cedula']);
             $tramite->nombres          = Str::lower($persona['nombres']);
             $tramite->primer_apellido  = Str::lower($persona['primer_apellido']);
             $tramite->segundo_apellido = Str::lower($persona['segundo_apellido']);
@@ -328,7 +328,7 @@ class SolicitudController extends Controller
             'fecha_decreto_extraordinario' => $diseno->fecha_extraordinaria ? Carbon::parse($diseno->fecha_extraordinaria)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '',
             'viceministro_nombre_direccion' => $diseno->cargo_viceministro,
             'nro_decreto_extraordinario' => $diseno->nro_extraordinaria,
-
+|
             // Localización
             'telefono_ministerio' => $diseno->telefono,
             'piso' => $diseno->piso,
