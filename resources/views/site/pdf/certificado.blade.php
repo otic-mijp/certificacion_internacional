@@ -304,7 +304,7 @@
             </div>
             CÉDULA DE IDENTIDAD:
             <span class="cedula-usuario">
-                {{ $datos }}.
+                {{ $datos }}
             </span>
         </div>
 
