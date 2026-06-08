@@ -87,7 +87,7 @@
         .titulo-principal {
             text-align: center;
             font-size: 13pt;
-            margin: 5px 0 15px 0;
+            margin: 0 0 5px 0;
             font-weight: bold;
 
             width: 100%;
@@ -96,7 +96,7 @@
 
         .parrafo {
             text-align: justify;
-            margin-bottom: 12px;
+            /* margin-bottom: 10px; */
         }
 
         .contenedor-datos {
@@ -124,7 +124,6 @@
 
         .firma-container {
             width: 100%;
-            /* margin-bottom: 5px; */
         }
 
         .sello-oficial {
@@ -159,7 +158,6 @@
         .base-legal {
             font-size: 12px;
             line-height: 1.2;
-            /* margin-top: 3px; */
             color: #333;
         }
 
@@ -167,9 +165,9 @@
         .nota-atencion {
             font-size: 8.5pt;
             text-align: justify;
-            margin-top: 15px;
+            margin-top: 10px;
             padding-top: 8px;
-            line-height: 1.4;
+            line-height: 1.3;
             border-top: 0.5px solid #ccc;
         }
 
@@ -179,9 +177,13 @@
             font-weight: bold;
         }
 
+        /* CAMBIO MINIMO 1: Convertimos el contenedor en un bloque rígido absoluto */
         .contenedor-qr-footer {
+            position: absolute;
+            bottom: 80px; /* Lo posicionamos exactamente encima del texto del footer fijo */
+            left: 0;
             width: 100%;
-            margin: 3px 0 0 0;
+            margin: 0;
             padding: 0;
         }
 
@@ -189,7 +191,7 @@
             float: left;
             position: relative;
             left: -8px;
-            width: 85px;
+            width: 75px;
             text-align: left;
             margin: 0;
             padding: 0;
@@ -197,8 +199,7 @@
 
         .qr-bloque-der {
             float: right;
-            width: 85px;
-            /* Ajusta al ancho de tu QR */
+            width: 75px;
             position: relative;
             right: -8px;
             border: solid 0px black;
@@ -208,13 +209,12 @@
         }
 
         .qr-final {
-            max-height: 65px;
+            max-height: 55px;
             width: auto;
             display: block;
             margin: 0;
         }
 
-        /* Fuerza al QR derecho a alinearse al borde externo */
         .qr-bloque-der .qr-final {
             margin-left: auto;
         }
@@ -229,7 +229,6 @@
             text-align: left;
         }
 
-        /* ESTO ES CRUCIAL: Limpia los floats para que el fondo rojo no se colapse */
         .clearfix::after {
             content: "";
             clear: both;
@@ -316,7 +315,7 @@
 
         <p class="parrafo">
             El presente certificado se emite a efectos de ser presentado ante las autoridades de
-            <span class="" style="text-transform: uppercase;">{{ $pais_solicitud }}.
+            <span style="text-transform: uppercase;">{{ $pais_solicitud }}.</span>
         </p>
 
         <p style="margin-top: 15px;">
@@ -348,7 +347,7 @@
             o escaneando el código QR superior.
         </div>
 
-        <div class="contenedor-qr-footer">
+        <div class="contenedor-qr-footer clearfix">
             <div class="qr-bloque-izq">
                 <img src="{{ $qr_cedula }}" alt="QR Solicitante" class="qr-final">
                 <div class="qr-etiqueta">AP</div>
