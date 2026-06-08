@@ -350,7 +350,6 @@ class SolicitudController extends Controller
             'fecha_actual' => $fecha_actual,
             'nro_tramite' => $nro_tramite,
             'web' =>  Str::before($diseno->web_consulta, 'solicitud') ?? '',
-
         ];
 
         $pdf = Pdf::loadView('site.pdf.certificado', $data);

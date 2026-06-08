@@ -169,7 +169,7 @@
             text-align: justify;
             margin-top: 15px;
             padding-top: 8px;
-            line-height: 1.3;
+            line-height: 1.4;
             border-top: 0.5px solid #ccc;
         }
 
@@ -189,7 +189,7 @@
             float: left;
             position: relative;
             left: -8px;
-            width: 75px;
+            width: 85px;
             text-align: left;
             margin: 0;
             padding: 0;
@@ -197,7 +197,7 @@
 
         .qr-bloque-der {
             float: right;
-            width: 75px;
+            width: 85px;
             /* Ajusta al ancho de tu QR */
             position: relative;
             right: -8px;
@@ -208,7 +208,7 @@
         }
 
         .qr-final {
-            max-height: 55px;
+            max-height: 65px;
             width: auto;
             display: block;
             margin: 0;
