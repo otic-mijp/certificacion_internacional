@@ -80,9 +80,9 @@
 
                         <!-- Lista de requisitos limpia -->
                         <ul class="list-disc pl-5 space-y-1.5 text-sm md:text-base text-amber-900 mb-4 font-medium">
-                            <li>Cédula o partida de nacimiento del menor</li>
-                            <li>Cédula del representante legal</li>
-                            <li>Carta explicativa</li>
+                            <li>Cédula o partida de nacimiento del menor.</li>
+                            <li>Cédula del representante legal.</li>
+                            <li>Carta explicativa.</li>
                         </ul>
 
                         <!-- Nota de ubicación unificada -->

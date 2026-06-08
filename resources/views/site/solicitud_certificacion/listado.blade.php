@@ -154,7 +154,7 @@
                 <ul
                     class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1 text-[11px] text-slate-600 font-medium list-disc ml-4">
                     <li>Papel Bond Blanco (Tamaño Carta)</li>
-                    <li>Impresión a <strong class="font-bold text-[#274294]">color o escala de grises (opcional)</strong>
+                    <li>Impresión a <strong class="font-bold text-[#274294]">escala de grises o color (opcional)</strong>
                     </li>
                     <li>Hoja limpia, sin arrugas ni enmiendas</li>
                     <li>Sin tachaduras ni marcas adicionales</li>

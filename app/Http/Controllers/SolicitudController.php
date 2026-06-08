@@ -40,12 +40,6 @@ class SolicitudController extends Controller
         # Persistencia de datos session
         session(['persona_validada' =>  $data]);
 
-        $antecedente = $this->get_estatus_antecedente($id_persona);
-
-        if ($antecedente) {
-            return $this->solicitud_rechazada($id_persona);
-        }
-
         $motivos = RecaudoMotivo::where('activo', true)->get();
 
         $paises = DVPais::select('id', 'nombre_oficial')
@@ -53,52 +47,6 @@ class SolicitudController extends Controller
             ->get();
 
         return view('site.solicitud_certificacion.crear', compact('paises', 'data', 'motivos'));
-    }
-
-    private function get_estatus_antecedente(string $idPersona): bool
-    {
-        return DVReo::where('id_reo', $idPersona)->exists();
-    }
-
-    private function solicitud_rechazada(string $id_persona)
-    {
-        $data = session('persona_validada');
-
-        $tramiteExistente = $this->get_existencia_tramite_rechazado($id_persona);
-
-        if (!$tramiteExistente) {
-
-            $tramite = new RecaudoTramite();
-            $diseno = RecaudoDiseno::where('estado', true)->first();
-
-            $tramite->cedula_titular   = $data['numero_cedula'];
-            $tramite->nacionalidad     = Str::upper($data['letra_cedula']);
-            $tramite->nombres          = Str::lower($data['nombres']);
-            $tramite->primer_apellido  = Str::lower($data['primer_apellido']);
-            $tramite->segundo_apellido = Str::lower($data['segundo_apellido']);
-            $tramite->tipo_solicitante = 1; // Obligatorio web
-
-            $titular = ($data['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
-
-            $tramite->tipo_titular        = $titular;
-            $tramite->id_motivo           = 9; # 9 para produccion
-            $tramite->id_descargas        = null;
-            $tramite->id_diseno_tramite   = $diseno->id;
-            $tramite->id_persona          = $id_persona;
-            $tramite->correo              = Auth::user()->email;
-            $tramite->pais_nombre_oficial = 'Asignación rechazada';
-            $tramite->id_estatus          = 3;
-            $tramite->apostilla           = false;
-            $tramite->save();
-
-            // 4. LÓGICA DE STORE: Generación del número de trámite oficial (Doble guardado)
-            $tramite->refresh();
-            $anio = date('Y');
-            $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
-            $tramite->save();
-        }
-
-        return view('site.solicitud_certificacion.rechazo');
     }
 
     private function get_existencia_tramite_rechazado(string $idPersona): bool
@@ -115,6 +63,16 @@ class SolicitudController extends Controller
 
         if (!$persona) {
             return back()->withInput()->withErrors(['error' => 'No se encontró la información de la persona. Vuelva a iniciar el proceso.']);
+        }
+
+        # 1. Si tiene antecedentes guardar la informacion.
+
+        $id_persona = $persona['id_persona'];
+
+        $antecedente = $this->get_estatus_antecedente($id_persona);
+
+        if ($antecedente) {
+            return $this->solicitud_rechazada($id_persona, $request->pais);
         }
 
         // ==========================================
@@ -202,7 +160,7 @@ class SolicitudController extends Controller
             // Guardado inicial
             $tramite->save();
 
-            // Generación del número de trámite oficial (Doble guardado)
+            // Generación del número de trámite oficial 
             $tramite->refresh();
             $anio = date('Y');
             $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
@@ -233,6 +191,52 @@ class SolicitudController extends Controller
 
             return back()->withInput()->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
         }
+    }
+
+    private function get_estatus_antecedente(string $idPersona): bool
+    {
+        return DVReo::where('id_reo', $idPersona)->exists();
+    }
+
+    private function solicitud_rechazada(string $id_persona, string $pais_rechazado = 'Asignación rechazada')
+    {
+        $data = session('persona_validada');
+
+        $tramiteExistente = $this->get_existencia_tramite_rechazado($id_persona);
+
+        if (!$tramiteExistente) {
+
+            $tramite = new RecaudoTramite();
+            $diseno = RecaudoDiseno::where('estado', true)->first();
+
+            $tramite->cedula_titular   = $data['numero_cedula'];
+            $tramite->nacionalidad     = Str::upper($data['letra_cedula']);
+            $tramite->nombres          = Str::lower($data['nombres']);
+            $tramite->primer_apellido  = Str::lower($data['primer_apellido']);
+            $tramite->segundo_apellido = Str::lower($data['segundo_apellido']);
+            $tramite->tipo_solicitante = 1; // Obligatorio web
+
+            $titular = ($data['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
+
+            $tramite->tipo_titular        = $titular;
+            $tramite->id_motivo           = 9; # 9 para produccion
+            $tramite->id_descargas        = null;
+            $tramite->id_diseno_tramite   = $diseno->id;
+            $tramite->id_persona          = $id_persona;
+            $tramite->correo              = Auth::user()->email;
+            $tramite->pais_nombre_oficial = $pais_rechazado;
+            $tramite->id_estatus          = 3;
+            $tramite->apostilla           = false;
+            $tramite->save();
+
+            // 4. LÓGICA DE STORE: Generación del número de trámite oficial (Doble guardado)
+            $tramite->refresh();
+            $anio = date('Y');
+            $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
+            $tramite->save();
+        }
+
+        return view('site.solicitud_certificacion.rechazo');
     }
 
     public function listado_tramites(): View

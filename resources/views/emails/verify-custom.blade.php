@@ -48,7 +48,7 @@
                                 </h3>
                                 <p style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0;">
                                     Solicitudes habilitadas de <b>lunes a viernes</b>.<br>
-                                    Posee una restricción de <b>3 trámites al mes</b> y <b>10 anuales</b>.
+                                    Posee una restricción de <b>1 trámite al día</b>, <b>3 al mes</b> y <b>10 anuales</b>.
                                 </p>
                             </div>
                         </td>

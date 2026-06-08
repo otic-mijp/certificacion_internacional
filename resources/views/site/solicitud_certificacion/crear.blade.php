@@ -205,11 +205,6 @@
                                 d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </button>
-
-                    <button type="button" id="btnLimpiar"
-                        class="w-full border sm:w-auto px-8 py-4 bg-transparent hover:bg-gray-100 text-gray-500 hover:text-gray-700 text-xs font-semibold uppercase tracking-wider rounded-xl transition-all duration-200 active:scale-95 flex items-center justify-center cursor-pointer">
-                        Limpiar
-                    </button>
                 </div>
             </div>
         </form>

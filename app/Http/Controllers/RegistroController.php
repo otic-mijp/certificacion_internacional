@@ -20,6 +20,9 @@ use Illuminate\Auth\Events\Registered;
 
 use App\Mail\RegistroBienvenidaMail;
 
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Carbon;
+
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
 use App\Http\Requests\Auth\RegistroUsuarioRequest;
 
@@ -36,7 +39,6 @@ class RegistroController extends Controller
 
         $persona = DVPersona::where('id_persona', $data)
             ->first();
-
 
         if (!$persona) {
             return redirect()->back()->withErrors(['numero_cedula' => 'Atención: No se encontraron registros. Debe dirigirse a la coordinación de antecedentes penales para actualizar su información.']);
@@ -117,6 +119,15 @@ class RegistroController extends Controller
 
         if (!$persona) {
             return redirect()->route('consulta.cedula');
+        }
+
+        $fechaFormulario = Carbon::parse($request->input('fecha_nacimiento'))->format('Y-m-d');
+        $fechaSesion     = Carbon::parse($persona['fecha_nacimiento'])->format('Y-m-d');
+
+        if ($fechaFormulario !== $fechaSesion) {
+            throw ValidationException::withMessages([
+                'fecha_nacimiento' => 'La fecha de nacimiento no coincide con nuestros registros oficiales.'
+            ]);
         }
 
         $usuario = Usuario::create([

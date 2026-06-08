@@ -31,8 +31,8 @@
                             </div>
                         @endforelse
                     </div>
-                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 text-center">
-                        <p class="text-sm text-yellow-700">
+                    <div class="bg-rose-100 border-l-4 border-rose-400 p-4 mb-4 text-center">
+                        <p class="text-sm text-rose-700">
                             <span class="font-bold">Advertencia:</span>
                             Si ha olvidado las respuestas, por favor actualice nuevamente sus preguntas y las respuestas de
                             las mismas.
