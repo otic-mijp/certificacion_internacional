@@ -72,7 +72,12 @@ class SolicitudController extends Controller
         $antecedente = $this->get_estatus_antecedente($id_persona);
 
         if ($antecedente) {
-            return $this->solicitud_rechazada($id_persona, $request->pais);
+
+            $pais_nulo = DVPais::select('nombre_oficial')
+                ->where('id', '=',  $request->pais)
+                ->first();
+
+            return $this->solicitud_rechazada($id_persona, $pais_nulo->nombre_oficial);
         }
 
         // ==========================================
