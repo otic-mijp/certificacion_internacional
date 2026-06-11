@@ -151,6 +151,15 @@
             color: #000000;
         }
 
+        .nota-rechazo {
+            font-size: 9pt;
+            color: #c53030;
+            background-color: #fff5f5;
+            border-left: 4px solid #feb2b2;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+
         /* --- Nota de Advertencia --- */
         .nota-advertencia {
             font-size: 8.5pt;
@@ -222,7 +231,7 @@
                 <table width="auto" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                     <tr>
                         <td class="numero-tramite">
-                            N° DE TRÁMITE: {{ $tramite->num_tramite }}
+                            N° DE TRÁMITE: {{ $tramite->num_tramite }} | {{ $rechazado }}
                         </td>
                     </tr>
                 </table>
@@ -230,29 +239,39 @@
         </tr>
     </table>
 
+    @if ($rechazado)
+        <div class="nota-rechazo">
+            Nota: Su solicitud ha sido rechazada. Para continuar con la gestión de su trámite, por favor diríjase a la
+            Coordinación de Antecedentes Penales.
+            Ubicación: Parroquia La Candelaria, Municipio Libertador, Caracas.
+            Allí se le brindará la asistencia necesaria para resolver cualquier inconveniente relacionado con su
+            solicitud.
+        </div>
+    @endif
+
     <!-- Sección Datos -->
     <div class="seccion-titulo">Datos del Ciudadano / Solicitante</div>
 
     <table class="tabla-datos">
         <tr>
-            <td class="label-dato">Nombres y Apellidos:</td>
+            <td class="label-dato">Nombres y apellidos:</td>
             <td class="valor-dato">
                 <span class="negrita">{{ $nombres }} {{ $primer_apellido }} {{ $segundo_apellido }}.</span>
             </td>
         </tr>
         <tr>
-            <td class="label-dato">Cédula de Identidad:</td>
+            <td class="label-dato">Cédula de identidad:</td>
             <td class="valor-dato">
                 <span
                     class="negrita">{{ $tramite->nacionalidad }}-{{ number_format($tramite->cedula_titular ?? ($tramite->num_identificacion ?? 0), 0, ',', '.') }}.</span>
             </td>
         </tr>
         <tr>
-            <td class="label-dato">País Solicitante:</td>
+            <td class="label-dato">País solicitante:</td>
             <td class="valor-dato">{{ $pais_nombre_oficial }}.</td>
         </tr>
         <tr>
-            <td class="label-dato">Fecha de Inicio del Trámite:</td>
+            <td class="label-dato">Fecha de solicitud del trámite:</td>
             <td class="valor-dato">
                 {{ $tramite->created_at->translatedFormat('d \d\e F \d\e Y') }}.
             </td>
