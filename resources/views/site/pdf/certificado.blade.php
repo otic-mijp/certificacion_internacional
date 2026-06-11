@@ -100,7 +100,7 @@
         }
 
         .contenedor-datos {
-            text-align: left;
+            text-align: center;
             margin: 12px 12px;
         }
 
@@ -300,7 +300,6 @@
                 {{ $nombre_solicitante }}
                 <br>
             </div>
-            CÉDULA DE IDENTIDAD:
             <span class="cedula-usuario">
                 {{ $datos }}
             </span>
