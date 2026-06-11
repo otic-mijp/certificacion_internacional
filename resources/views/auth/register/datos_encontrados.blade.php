@@ -7,7 +7,14 @@
             <div class="bg-blue-900 px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h3 class="text-3xl font-bold text-white tracking-tight">Registro de cuenta única</h3>
-                    <p class="text-blue-300 text-sm font-medium mt-1">Complete sus datos para el acceso oficial al panel.</p>
+                    <p class="text-blue-300 text-sm font-medium mt-1">
+                        Complete sus datos para el acceso oficial al panel.
+                        <br>
+                        <span
+                            class="text-xs bg-blue-950/40 text-red-300 py-1 rounded-md inline-block border border-blue-800/50">
+                            Los campos con <strong class="text-red-400 font-black">*</strong> son obligatorios.
+                        </span>
+                    </p>
                 </div>
                 <a href="{{ route('login') }}"
                     class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-semibold rounded-xl text-blue-900 bg-white hover:bg-blue-50 transition-colors shadow-sm">
@@ -60,7 +67,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div class="flex flex-col gap-1">
                                     <label for="email" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
-                                        Correo electrónico:
+                                        Correo electrónico: <span class="text-red-500">*</span>
                                     </label>
                                     <input type="email" id="email" name="email" value="{{ old('email') }}"
                                         autocomplete="off" placeholder="ejemplo@correo.com"
@@ -74,7 +81,7 @@
                                 <div class="flex flex-col gap-1">
                                     <label for="email_confirmation"
                                         class="block text-xs font-bold text-slate-700 mb-2 uppercase">
-                                        Confirmar correo:
+                                        Confirmar correo: <span class="text-red-500">*</span>
                                     </label>
                                     <input type="email" id="email_confirmation" name="email_confirmation"
                                         value="{{ old('email_confirmation') }}" placeholder="Repita su correo"
@@ -99,7 +106,7 @@
                     </div>
                     <div>
                         <label for="fecha_nacimiento" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
-                            Fecha de nacimiento:
+                            Fecha de nacimiento: <span class="text-red-500">*</span>
                         </label>
                         <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"
                             value="{{ old('fecha_nacimiento') }}"
@@ -113,7 +120,7 @@
                     </div>
                     <div>
                         <label for="telefono_celular" class="block text-xs font-bold text-slate-700 mb-2 uppercase">
-                            Teléfono celular:
+                            Teléfono celular: <span class="text-red-500">*</span>
                         </label>
                         <input type="tel" id="telefono_celular" name="telefono_celular" autocomplete="off"
                             value="{{ old('telefono_celular') }}" placeholder="+58 412 1234567"
@@ -143,7 +150,7 @@
                 <section id="group-profesion" class="custom-select-group relative">
                     <label for="buscador-profesion"
                         class="block text-sm font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                        Profesión u oficio:
+                        Profesión u oficio: <span class="text-red-500">*</span>
                     </label>
                     <input type="text" id="buscador-profesion"
                         class="buscador w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-white outline-none"
@@ -179,7 +186,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div class="relative custom-select-group" id="group-estado">
                             <label for="estado_id"
-                                class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">Estado:</label>
+                                class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">Estado: <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" id="estado_id" autocomplete="off"
                                 class="buscador w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-white outline-none"
                                 placeholder="Seleccione..." autocomplete="off"
@@ -206,7 +214,7 @@
                         <div class="relative custom-select-group" id="group-municipio">
                             <label for="municipio_id"
                                 class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">
-                                Municipio:
+                                Municipio: <span class="text-red-500">*</span>
                             </label>
 
                             <input type="text"
@@ -237,8 +245,8 @@
                             </div>
                         </div>
                         <div class="relative custom-select-group" id="group-parroquia">
-                            <label
-                                class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">Parroquia:</label>
+                            <label class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">Parroquia: <span
+                                    class="text-red-500">*</span></label>
                             <input type="text"
                                 class="buscador w-full rounded-xl border-slate-200 text-sm p-3 focus:ring-2 focus:ring-blue-500 border bg-white outline-none"
                                 placeholder="Seleccione..." autocomplete="off"
@@ -258,7 +266,7 @@
                     </div>
                     <div>
                         <label for="direccion" class="block text-[11px] font-black text-slate-400 uppercase mb-2 ml-1">
-                            Dirección detallada:
+                            Dirección detallada: <span class="text-red-500">*</span>
                         </label>
                         <textarea rows="4" id="direccion" name="direccion" autocomplete="off"
                             class="w-full rounded-xl border-slate-200 p-4 text-sm focus:ring-2 focus:ring-blue-500 border resize-none transition-all outline-none"
@@ -275,7 +283,7 @@
                         <div class="space-y-2">
                             <label for="clave_usuario"
                                 class="block text-sm font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                                Nueva Contraseña:
+                                Nueva Contraseña: <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
                                 <input type="password" id="clave_usuario" name="contrasena" placeholder="********"
@@ -298,7 +306,7 @@
                         <div class="space-y-2">
                             <label for="confirmar_clave_usuario"
                                 class="block text-sm font-semibold text-slate-700 mb-2 uppercase tracking-wide">
-                                Confirmar Contraseña:
+                                Confirmar Contraseña: <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
                                 <input type="password" id="confirmar_clave_usuario" name="contrasena_confirmation"

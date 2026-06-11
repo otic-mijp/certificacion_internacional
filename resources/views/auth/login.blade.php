@@ -5,19 +5,32 @@
         <main class="flex-grow flex flex-col items-center justify-center px-4 py-8">
             <div
                 class="w-full max-w-4xl bg-white rounded-3xl md:rounded-[40px] shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col md:flex-row border border-gray-50">
-
                 <div
                     class="w-full md:w-5/12 bg-[#233C7E] p-8 md:p-12 text-white flex flex-col justify-between relative overflow-hidden">
                     <div class="absolute -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl hidden sm:block"></div>
 
                     <div class="relative z-10">
-                        <span class="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] opacity-60">Portal
-                            Oficial</span>
+                        <span class="text-[9px] md:text-[10px] font-black uppercase tracking-[0.4em] opacity-60">
+                            Portal Oficial
+                        </span>
                         <h1 class="text-2xl md:text-3xl font-light leading-tight mt-4 md:mt-6 tracking-tight">
                             Certificación de <br class="hidden md:block">
                             <span class="font-bold text-cyan-100">Antecedentes</span>
                             Penales
                         </h1>
+
+                        <div class="mt-5">
+                            <a href="http://172.16.11.83/validacionInter/" target="_blank" rel="noopener noreferrer"
+                                class="inline-flex items-center gap-2 text-xs font-semibold text-cyan-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 px-4 py-2 rounded-xl transition-all shadow-sm group">
+                                Valide su trámite en línea aquí.
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                                    stroke="currentColor"
+                                    class="w-3.5 h-3.5 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                </svg>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="relative z-10 border-t border-white/10 pt-6 mt-8 md:mt-0 md:pt-8">
