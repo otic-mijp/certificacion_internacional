@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es-ve">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +12,13 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+
         [x-cloak] {
             display: none !important;
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col font-sans antialiased bg-slate-50 text-slate-900">
     <header class="bg-white/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-gray-100 shadow-sm">
         <div class="max-w-7xl mx-auto  flex justify-center">
@@ -33,6 +36,6 @@
     </main>
 
     @include('layouts.components.footer')
-
+    @stack('scripts')
 </body>
 </html>

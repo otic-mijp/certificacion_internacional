@@ -45,23 +45,29 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::authenticateUsing(function (\Illuminate\Http\Request $request) {
 
+            // 1. Añadimos la validación del reCAPTCHA junto a los datos de acceso
             $request->validate([
                 Fortify::username() => 'required|string',
                 'password' => 'required|string',
+                'g-recaptcha-response' => 'required|captcha', 
+            ], [
+                'g-recaptcha-response.required' => 'Por favor, completa el captcha de seguridad.',
+                'g-recaptcha-response.captcha'  => 'Error en la validación del captcha. Inténtalo de nuevo.',
             ]);
 
+            // 2. Buscamos al usuario en tu modelo personalizado 'Usuario' y campo 'contrasena'
             $user = Usuario::where(Fortify::username(), $request->{Fortify::username()})->first();
 
             if ($user && \Illuminate\Support\Facades\Hash::check($request->password, $user->contrasena)) {
 
-                // 1. Obtenemos el tiempo de vida de la sesión en segundos (por defecto de config/session.php)
+                // 3. Obtenemos el tiempo de vida de la sesión en segundos (por defecto de config/session.php)
                 // Convertimos los minutos a segundos. Ejemplo: 120 minutos = 7200 segundos.
                 $sessionLifetimeInSeconds = config('session.lifetime') * 60;
 
-                // 2. Calculamos el timestamp mínimo que se considera "activo"
+                // 4. Calculamos el timestamp mínimo que se considera "activo"
                 $activityThreshold = time() - $sessionLifetimeInSeconds;
 
-                // 3. Contamos solo las sesiones cuya 'last_activity' sea mayor a ese umbral
+                // 5. Contamos solo las sesiones cuya 'last_activity' sea mayor a ese umbral
                 $activeSessions = \Illuminate\Support\Facades\DB::table('sesiones')
                     ->where('user_id', $user->id)
                     ->where('last_activity', '>=', $activityThreshold) // <-- FILTRO CRUCIAL
@@ -73,7 +79,7 @@ class FortifyServiceProvider extends ServiceProvider
                     ]);
                 }
 
-                // OPCIONAL: Si quieres limpiar la basura de la tabla de una vez
+                // 6. OPCIONAL: Si quieres limpiar la basura de la tabla de una vez
                 \Illuminate\Support\Facades\DB::table('sesiones')
                     ->where('user_id', $user->id)
                     ->where('last_activity', '<', $activityThreshold)
