@@ -290,9 +290,8 @@
         <p class="parrafo">
             En nombre del ciudadano Ministro del Poder Popular para las Relaciones Interiores, Justicia y Paz,
             la {{ $nombre_direccion }}, en el ejercicio de sus funciones y cumpliendo la
-            Ley de Registro de Antecedentes Penales publicada en la Gaceta Oficial de la República de Venezuela (hoy
-            República Bolivariana de Venezuela) Nro. {{ $gaceta_cambio_pais }}, de fecha
-            {{ $fecha_cambio_gaceta_pais }},
+            Ley de Registro de Antecedentes Penales publicada en la Gaceta Oficial de la República Bolivariana de Venezuela
+            Nro. {{ $gaceta_cambio_pais }}, de fecha {{ $fecha_cambio_gaceta_pais }},
             a solicitud de parte interesada expide el presente certificado al ciudadano(a):
         </p>
 
@@ -315,7 +314,7 @@
 
         <p class="parrafo">
             El presente certificado se emite a efectos de ser presentado ante las autoridades de
-            <span style="text-transform: uppercase;">{{ $pais_solicitud }}.</span>
+            <span style="text-transform: uppercase; font-weight: bold;">{{ $pais_solicitud }}.</span>
         </p>
 
         <p style="margin-top: 15px;">

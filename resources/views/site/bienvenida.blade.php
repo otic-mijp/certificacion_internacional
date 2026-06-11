@@ -41,7 +41,7 @@
                 </div>
             @endif
 
-            <div class="flex items-center gap-4 p-8 border-b border-slate-200 bg-slate-200-50">
+            {{-- <div class="flex items-center gap-4 p-8 border-b border-slate-200 bg-slate-200-50">
                 <div
                     class="w-12 h-12 bg-[#233C7E] rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-900/20">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 

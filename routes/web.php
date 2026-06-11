@@ -65,8 +65,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::controller(SolicitudController::class)->prefix('solicitud')->name('solicitud.')->group(function () {
 
-        Route::get('/nueva_solicitud', 'index')->name('crear');
-        Route::post('/nueva_solicitud/registro', 'solicitud_store')->name('store');
+        Route::get('/nueva_solicitud', 'index')->name('crear')->middleware(\App\Http\Middleware\EnsureHasSecurityQuestions::class);
+        Route::post('/nueva_solicitud/registro', 'solicitud_store')->name('store')->middleware(\App\Http\Middleware\EnsureHasSecurityQuestions::class);
 
         Route::get('/tramites', 'listado_tramites')->name('listado');
         Route::get('/tramite/certificado/{num_tramite}', 'get_certificado_seleccionado')->name('pdf');
