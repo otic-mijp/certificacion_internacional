@@ -40,46 +40,6 @@
                     </a>
                 </div>
             @endif
-
-            {{-- <div class="flex items-center gap-4 p-8 border-b border-slate-200 bg-slate-200-50">
-                <div
-                    class="w-12 h-12 bg-[#233C7E] rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-900/20">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-slate-800">Información importante</h2>
-                    <p class="text-sm text-slate-500 font-medium">Requisitos y restricciones del trámite</p>
-                </div>
-            </div>
-
-            <div class="p-8 md:p-12">
-                <div
-                    class="group p-8 rounded-2xl border border-slate-200 bg-white hover:border-blue-100 hover:bg-blue-50/30 transition-all duration-300">
-                    <div class="flex flex-col md:flex-row md:items-center gap-6">
-                        <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-sm border border-slate-50 group-hover:scale-110 transition-transform duration-300 shrink-0">
-                            📊
-                        </div>
-                        <div class="flex-1 text-slate-600 leading-relaxed text-lg">
-                            <p class="mb-3">
-                                Horario: <span class="text-slate-900 font-bold underline decoration-blue-200 decoration-4 underline-offset-2">
-                                    Lunes a Viernes
-                                </span>.
-                            </p>
-
-                            <p class="font-semibold text-slate-800">Límite de trámites:</p>
-
-                            <ul class="list-disc pl-5 mt-1 text-slate-600 space-y-1">
-                                <li><span class="text-slate-900 font-bold">Por día:</span> Máximo 1 trámite.</li>
-                                <li><span class="text-slate-900 font-bold">Al mes:</span> Hasta 3 trámites.</li>
-                                <li><span class="text-slate-900 font-bold">Al año:</span> Hasta 10 trámites.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </div>
 
