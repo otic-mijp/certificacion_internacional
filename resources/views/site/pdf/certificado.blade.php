@@ -360,7 +360,7 @@
         <img src="{{ $banner_footer }}" alt="Banner Footer" class="img-banner-footer">
         <div class="footer-texto">
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia
-            La Candelaria, <br> Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
+            La Candelaria, <br> Municipio Libertador, Distrito capital, Venezuela. Teléfono: +58 {{ $telefono_ministerio }} <br>
         </div>
     </footer>
 </body>

@@ -31,7 +31,7 @@
             width: 420px;
             height: 420px;
             margin-left: -210px;
-            opacity: 0.06;
+            opacity: 0.08;
             z-index: -1;
         }
 
@@ -231,7 +231,7 @@
                 <table width="auto" border="0" cellspacing="0" cellpadding="0" style="margin: 0 auto;">
                     <tr>
                         <td class="numero-tramite">
-                            N° DE TRÁMITE: {{ $tramite->num_tramite }} | {{ $rechazado }}
+                            N° DE TRÁMITE: {{ $tramite->num_tramite }}{{ $rechazado ? " | $rechazado" : '' }}
                         </td>
                     </tr>
                 </table>
@@ -243,7 +243,7 @@
         <div class="nota-rechazo">
             Nota: Su solicitud ha sido rechazada. Para continuar con la gestión de su trámite, por favor diríjase a la
             Coordinación de Antecedentes Penales.
-            Ubicación: Parroquia La Candelaria, Municipio Libertador, Caracas.
+            Ubicación: Parroquia La Candelaria, Municipio Libertador, Distrito capital.
             Allí se le brindará la asistencia necesaria para resolver cualquier inconveniente relacionado con su
             solicitud.
         </div>
@@ -290,7 +290,7 @@
         <div class="footer-texto">
             Esquina de Platanal, Este 1, Avenida Urdaneta, Edificio Sede MPPRIJP, Piso {{ $piso }}, Parroquia
             La Candelaria,<br>
-            Municipio Libertador, Caracas, Venezuela. Teléfono: +58 {{ $telefono_ministerio }}
+            Municipio Libertador, Distrito capital, Venezuela. Teléfono: +58 {{ $telefono_ministerio }}
         </div>
     </footer>
 

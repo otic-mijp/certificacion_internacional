@@ -100,7 +100,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                             <span><strong class="text-slate-700 font-medium">Ubicación:</strong> Piso 5 del Edificio París,
-                                Plaza La Candelaria, Municipio Libertador, Caracas.</span>
+                                Plaza La Candelaria, Municipio Libertador, Distrito capital.</span>
                         </div>
                     </div>
                 </li>

@@ -32,25 +32,12 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <button onclick="window.location.reload();"
-                class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors order-2 sm:order-1 cursor-pointer">
-                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                </svg>
-                Reintentar
-            </button>
-
-            <a href="{{ url('/') }}"
+            <a href="{{ route('solicitud.listado') }}"
                 class="inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-white bg-rose-600 rounded-xl hover:bg-rose-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-rose-600 transition-colors order-1 sm:order-2 shadow-sm">
                 Volver al Inicio
             </a>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-slate-100 text-xs text-slate-400">
-            Código de rastreo: <span
-                class="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">#{{ out_track_id ?? rand(100000, 999999) }}</span>
-        </div>
     </div>
 
 </body>

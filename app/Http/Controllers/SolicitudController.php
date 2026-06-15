@@ -11,6 +11,7 @@ use App\Models\RecaudoDiseno;
 use App\Models\RecaudoMotivo;
 use App\Models\RecaudoTramite;
 use App\Mail\CorreoSolicitudAntecedente;
+use App\Services\SolicitudTramiteService;
 
 use Illuminate\View\View;
 use Illuminate\Support\Str;
@@ -19,6 +20,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\RedirectResponse;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -28,36 +33,35 @@ use BaconQrCode\Writer;
 
 class SolicitudController extends Controller
 {
+
+    private SolicitudTramiteService $tramiteService;
+
+    public function __construct(SolicitudTramiteService $tramiteService)
+    {
+        $this->tramiteService = $tramiteService;
+    }
+
     public function index(): View
     {
+        $idPersona = auth()->user()->id_persona;
 
-        $id_persona = Auth::user()->id_persona;
+        $persona = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula', 'fecha_nacimiento'])
+            ->where('id_persona', $idPersona)
+            ->firstOrFail();
 
-        $data = DVPersona::select(['id_persona', 'nombres', 'primer_apellido', 'segundo_apellido', 'letra_cedula', 'numero_cedula', 'fecha_nacimiento'])
-            ->where('id_persona', $id_persona)
-            ->first();
+        session(['persona_validada' => $persona->toArray()]);
 
-        # Persistencia de datos session
-        session(['persona_validada' =>  $data]);
+        $motivos =  RecaudoMotivo::where('activo', true)->get();
+        $paises =  DVPais::select('id', 'nombre_oficial')->where('id', '!=', 'VEN')->get();
 
-        $motivos = RecaudoMotivo::where('activo', true)->get();
-
-        $paises = DVPais::select('id', 'nombre_oficial')
-            ->where('id', '!=', 'VEN')
-            ->get();
-
-        return view('site.solicitud_certificacion.crear', compact('paises', 'data', 'motivos'));
+        return view('site.solicitud_certificacion.crear', [
+            'data' => $persona,
+            'motivos' => $motivos,
+            'paises' => $paises
+        ]);
     }
 
-    private function get_existencia_tramite_rechazado(string $idPersona): bool
-    {
-        return RecaudoTramite::where('id_persona', $idPersona)
-            ->where('id_estatus', 3)
-            ->whereDate('created_at', now()->toDateString())
-            ->exists();
-    }
-
-    public function solicitud_store(SolicitudTramiteRequest $request)
+    public function solicitud_store(SolicitudTramiteRequest $request): RedirectResponse
     {
         $persona = session('persona_validada');
 
@@ -65,142 +69,62 @@ class SolicitudController extends Controller
             return back()->withInput()->withErrors(['error' => 'No se encontró la información de la persona. Vuelva a iniciar el proceso.']);
         }
 
-        # 1. Si tiene antecedentes guardar la informacion.
-
-        $id_persona = $persona['id_persona'];
-
-        $antecedente = $this->get_estatus_antecedente($id_persona);
-
-        if ($antecedente) {
-
-            $pais_nulo = DVPais::select('nombre_oficial')
-                ->where('id', '=',  $request->pais)
-                ->first();
-
-            return $this->solicitud_rechazada($id_persona, $pais_nulo->nombre_oficial);
-        }
-
-        // ==========================================
-        // VALIDACIÓN DE MAYORÍA DE EDAD (18 AÑOS)
-        // ==========================================
-        $fechaNacimiento = Carbon::parse($persona['fecha_nacimiento']);
-
-        if ($fechaNacimiento->age < 18) {
-            return back()->withInput()->withErrors(['error' => 'Lo sentimos, este trámite solo está disponible para personas mayores de edad (18 años o más).']);
-        }
-
-        $idPersona = $persona['id_persona'];
-        $ahora = Carbon::now();
-
-        // ==========================================
-        // VALIDACIÓN DE LÍMITES DE TRÁMITES
-        // ==========================================
-        // Validar 1 por día, 3 por mes, 10 por año.
-
-        $tramitesHoy = RecaudoTramite::where('id_persona', $idPersona)
-            ->whereDate('created_at', $ahora->toDateString())
-            ->count();
-
-        if ($tramitesHoy >= 1) {
-            return back()->withInput()->withErrors(['error' => 'Ya has realizado un trámite el día de hoy. Solo se permite un (1) trámite por día.']);
-        }
-
-        $tramitesMes = RecaudoTramite::where('id_persona', $idPersona)
-            ->whereYear('created_at', $ahora->year)
-            ->whereMonth('created_at', $ahora->month)
-            ->count();
-
-        if ($tramitesMes >= 3) {
-            return back()->withInput()->withErrors(['error' => 'Has alcanzado el límite máximo de 3 trámites para este mes.']);
-        }
-
-        $tramitesAnio = RecaudoTramite::where('id_persona', $idPersona)
-            ->whereYear('created_at', $ahora->year)
-            ->count();
-
-        if ($tramitesAnio >= 10) {
-            return back()->withInput()->withErrors(['error' => 'Has alcanzado el límite máximo de 10 trámites para este año.']);
-        }
-
-        // ==========================================
-        // PROCESAMIENTO DEL TRÁMITE
-        // ==========================================
-
-        $diseno = RecaudoDiseno::where('estado', true)->first();
-        $pais_validado = DVPais::where('id', $request->pais)->firstOrFail();
-        $titular = ($persona['letra_cedula'] == 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
-
-        // Verificamos antecedentes penales usando el número de cédula
-        $tieneAntecedentes = DVReo::where('id_reo', $persona['numero_cedula'])->exists();
-
-        DB::beginTransaction();
-
         try {
-            $tramite = new RecaudoTramite();
 
-            $tramite->cedula_titular   = $persona['numero_cedula'];
-            $tramite->nacionalidad     = Str::upper($persona['letra_cedula']);
-            $tramite->nombres          = Str::lower($persona['nombres']);
-            $tramite->primer_apellido  = Str::lower($persona['primer_apellido']);
-            $tramite->segundo_apellido = Str::lower($persona['segundo_apellido']);
-            $tramite->tipo_solicitante = 1; // Obligatorio web
-            $tramite->tipo_titular     = $titular;
-            $tramite->id_motivo        = $request['motivo'];
-            $tramite->id_descargas     = null;
-            $tramite->id_diseno_tramite = $diseno->id;
-            $tramite->id_persona       = $idPersona;
-            $tramite->correo           = Auth::user()->email;
-            $tramite->apostilla        = filter_var($request->desea_apostillar, FILTER_VALIDATE_BOOLEAN);
-
-            # En espera de repuesta...
-            if ($tieneAntecedentes) {
-                $tramite->pais_nombre_oficial = '*';
-                $tramite->id_estatus          = 3; // Rechazado
-                $tramite->apostilla           = false;
-            } else {
-                $tramite->pais_nombre_oficial = Str::lower($pais_validado->nombre_oficial);
-                $tramite->id_estatus          = 2; // Aprobado
-            }
-
-            // Guardado inicial
-            $tramite->save();
-
-            // Generación del número de trámite oficial 
-            $tramite->refresh();
-            $anio = date('Y');
-            $tramite->num_tramite = "102{$anio}{$tramite->id_correlativo}";
-            $tramite->save();
-
-            DB::commit();
-
-
-            $data = [
-                'nombre_completo' => $persona['nombres'] . ' ' . $persona['primer_apellido'] . ' ' . $persona['segundo_apellido'],
-                'num_tramite' => $tramite->num_tramite,
-                'pais_nombre_oficial' => $tramite->pais_nombre_oficial,
-            ];
-
-            Mail::to(Auth::user()->email)->send(new CorreoSolicitudAntecedente($data['num_tramite'], $data['pais_nombre_oficial'], $data['nombre_completo']));
+            $tramite = $this->tramiteService->procesarSolicitud($persona, $request->validated());
 
             session()->forget('persona_validada');
 
-            if ($tieneAntecedentes) {
-                return back()->withInput()->withErrors(['error' => 'Su solicitud ha sido procesada, pero fue rechazada debido a inconsistencias en la validación.']);
+            if ($tramite->id_estatus === 3) {
+                return redirect()->route('site.solicitud_certificacion.rechazo');
             }
 
-            return back()->withInput()->with('success', 'Se ha generado la solicitud con éxito. Número de trámite: ' . $tramite->num_tramite);
+            return back()->withInput()->with('success', "Se ha generado la solicitud con éxito. Número de trámite: {$tramite->num_tramite}");
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
+            return back()->withInput()->withErrors($e->errors());
         } catch (\Exception $e) {
 
-            DB::rollBack();
-            Log::error("Error al crear solicitud: " . $e->getMessage());
+            Log::error('Error crítico en procesamiento de trámite HTTP', [
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'user_id' => auth()->id()
+            ]);
 
-            return back()->withInput()->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico al procesar su solicitud.']);
+            return back()->withInput()->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico interno al procesar su solicitud.']);
         }
     }
 
-    private function get_estatus_antecedente(string $idPersona): bool
+    private function validarMayoriaEdad(?string $fechaNacimiento): void
     {
-        return DVReo::where('id_reo', $idPersona)->exists();
+        if (!$fechaNacimiento || Carbon::parse($fechaNacimiento)->age < 18) {
+            throw ValidationException::withMessages([
+                'error' => 'Lo sentimos, este trámite solo está disponible para personas mayores de edad (18 años o más).'
+            ]);
+        }
+    }
+
+    private function validarLimitesTramites(string $idPersona): void
+    {
+        $ahora = Carbon::now();
+
+        $conteos = RecaudoTramite::where('id_persona', $idPersona)
+            ->selectRaw("
+                COUNT(CASE WHEN DATE(created_at) = ? THEN 1 END) as hoy,
+                COUNT(CASE WHEN YEAR(created_at) = ? AND MONTH(created_at) = ? THEN 1 END) as mes,
+                COUNT(CASE WHEN YEAR(created_at) = ? THEN 1 END) as anio
+            ", [$ahora->toDateString(), $ahora->year, $ahora->month, $ahora->year])
+            ->first();
+
+        if (($conteos->hoy ?? 0) >= 1) {
+            throw ValidationException::withMessages(['error' => 'Ya has realizado un trámite el día de hoy. Solo se permite un (1) trámite por día.']);
+        }
+        if (($conteos->mes ?? 0) >= 3) {
+            throw ValidationException::withMessages(['error' => 'Has alcanzado el límite máximo de 3 trámites para este mes.']);
+        }
+        if (($conteos->anio ?? 0) >= 10) {
+            throw ValidationException::withMessages(['error' => 'Has alcanzado el límite máximo de 10 trámites para este año.']);
+        }
     }
 
     private function solicitud_rechazada(string $id_persona, string $pais_rechazado = 'Asignación rechazada')
@@ -244,175 +168,207 @@ class SolicitudController extends Controller
         return view('site.solicitud_certificacion.rechazo');
     }
 
+    private function get_existencia_tramite_rechazado(string $idPersona): bool
+    {
+        return RecaudoTramite::where('id_persona', $idPersona)
+            ->where('id_estatus', 3)
+            ->whereDate('created_at', now()->toDateString())
+            ->exists();
+    }
+
     public function listado_tramites(): View
     {
-        $userId = Auth::user()->id_persona;
-        $ahora = Carbon::now();
+        $userId = auth()->user()->id_persona;
+        $anioActual = Carbon::now()->year;
 
-        $listado_tramites = RecaudoTramite::where('id_persona', $userId)
-            ->whereYear('created_at', $ahora->year)
+        $listado_tramites = RecaudoTramite::with('diseno')
+            ->where('id_persona', $userId)
+            ->whereYear('created_at', $anioActual)
             ->latest()
-            ->limit(10)
             ->paginate(10);
 
         return view('site.solicitud_certificacion.listado', compact('listado_tramites'));
     }
 
-    public function get_certificado_seleccionado(int $num_tramite) # PDF
+    public function get_certificado_seleccionado(int $num_tramite): Response
     {
-        $tramite = RecaudoTramite::where('num_tramite', $num_tramite)
-            ->where('id_persona', Auth::user()->id_persona)
-            ->firstOrFail();
+        try {
 
-        if ($tramite->id_estatus === 3) {
-            abort(403, 'El certificado no está disponible para trámites rechazados.');
-        }
+            $tramite = RecaudoTramite::with('diseno')
+                ->where('num_tramite', $num_tramite)
+                ->where('id_persona', auth()->user()->id_persona)
+                ->firstOrFail();
 
-        if (!$tramite->created_at->addMonths(3)->isFuture()) {
-            abort(403, 'El certificado ha caducado (venció el plazo de 3 meses).');
-        }
-
-        $diseno = $tramite->diseno;
-
-        // Procesar imágenes
-        $imagenes = ['logo_encabezado', 'logo_fondo', 'sello', 'firma', 'banner_footer'];
-        $procesadas = [];
-
-        foreach ($imagenes as $campo) {
-            $valor = $diseno->$campo ?? null;
-
-            if (is_resource($valor)) {
-                $valor = stream_get_contents($valor);
+            if ($tramite->id_estatus === 3) {
+                abort(403, 'El certificado no está disponible para trámites rechazados.');
             }
 
-            if ($valor && !str_starts_with($valor, 'data:image')) {
-                $procesadas[$campo] = 'data:image/png;base64,' . base64_encode($valor);
-            } else {
-                $procesadas[$campo] = $valor;
+            if ($tramite->created_at->addMonths(3)->isPast()) {
+                abort(403, 'El certificado ha caducado (venció el plazo de 3 meses).');
             }
+
+            $diseno = $tramite->diseno;
+
+            // Procesamiento de imágenes binarias (BLOB) almacenadas en DB a formato Base64 Inline
+            $imagenes = ['logo_encabezado', 'logo_fondo', 'sello', 'firma', 'banner_footer'];
+            $procesadas = [];
+
+            foreach ($imagenes as $campo) {
+                $valor = $diseno->$campo ?? null;
+
+                if (is_resource($valor)) {
+                    $valor = stream_get_contents($valor);
+                }
+
+                if ($valor && !Str::startsWith((string)$valor, 'data:image')) {
+                    $procesadas[$campo] = 'data:image/png;base64,' . base64_encode((string)$valor);
+                } else {
+                    $procesadas[$campo] = $valor;
+                }
+            }
+
+            $renderer = new ImageRenderer(new RendererStyle(150), new SvgImageBackEnd());
+            $writer = new Writer($renderer);
+
+            $datosIdentidad = Str::upper($tramite->nacionalidad . '-' . $tramite->cedula_titular);
+            $nombreCompleto = "{$tramite->nombres} {$tramite->primer_apellido} {$tramite->segundo_apellido}";
+            $urlValidacion = $diseno->web_consulta . $tramite->num_tramite;
+
+            // Construcción de los tres códigos QR requeridos por la vista HTML
+            $qrWeb =     'data:image/svg+xml;base64,' . base64_encode($writer->writeString($urlValidacion));
+            $qrTramite = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString("Tramite: " . $tramite->num_tramite));
+            $qrCedula =  'data:image/svg+xml;base64,' . base64_encode($writer->writeString("Cedula: " . $datosIdentidad));
+
+            // Formateo de fechas con localización en español ('es') acorde al estándar legal del documento
+            $fechaActual = Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+            $fechaGaceta = $diseno->fecha_gaceta ? Carbon::parse($diseno->fecha_gaceta)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '';
+            $fechaDecreto = $diseno->fecha_decreto ? Carbon::parse($diseno->fecha_decreto)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '';
+            $fechaExtraordinaria = $diseno->fecha_extraordinaria ? Carbon::parse($diseno->fecha_extraordinaria)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : 'N/A';
+
+            // Mapeo unívoco de variables requeridas estrictamente por el motor Blade de la plantilla
+            $dataPayload = [
+                'logo_ministerial_fondo'       => $procesadas['logo_fondo'],
+                'logo_ministerial'             => $procesadas['logo_encabezado'],
+                'qr_pag_redirect'              => $qrWeb,
+                'nombre_direccion'             => $diseno->nombre_direccion,
+                'gaceta_cambio_pais'           => $diseno->nro_gaceta,
+                'fecha_cambio_gaceta_pais'     => $fechaGaceta,
+                'nombre_solicitante'           => Str::upper($nombreCompleto),
+                'datos'                        => $datosIdentidad,
+                'pais_solicitud'               => Str::upper($tramite->pais_nombre_oficial),
+                'fecha_actual'                 => $fechaActual,
+                'sello_direccion'              => $procesadas['sello'],
+                'firma_viceministro'           => $procesadas['firma'],
+                'nombre_viceministro'          => $diseno->nombre_viceministro,
+                'viceministro_nombre_direccion' => $diseno->cargo_viceministro,
+                'nro_decreto_desgnacion'       => $diseno->nro_designacion,
+                'fecha_decreto_desgnacion'     => $fechaDecreto,
+                'nro_decreto_extraordinario'   => $diseno->nro_extraordinaria,
+                'fecha_decreto_extraordinario' => $fechaExtraordinaria,
+                'web'                          => Str::before($diseno->web_consulta, 'solicitud') ?: '',
+                'nro_tramite'                  => $tramite->num_tramite,
+                'qr_cedula'                    => $qrCedula,
+                'qr_tramite'                   => $qrTramite,
+                'banner_footer'                => $procesadas['banner_footer'],
+                'piso'                         => $diseno->piso,
+                'telefono_ministerio'          => $diseno->telefono,
+            ];
+
+            // Renderizado del PDF utilizando la fachada de DomPDF sin alterar el CSS interno
+            $pdf = Pdf::loadView('site.pdf.certificado', $dataPayload);
+
+            // Transmisión en stream inline para su visualización en navegadores web de alta disponibilidad
+            return $pdf->stream("Certificado_nro-{$tramite->num_tramite}.pdf");
+        } catch (\Exception $e) {
+
+            Log::error('Error crítico en la compilación y renderizado del PDF del certificado', [
+                'num_tramite' => $num_tramite,
+                'exception'   => $e->getMessage(),
+                'trace'       => $e->getTraceAsString()
+            ]);
+
+            abort(500, 'Ocurrió un error interno al generar el documento digital de certificación.');
         }
-
-        // Configuración de QR
-        $renderer = new ImageRenderer(new RendererStyle(150), new SvgImageBackEnd());
-        $writer = new Writer($renderer);
-
-        $nro_tramite = $tramite->num_tramite;
-        $datos_identidad = $tramite->nacionalidad . '-' . $tramite->cedula_titular;
-        $nombre_completo = $tramite->nombres . ' ' . $tramite->primer_apellido . ' ' . $tramite->segundo_apellido;
-
-        $url_validacion = $diseno->web_consulta . $nro_tramite;
-
-        $qr_tramite = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString("Tramite: " . $nro_tramite));
-        $qr_cedula = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString("Cedula: " . $datos_identidad));
-        $qr_web = 'data:image/svg+xml;base64,' . base64_encode($writer->writeString($url_validacion));
-
-        // Fechas
-        $fecha_actual = Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
-        $fecha_gaceta = $diseno->fecha_gaceta ? Carbon::parse($diseno->fecha_gaceta)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '';
-        $fecha_decreto = $diseno->fecha_decreto ? Carbon::parse($diseno->fecha_decreto)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '';
-
-        // Datos para la vista
-        $data = [
-            'tramite' => $tramite,
-
-            // QR
-            'qr_pag_redirect' => $qr_web,
-            'qr_tramite' => $qr_tramite,
-            'qr_cedula' => $qr_cedula,
-
-            // Imágenes procesadas
-            'logo_ministerial' => $procesadas['logo_encabezado'],
-            'sello_direccion' => $procesadas['sello'],
-            'firma_viceministro' => $procesadas['firma'],
-            'banner_footer' => $procesadas['banner_footer'],
-            'logo_ministerial_fondo' => $procesadas['logo_fondo'],
-
-            // Datos de autoridad
-            'nombre_direccion' => $diseno->nombre_direccion,
-            'gaceta_cambio_pais' => $diseno->nro_gaceta,
-            'fecha_cambio_gaceta_pais' => $fecha_gaceta,
-            'nombre_viceministro' => $diseno->nombre_viceministro,
-            'nro_decreto_desgnacion' => $diseno->nro_designacion,
-            'fecha_decreto_desgnacion' => $fecha_decreto,
-            'fecha_decreto_extraordinario' => $diseno->fecha_extraordinaria ? Carbon::parse($diseno->fecha_extraordinaria)->locale('es')->isoFormat('D [de] MMMM [de] YYYY') : '',
-            'viceministro_nombre_direccion' => $diseno->cargo_viceministro,
-            'nro_decreto_extraordinario' => $diseno->nro_extraordinaria,
-
-            // Localización
-            'telefono_ministerio' => $diseno->telefono,
-            'piso' => $diseno->piso,
-
-            // Datos del trámite
-            'fecha' => $tramite->created_at->format('d/m/Y'),
-            'nombre_solicitante' => strtoupper($nombre_completo),
-            'datos' => $datos_identidad,
-            'pais_solicitud' => strtoupper($tramite->pais_nombre_oficial),
-            'fecha_actual' => $fecha_actual,
-            'nro_tramite' => $nro_tramite,
-            'web' =>  Str::before($diseno->web_consulta, 'solicitud') ?? '',
-        ];
-
-        $pdf = Pdf::loadView('site.pdf.certificado', $data);
-
-        return $pdf->stream('Certificado nro-' . $tramite->num_tramite . '.pdf');
     }
 
-    public function get_comprobante_seleccionado(int $num_tramite)
+    public function get_comprobante_seleccionado(int $num_tramite): Response
     {
-        $tramite = RecaudoTramite::where('num_tramite', $num_tramite)
-            ->where('id_persona', Auth::user()->id_persona)
-            ->firstOrFail();
+        try {
+            // Eager loading de la relación diseno para optimizar el rendimiento en PostgreSQL
+            $tramite = RecaudoTramite::with('diseno')
+                ->where('num_tramite', $num_tramite)
+                ->where('id_persona', auth()->user()->id_persona)
+                ->firstOrFail();
 
-        if ($tramite->id_persona != Auth::user()->id_persona) {
-            abort(403, 'No tienes permiso para acceder a este comprobante.');
-        }
+            $diseno = $tramite->diseno;
 
-        $diseno = $tramite->diseno;
+            // Procesamiento seguro de elementos gráficos binarios (BLOB) de la DB a Base64 Inline
+            $imagenes = ['logo_encabezado', 'logo_fondo', 'sello', 'firma', 'banner_footer'];
+            $procesadas = [];
 
-        // Procesar imágenes
-        $imagenes = ['logo_encabezado', 'logo_fondo', 'sello', 'firma', 'banner_footer'];
-        $procesadas = [];
+            foreach ($imagenes as $campo) {
+                $valor = $diseno->$campo ?? null;
 
-        foreach ($imagenes as $campo) {
-            $valor = $diseno->$campo ?? null;
+                if (is_resource($valor)) {
+                    $valor = stream_get_contents($valor);
+                }
 
-            if (is_resource($valor)) {
-                $valor = stream_get_contents($valor);
+                // CORRECCIÓN PSR-12: Uso de startsWith en lugar del deprecado starts_with
+                if ($valor && !Str::startsWith((string)$valor, 'data:image')) {
+                    $procesadas[$campo] = 'data:image/png;base64,' . base64_encode((string)$valor);
+                } else {
+                    $procesadas[$campo] = $valor;
+                }
             }
 
-            if ($valor && !str_starts_with($valor, 'data:image')) {
-                $procesadas[$campo] = 'data:image/png;base64,' . base64_encode($valor);
-            } else {
-                $procesadas[$campo] = $valor;
-            }
+            // Determinación lógica del estatus de rechazo (id_estatus = 3 es el estándar de rechazados)
+            $esRechazado = ((int)$tramite->id_estatus === 3);
+            $textoRechazado = $esRechazado ? 'RECHAZADO' : 'EN PROCESO';
+
+            // Construcción y Mapeo Exacto del Payload para la Vista Blade
+            $dataPayload = [
+                // Instancia del objeto completo requerido por el Blade
+                'tramite'                => $tramite,
+
+                // Control de estatus de rechazo
+                'rechazado'              => $esRechazado ? $textoRechazado : null,
+
+                // Mapeo explícito de campos de texto individuales usados en la vista
+                'nombres'                => Str::upper($tramite->nombres ?? ''),
+                'primer_apellido'        => Str::upper($tramite->primer_apellido ?? ''),
+                'segundo_apellido'       => Str::upper($tramite->segundo_apellido ?? ''),
+                'pais_nombre_oficial'    => Str::upper($tramite->pais_nombre_oficial ?? 'REPÚBLICA BOLIVARIANA DE VENEZUELA'),
+
+                // Inyección de elementos institucionales gráficos procesados
+                'logo_ministerial_fondo' => $procesadas['logo_fondo'],
+                'logo_ministerial'       => $procesadas['logo_encabezado'],
+                'banner_footer'          => $procesadas['banner_footer'],
+
+                // Variables de ubicación y contacto dinámicos extraídos del diseño institucional
+                'piso'                   => $diseno->piso ?? 'N/A',
+                'telefono_ministerio'    => $diseno->telefono ?? 'N/A',
+            ];
+
+            // Forzar localización al español para asegurar que translatedFormat('d \d\e F \d\e Y') compile correctamente
+            Carbon::setLocale('es');
+
+            // Compilación del HTML mediante el wrapper de DomPDF
+            $pdf = Pdf::loadView('site.pdf.comprobante', $dataPayload);
+
+            // Transmisión inline al visualizador del navegador del cliente
+            return $pdf->stream("Comprobante_Tramite-{$tramite->num_tramite}.pdf");
+        } catch (\Exception $e) {
+            Log::error('Error crítico en la compilación y renderizado del PDF del comprobante', [
+                'num_tramite' => $num_tramite,
+                'exception'   => $e->getMessage(),
+                'trace'       => $e->getTraceAsString()
+            ]);
+
+            abort(500, 'Ocurrió un error interno al compilar el documento digital del comprobante.');
         }
-
-
-        $data = [
-            'tramite' => $tramite,
-            'telefono_ministerio' => $diseno->telefono,
-            'piso' => $diseno->piso,
-            'logo_ministerial' => $procesadas['logo_encabezado'],
-            'logo_ministerial_fondo' => $procesadas['logo_fondo'],
-            'sello_direccion' => $procesadas['sello'],
-            'firma_viceministro' => $procesadas['firma'],
-            'banner_footer' => $procesadas['banner_footer'],
-
-            # Datos persona:
-            'nombres' => $tramite->nombres,
-            'nacionalidad' => $tramite->nacionalidad,
-            'cedula_titular' => $tramite->cedula_titular,
-            'primer_apellido' => $tramite->primer_apellido,
-            'segundo_apellido' => $tramite->segundo_apellido,
-            'pais_nombre_oficial' => $tramite->pais_nombre_oficial,
-            'rechazado' => $tramite->id_estatus === 3 ? 'Rechazado' : '',
-            'created_at' => $tramite->created_at,
-        ];
-
-        $pdf = Pdf::loadView('site.pdf.comprobante', $data);
-
-        return $pdf->stream('Comprobante nro-' . $tramite->num_tramite . '.pdf');
     }
+
+
 
     public function informacion()
     {

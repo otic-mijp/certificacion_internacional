@@ -24,9 +24,9 @@
 
 
         <p class="text-slate-600 text-xs md:text-sm font-medium leading-relaxed max-w-md mx-auto mb-8 text-center px-4">
-            Por favor, diríjase a la <span
-                class="text-slate-800 font-black tracking-tight uppercase text-[11px] md:text-xs">Coordinación de
-                Antecedentes Penales</span> en Caracas para recibir atención personalizada.
+            Por favor, diríjase a la <span class="text-slate-800 font-black tracking-tight uppercase text-[11px] md:text-xs">
+                Coordinación de Antecedentes Penales</span>
+                Ubicada en el Distrito capital para recibir atención personalizada.
             <span class="block mt-2 text-slate-500 font-normal">
                 Si desconoce su ubicación exacta, asista a la sede principal del
                 <a target="_blank" href="https://maps.app.goo.gl/UWptEuSGqvLanmjTA" title="Ubicacion en mapa"
