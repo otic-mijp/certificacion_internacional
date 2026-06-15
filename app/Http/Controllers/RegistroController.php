@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
+use Illuminate\Http\RedirectResponse;
 
 use App\Models\DVPersona;
 use App\Models\Estado;
@@ -16,15 +18,17 @@ use App\Models\Parroquia;
 use App\Models\Profesion;
 use App\Models\Usuario;
 
-use Illuminate\Auth\Events\Registered;
+use Exception;
 
-use App\Mail\RegistroBienvenidaMail;
+use Illuminate\Auth\Events\Registered;
 
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Carbon;
 
 use App\Http\Requests\Auth\ConsultaCedulaRegistroRequest;
 use App\Http\Requests\Auth\RegistroUsuarioRequest;
+use App\Jobs\EnviarCorreoBienvenida;
+use App\Mail\RegistroBienvenidaMail;
 
 class RegistroController extends Controller
 {
@@ -51,7 +55,6 @@ class RegistroController extends Controller
                 return redirect()->back()->withErrors(['numero_cedula' => 'Atención: No se permiten registros de personas menores de edad.']);
             }
         }
-
 
         $usuario = Usuario::where('id_persona', $data)->first();
 
@@ -114,7 +117,6 @@ class RegistroController extends Controller
 
     public function store(RegistroUsuarioRequest $request)
     {
-
         $persona = session('persona_validada');
 
         if (!$persona) {
@@ -130,32 +132,46 @@ class RegistroController extends Controller
             ]);
         }
 
-        $usuario = Usuario::create([
-            'id_persona'     => Str::upper($persona['id_persona']),
+        try {
+           
+            DB::beginTransaction();
 
-            # Datos del request (también en minúsculas)
-            'email' => mb_strtolower($request->input('email')),
-            'telefono_celular'   => $request->input('telefono_celular'),
-            'telefono_local'     => $request->input('telefono_local'),
-            'profesion_id'       => $request->input('profesion_id'),
-            'estado_id'          => $request->input('estado_id'),
-            'municipio_id'       => $request->input('municipio_id'),
-            'parroquia_id'       => $request->input('parroquia_id'),
-            'direccion'          => mb_strtolower($request->input('direccion')),
-            'contrasena'         => $request->input('contrasena'),
-            'estatus_contrasena_reiniciada' => false,
-        ]);
+            $usuario = Usuario::create([
+                'id_persona'         => Str::upper($persona['id_persona']),
+                'email'              => mb_strtolower($request->input('email')),
+                'telefono_celular'   => $request->input('telefono_celular'),
+                'telefono_local'     => $request->input('telefono_local'),
+                'profesion_id'       => $request->input('profesion_id'),
+                'estado_id'          => $request->input('estado_id'),
+                'municipio_id'       => $request->input('municipio_id'),
+                'parroquia_id'       => $request->input('parroquia_id'),
+                'direccion'          => mb_strtolower($request->input('direccion')),
+                'contrasena'         => $request->input('contrasena'),
+                'estatus_contrasena_reiniciada' => false,
+            ]);
 
-        session()->forget('persona_validada');
+            Mail::to($usuario->email)->send(new RegistroBienvenidaMail());
 
-        Mail::to($request->input('email'))->send(new RegistroBienvenidaMail());
+            DB::commit();
 
-        // Enviar notificación de verificación de email
-        event(new Registered($usuario));
+            session()->forget('persona_validada');
 
-        Auth::login($usuario);
+            event(new Registered($usuario));
 
-        return to_route('usuario.bienvenida');
+            Auth::login($usuario);
+
+            return to_route('usuario.bienvenida');
+
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            Log::error('Error en el registro de usuario (Correo no enviado): ' . $e->getMessage());
+
+            return back()->withInput()->withErrors([
+                'email' => 'No se pudo procesar tu registro debido a un problema enviando el correo de bienvenida. Por favor, inténtalo más tarde.'
+            ]);
+        }
     }
 
     public function getMunicipios(int $estado_id): JsonResponse

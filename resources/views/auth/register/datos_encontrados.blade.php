@@ -11,7 +11,7 @@
                         Complete sus datos para el acceso oficial al panel.
                         <br>
                         <span
-                            class="text-xs bg-blue-950/40 text-red-300 py-1 rounded-md inline-block border border-blue-800/50">
+                            class="text-xs text-red-300 py-1 rounded-md inline-block">
                             Los campos con <strong class="text-red-400 font-black">*</strong> son obligatorios.
                         </span>
                     </p>
