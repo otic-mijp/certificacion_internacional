@@ -10,7 +10,7 @@ use App\Models\DVReo;
 use App\Models\RecaudoDiseno;
 use App\Models\RecaudoMotivo;
 use App\Models\RecaudoTramite;
-use App\Mail\CorreoSolicitudAntecedente;
+use App\Events\TramiteProcesado;
 use App\Services\SolicitudTramiteService;
 
 use Illuminate\View\View;

@@ -23,4 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->view('errors.404', [], 504);
             }
         });
-    })->create();
+    })
+    ->withEvents(discover: [
+        __DIR__ . '/../app/Listeners',
+    ])
+    ->create();
