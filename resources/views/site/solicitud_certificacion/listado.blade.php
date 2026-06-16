@@ -46,7 +46,7 @@
                                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5 animate-pulse"></span>
                                             Iniciado
                                         </span>
-                                    @elseif ($tramite->id_estatus === 2)
+                                    @elseif ($tramite->id_estatus === 2 || $tramite->id_estatus === 4)
                                         <span
                                             class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wide">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>

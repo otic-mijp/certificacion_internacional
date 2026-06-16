@@ -44,7 +44,7 @@ class SolicitudTramiteService
             $tramite->segundo_apellido = Str::lower($persona['segundo_apellido']);
             $tramite->tipo_solicitante = 1; // Canal Web Obligatorio
             $tramite->tipo_titular     = $titular;
-            $tramite->id_descargas     = null;
+            $tramite->usuario          = 'Web';
             $tramite->id_diseno_tramite = $diseno->id;
             $tramite->id_persona       = $idPersona;
             $tramite->correo           = auth()->user()->email;
