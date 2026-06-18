@@ -146,7 +146,7 @@ class SolicitudController extends Controller
 
             $tramite->tipo_titular        = $titular;
             $tramite->id_motivo           = 9; # 9 para produccion
-            $tramite->id_descargas        = null;
+            $tramite->usuario             = 'Web';
             $tramite->id_diseno_tramite   = $diseno->id;
             $tramite->id_persona          = $id_persona;
             $tramite->correo              = Auth::user()->email;
