@@ -16,11 +16,8 @@ use App\Services\SolicitudTramiteService;
 use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\RedirectResponse;
@@ -91,7 +88,7 @@ class SolicitudController extends Controller
                 'user_id' => auth()->id()
             ]);
 
-            return back()->withInput()->withErrors(['error' => 'Lo sentimos, ocurrió un problema técnico interno al procesar su solicitud.']);
+            return back()->withInput()->withErrors(['error' => 'Lo sentimos, ocurrió un problema al procesar su solicitud.']);
         }
     }
 

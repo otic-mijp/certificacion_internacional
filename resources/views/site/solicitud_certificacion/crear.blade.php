@@ -123,7 +123,7 @@
                         </label>
 
                         <div class="relative">
-                            <select id="pais_solicitud" name="pais" required class="hidden">
+                            <select id="pais_solicitud" name="pais" required class="sr-only absolute pointer-events-none">
                                 <option value="" disabled {{ old('pais') ? '' : 'selected' }}>Seleccione el país...
                                 </option>
                                 @foreach ($paises as $pais)

@@ -23,13 +23,12 @@ class SolicitudTramiteService
     public function procesarSolicitud(array $persona, array $data): RecaudoTramite
     {
         $idPersona = (string) $persona['id_persona'];
-        $cedula = (int) $persona['numero_cedula'];
+        $cedula    = (int) $persona['numero_cedula'];
 
         $this->validarMayoriaEdad($persona['fecha_nacimiento']);
         $this->validarLimitesTramites($idPersona);
 
-        $tieneAntecedentes = DVReo::where('id_reo', $idPersona)
-            ->exists();
+        $tieneAntecedentes = DVReo::where('id_reo', $idPersona)->exists();
 
         $diseno = RecaudoDiseno::where('estado', true)->firstOrFail();
         $titular = (Str::lower($persona['letra_cedula']) === 'v') ? 'CIUDADANO MAYOR DE EDAD' : 'CIUDADANO EXTRANJERO';
