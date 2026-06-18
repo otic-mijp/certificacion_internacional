@@ -151,16 +151,22 @@
             <div id="modal-content"
                 class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all duration-500 ease-out scale-95 opacity-0">
                 <div class="flex flex-col">
-                    <img src="data:image/jpeg;base64,{{ base64_encode(is_resource($popupImg->imagen_data) ? stream_get_contents($popupImg->imagen_data) : $popupImg->imagen_data) }}"
-                        alt="Información importante" class="w-full h-auto object-cover max-h-[50vh] md:max-h-[600px]">
+
+                    <div
+                        class="w-full bg-slate-50 flex items-center justify-center overflow-hidden max-h-[40vh] md:max-h-[450px]">
+                        <img src="data:image/jpeg;base64,{{ base64_encode(is_resource($popupImg->imagen_data) ? stream_get_contents($popupImg->imagen_data) : $popupImg->imagen_data) }}"
+                            alt="Información importante" class="w-full h-full object-contain">
+                    </div>
+
                     <div class="p-6 md:p-8 text-center">
                         <h3 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">Aviso
                             Importante</h3>
                         <p class="text-[11px] md:text-sm text-slate-500 mb-6 font-medium">Lea detenidamente antes de
                             continuar.</p>
                         <button id="modal-confirm-button"
-                            class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all hover:bg-[#1a2d5f]">Entendido,
-                            continuar</button>
+                            class="w-full cursor-pointer py-4 bg-[#233C7E] text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-2xl shadow-lg active:scale-95 transition-all hover:bg-[#1a2d5f]">
+                            Entendido, continuar
+                        </button>
                     </div>
                 </div>
             </div>

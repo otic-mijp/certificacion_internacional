@@ -15,11 +15,11 @@
             </p>
         </div>
 
-        <div
-            class="max-w-4xl w-full bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
+        <div class="max-w-4xl w-full bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden">
 
             @if (!$tiene_preguntas_seguridad)
-                <div class="flex items-center gap-4 p-8 border-b border-slate-50 bg-red-100 animate-pulse hover:animate-none">
+                <div
+                    class="flex items-center gap-4 p-8 border-b border-slate-50 bg-red-100 animate-pulse hover:animate-none">
                     <div
                         class="w-12 h-12 bg-red-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-red-900/20">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,8 +53,11 @@
                 class="relative w-full max-w-lg bg-white rounded-3xl md:rounded-[40px] shadow-2xl overflow-hidden transform transition-all duration-500 ease-out scale-95 opacity-0">
 
                 <div class="flex flex-col">
-                    <img src="data:image/jpeg;base64,{{ base64_encode(is_resource($popupImg->imagen_data) ? stream_get_contents($popupImg->imagen_data) : $popupImg->imagen_data) }}"
-                        alt="Información Importante" class="w-full h-auto object-cover max-h-[50vh] md:max-h-[600px]">
+                    <div
+                        class="w-full bg-slate-50 flex items-center justify-center overflow-hidden max-h-[40vh] md:max-h-[420px]">
+                        <img src="data:image/jpeg;base64,{{ base64_encode(is_resource($popupImg->imagen_data) ? stream_get_contents($popupImg->imagen_data) : $popupImg->imagen_data) }}"
+                            alt="Información Importante" class="w-full h-full object-contain">
+                    </div>
 
                     <div class="p-6 md:p-8 text-center">
                         <h3 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">

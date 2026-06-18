@@ -15,9 +15,9 @@
             </div>
         </div>
 
-        <section class="bg-white rounded-3xl shadow-xl shadow-slate-100/80 border border-slate-100 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
+       <section class="bg-white rounded-3xl shadow-xl shadow-slate-100/80 border border-slate-100 overflow-hidden">
+            <div class="overflow-x-auto w-full scrollbar-thin scrollbar-thumb-slate-200">
+                <table class="w-full text-left border-collapse min-w-[800px]">
                     <thead>
                         <tr class="bg-slate-50/70 border-b border-slate-200/80 text-slate-500">
                             <th class="px-6 py-4.5 text-[10px] font-bold uppercase tracking-[0.15em]">Nro. Trámite</th>
@@ -32,14 +32,14 @@
                             <tr class="hover:bg-slate-50/40 transition-colors duration-200">
 
                                 {{-- Nro. Trámite --}}
-                                <td class="px-6 py-4.5">
+                                <td class="px-6 py-4.5 whitespace-nowrap">
                                     <span class="text-xs font-semibold font-mono text-slate-800 tracking-tight">
                                         {{ $tramite->num_tramite }}
                                     </span>
                                 </td>
 
                                 {{-- Estatus --}}
-                                <td class="px-6 py-4.5">
+                                <td class="px-6 py-4.5 whitespace-nowrap">
                                     @if ($tramite->id_estatus === 1)
                                         <span
                                             class="inline-flex items-center px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wide">
@@ -61,8 +61,8 @@
                                     @endif
                                 </td>
 
-                                {{-- Fecha (Tooltip aislado del TR) --}}
-                                <td class="px-6 py-4.5">
+                                {{-- Fecha --}}
+                                <td class="px-6 py-4.5 whitespace-nowrap">
                                     <div class="relative inline-block group/fecha cursor-help">
                                         <span
                                             class="text-xs font-medium text-slate-500 border-b border-dotted border-slate-300 hover:text-slate-700 transition-colors pb-0.5">
@@ -80,46 +80,51 @@
                                     </div>
                                 </td>
 
-                                <td class="px-6 py-4.5">
-
-                                    <a target="_blank" href="{{ route('solicitud.pdf.comprobante', $tramite->num_tramite) }}"
-                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-800 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all duration-200 hover:bg-slate-900 hover:text-white hover:shadow-md hover:shadow-slate-900/10">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                        </svg>
-                                        Comprobante
-                                    </a>
-
-                                    @if ($tramite->id_estatus === 3)
-                                        <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 text-slate-400 rounded-lg text-[10px] font-bold uppercase tracking-wide select-none">
-                                            No disponible
-                                        </span>
-                                    @elseif ($tramite->created_at->addMonths(3)->isFuture())
-                                        <a target="_blank" href="{{ route('solicitud.pdf', $tramite->num_tramite) }}"
+                                {{-- Documentos --}}
+                                <td class="px-6 py-4.5 whitespace-nowrap">
+                                    <div class="flex items-center gap-1.5">
+                                        <a target="_blank"
+                                            href="{{ route('solicitud.pdf.comprobante', $tramite->num_tramite) }}"
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-800 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all duration-200 hover:bg-slate-900 hover:text-white hover:shadow-md hover:shadow-slate-900/10">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                             </svg>
-                                            Certificado
+                                            Comprobante
                                         </a>
-                                    @else
-                                        <span
-                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-[10px] font-bold uppercase tracking-wide">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M12 6v6m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            Caducado
-                                        </span>
-                                    @endif
+
+                                        @if ($tramite->id_estatus === 3)
+                                            <span
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 text-slate-400 rounded-lg text-[10px] font-bold uppercase tracking-wide select-none">
+                                                No disponible
+                                            </span>
+                                        @elseif ($tramite->created_at->addMonths(3)->isFuture())
+                                            <a target="_blank" href="{{ route('solicitud.pdf', $tramite->num_tramite) }}"
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-800 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-all duration-200 hover:bg-slate-900 hover:text-white hover:shadow-md hover:shadow-slate-900/10">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                    stroke-width="2.2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                </svg>
+                                                Certificado
+                                            </a>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg text-[10px] font-bold uppercase tracking-wide">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                    stroke-width="2.2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 6v6m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Caducado
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4.5">
+
+                                {{-- Apostilla --}}
+                                <td class="px-6 py-4.5 whitespace-nowrap">
                                     @if ($tramite->apostilla)
                                         <span
                                             class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wide">
