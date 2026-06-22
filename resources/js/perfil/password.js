@@ -40,7 +40,9 @@ function initPasswordSecurity() {
         special: { el: document.getElementById('req-special'), regex: /[!@#$%^&*(),.?":{}|<>#$%\&*\-+?¿]/ }
     };
 
-    if (!passwordInput || !submitBtn) return;
+    // CORRECCIÓN: Si falta la contraseña o el botón, cancelamos. 
+    // Si falta confirmInput, también cancelamos para evitar errores visuales más abajo.
+    if (!passwordInput || !submitBtn || !confirmInput) return;
 
     passwordInput.addEventListener('input', function () {
         const value = this.value;
@@ -48,15 +50,14 @@ function initPasswordSecurity() {
         // Validar requisitos individuales
         Object.keys(requirements).forEach(key => {
             const { el, regex } = requirements[key];
-            if (el) updateRequirementUI(el, regex.test(value));
+            // Enviamos el elemento a la función (la función se encargará de validar si es null)
+            updateRequirementUI(el, regex.test(value));
         });
 
-        checkFormReady(); // Comprobar si habilitamos el botón
+        checkFormReady();
     });
 
-    if (confirmInput) {
-        confirmInput.addEventListener('input', checkFormReady);
-    }
+    confirmInput.addEventListener('input', checkFormReady);
 
     function checkFormReady() {
         // 1. Verificar requisitos de seguridad
@@ -67,7 +68,7 @@ function initPasswordSecurity() {
         // 2. Verificar que coincidan
         const passwordsMatch = passwordInput.value === confirmInput.value && passwordInput.value !== "";
 
-        // 3. Lógica de habilitación
+        // 3. Lógica de habilitación del botón
         if (allReqsPassed && passwordsMatch) {
             submitBtn.disabled = false;
             submitBtn.classList.remove('bg-slate-400', 'cursor-not-allowed', 'opacity-70');
@@ -78,7 +79,7 @@ function initPasswordSecurity() {
             submitBtn.classList.remove('bg-[#233C7E]', 'cursor-pointer', 'opacity-100');
         }
 
-        // También actualizamos el borde del confirmInput para feedback visual
+        // Actualizamos el feedback visual del input de confirmación
         validateMatchUI(passwordInput.value, confirmInput.value);
     }
 
@@ -90,6 +91,25 @@ function initPasswordSecurity() {
             confirmInput.classList.add('border-green-500');
         } else {
             confirmInput.classList.add('border-red-400');
+        }
+    }
+
+    // CORRECCIÓN CLAVE: Blindamos la función que actualiza la interfaz de los requisitos
+    function updateRequirementUI(el, isValid) {
+        // Si el elemento no existe en el DOM (es null), salimos inmediatamente sin romper nada
+        if (!el) return;
+
+        if (isValid) {
+            el.classList.remove('text-red-500', 'opacity-50'); // Ajusta tus clases de Tailwind aquí
+            el.classList.add('text-green-500');
+
+            // Si tienes iconos internos (ej: checks), usamos ?. para evitar que falle si no existen
+            el.querySelector('.check-icon')?.classList.remove('hidden');
+        } else {
+            el.classList.remove('text-green-500');
+            el.classList.add('text-red-500', 'opacity-50');
+
+            el.querySelector('.check-icon')?.classList.add('hidden');
         }
     }
 }

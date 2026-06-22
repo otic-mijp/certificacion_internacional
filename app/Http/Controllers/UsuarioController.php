@@ -21,22 +21,12 @@ class UsuarioController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
+        $data = DVPersona::where('id_persona', $user->id_persona)->first();
+        $tiene_preguntas_seguridad = $user->respuestasSeguridad()->exists();
+        $popupImg = PopupSetting::where('popup_principal', false)->first();
 
-        $usuario = Auth::user()->estatus_contrasena_reiniciada;
-
-        if ($usuario === true) {
-
-            return view('site.perfil.contrasena_obligatoria');
-        } else {
-
-            $user = Auth::user();
-            $data = DVPersona::where('id_persona', $user->id_persona)->first();
-            $tiene_preguntas_seguridad = $user->respuestasSeguridad()->exists();
-            $popupImg = PopupSetting::where('popup_principal', false)->first();
-
-
-            return view('site.bienvenida', compact('data', 'tiene_preguntas_seguridad', 'popupImg'));
-        }
+        return view('site.bienvenida', compact('data', 'tiene_preguntas_seguridad', 'popupImg'));
     }
 
     public function perfil(): View
@@ -100,6 +90,11 @@ class UsuarioController extends Controller
         $user->save();
 
         return back()->with('success', '¡Tu correo ha sido actualizado con éxito!');
+    }
+
+    public function clave_obligatoria(): View
+    {
+        return view('site.perfil.contrasena_obligatoria');
     }
 
     public function clave_nueva(): View

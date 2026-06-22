@@ -42,7 +42,7 @@ Route::group(['prefix' => 'recuperar', 'controller' => LoginController::class], 
     Route::post('/usuario/correo', 'recuperar_correo')->name('recuperar.correo.usuario');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', \App\Http\Middleware\EnsurePasswordResetCompleted::class])->group(function () {
 
     Route::get('/dashboard', [UsuarioController::class, 'index'])->name('usuario.bienvenida');
 
