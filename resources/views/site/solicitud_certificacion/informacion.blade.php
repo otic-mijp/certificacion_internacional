@@ -111,7 +111,7 @@
                             Solicitud para Menores de Edad
                         </h4>
                         <p class="text-sm md:text-base text-amber-800 leading-relaxed mb-4">
-                            Para tramitar el certificado de un menor de edad, el representative debe dirigirse a la <strong
+                            Para tramitar el certificado de un menor de edad, el representante debe dirigirse a la <strong
                                 class="font-semibold text-amber-950">Coordinación de Antecedentes Penales</strong>
                             presentando los siguientes requisitos:
                         </p>
