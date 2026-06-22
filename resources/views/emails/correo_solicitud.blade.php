@@ -41,7 +41,7 @@
                         <td style="padding: 10px 50px 30px 50px;">
 
                             <p
-                                style="margin: 0 0 15px 0; font-size: 16px; line-height: 1.6; color: #2d3748; font-weight: bold;">
+                                style="margin: 0 0 15px 0; font-size: 16px; line-height: 1.6; color: #2d3748; font-weight: bold; text-transform: uppercase;">
                                 Estimado Sr(a). {{ $nombre_completo ?? 'Usuario' }}
                             </p>
 
@@ -70,7 +70,7 @@
                                             País de Destino de la Certificación
                                         </span>
                                         <span
-                                            style="display: block; font-size: 15px; color: #4a5568; font-weight: 600;">
+                                            style="display: block; font-size: 15px; color: #4a5568; font-weight: 600; text-transform: uppercase;">
                                             {{ $pais_nombre_oficial ?? 'No especificado' }}
                                         </span>
                                     </td>

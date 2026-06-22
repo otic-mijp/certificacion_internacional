@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Throwable; // Importamos Throwable para el método failed
 
 class EnviarCorreoTramite implements ShouldQueue
 {
@@ -59,14 +60,36 @@ class EnviarCorreoTramite implements ShouldQueue
             Mail::to($correoDestino)->send(
                 new CorreoSolicitudAntecedente($numTramite, $paisNombreOficial, $nombreCompleto)
             );
+
         } catch (\Exception $e) {
-            Log::error("Falla en segundo plano al procesar CorreoSolicitudAntecedente para el trámite {$event->tramite->num_tramite}", [
-                'error' => $e->getMessage(),
-                'line'  => $e->getLine()
+            // Nota: Cambiamos a Log::warning aquí porque es un intento fallido, pero aún se va a reintentar
+            Log::warning("Intento fallido en segundo plano para enviar correo del trámite {$event->tramite->num_tramite}. Reintentando en 15s...", [
+                'intento' => $this->attempts(),
+                'error'   => $e->getMessage()
             ]);
 
-            // Reclama el Job para volverlo a intentar en 15 segundos si no ha superado el límite ($tries)
-            $this->release(15);
+            // Si todavía nos quedan intentos disponibles, lo volvemos a encolar
+            if ($this->attempts() < $this->tries) {
+                $this->release(15);
+            } else {
+                // Si ya fue el último intento, dejamos que la excepción fluya para que Laravel invoque el método failed()
+                throw $e;
+            }
         }
+    }
+
+    /**
+     * Este método se ejecuta AUTOMÁTICAMENTE cuando el trabajo agota todos sus reintentos ($tries = 3)
+     * Aquí es donde registramos que el correo DEFINITIVAMENTE no se llegó a mostrar/enviar.
+     */
+    public function failed(TramiteProcesado $event, Throwable $exception): void
+    {
+        Log::error("CRÍTICO: El correo del trámite Nro: {$event->tramite->num_tramite} NO se llegó a enviar tras {$this->tries} intentos.", [
+            'tramite_id' => $event->tramite->id,
+            'correo'     => $event->tramite->correo,
+            'error'      => $exception->getMessage(),
+            'file'       => $exception->getFile(),
+            'line'       => $exception->getLine()
+        ]);
     }
 }

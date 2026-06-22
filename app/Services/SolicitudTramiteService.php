@@ -12,6 +12,7 @@ use App\Events\TramiteProcesado;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class SolicitudTramiteService
@@ -65,11 +66,11 @@ class SolicitudTramiteService
 
             $tramite->save();
 
+            event(new TramiteProcesado($tramite, $persona));
+
             $anio = Carbon::now()->year;
             $tramite->num_tramite = "102{$anio}{$tramite->id}";
             $tramite->save();
-
-            event(new TramiteProcesado($tramite, $persona));
 
             return $tramite;
         });
