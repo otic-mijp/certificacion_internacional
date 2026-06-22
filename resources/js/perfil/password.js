@@ -40,35 +40,41 @@ function initPasswordSecurity() {
         special: { el: document.getElementById('req-special'), regex: /[!@#$%^&*(),.?":{}|<>#$%\&*\-+?¿]/ }
     };
 
-    // CORRECCIÓN: Si falta la contraseña o el botón, cancelamos. 
-    // Si falta confirmInput, también cancelamos para evitar errores visuales más abajo.
-    if (!passwordInput || !submitBtn || !confirmInput) return;
+    // Si no existe el input principal o el botón, detenemos la ejecución de forma segura
+    if (!passwordInput || !submitBtn) return;
 
     passwordInput.addEventListener('input', function () {
         const value = this.value;
 
-        // Validar requisitos individuales
+        // Validar requisitos individuales (Solo si el elemento visual existe en el HTML)
         Object.keys(requirements).forEach(key => {
             const { el, regex } = requirements[key];
-            // Enviamos el elemento a la función (la función se encargará de validar si es null)
-            updateRequirementUI(el, regex.test(value));
+            if (el) {
+                updateRequirementUI(el, regex.test(value));
+            }
         });
 
-        checkFormReady();
+        checkFormReady(); // Comprobar si habilitamos el botón
     });
 
-    confirmInput.addEventListener('input', checkFormReady);
+    // Solo añadimos el evento si el input de confirmación realmente existe en esta vista
+    if (confirmInput) {
+        confirmInput.addEventListener('input', checkFormReady);
+    }
 
     function checkFormReady() {
-        // 1. Verificar requisitos de seguridad
+        // 1. Verificar si pasa todos los requisitos de seguridad establecidos
         const allReqsPassed = Object.values(requirements).every(req =>
             req.regex.test(passwordInput.value)
         );
 
-        // 2. Verificar que coincidan
-        const passwordsMatch = passwordInput.value === confirmInput.value && passwordInput.value !== "";
+        // 2. Verificar que coincidan (Si NO hay confirmInput en la vista, asumimos que está bien para no bloquear el flujo)
+        let passwordsMatch = true; 
+        if (confirmInput) {
+            passwordsMatch = passwordInput.value === confirmInput.value && passwordInput.value !== "";
+        }
 
-        // 3. Lógica de habilitación del botón
+        // 3. Lógica de habilitación de botón
         if (allReqsPassed && passwordsMatch) {
             submitBtn.disabled = false;
             submitBtn.classList.remove('bg-slate-400', 'cursor-not-allowed', 'opacity-70');
@@ -79,11 +85,16 @@ function initPasswordSecurity() {
             submitBtn.classList.remove('bg-[#233C7E]', 'cursor-pointer', 'opacity-100');
         }
 
-        // Actualizamos el feedback visual del input de confirmación
-        validateMatchUI(passwordInput.value, confirmInput.value);
+        // 4. Feedback visual (Solo si el campo de confirmación existe)
+        if (confirmInput) {
+            validateMatchUI(passwordInput.value, confirmInput.value);
+        }
     }
 
     function validateMatchUI(val1, val2) {
+        // Doble verificación de seguridad para evitar errores con classList
+        if (!confirmInput) return;
+
         confirmInput.classList.remove('border-slate-300', 'border-green-500', 'border-red-400');
         if (val2 === "") {
             confirmInput.classList.add('border-slate-300');
@@ -93,47 +104,43 @@ function initPasswordSecurity() {
             confirmInput.classList.add('border-red-400');
         }
     }
-
-    // CORRECCIÓN CLAVE: Blindamos la función que actualiza la interfaz de los requisitos
-    function updateRequirementUI(el, isValid) {
-        // Si el elemento no existe en el DOM (es null), salimos inmediatamente sin romper nada
-        if (!el) return;
-
-        if (isValid) {
-            el.classList.remove('text-red-500', 'opacity-50'); // Ajusta tus clases de Tailwind aquí
-            el.classList.add('text-green-500');
-
-            // Si tienes iconos internos (ej: checks), usamos ?. para evitar que falle si no existen
-            el.querySelector('.check-icon')?.classList.remove('hidden');
-        } else {
-            el.classList.remove('text-green-500');
-            el.classList.add('text-red-500', 'opacity-50');
-
-            el.querySelector('.check-icon')?.classList.add('hidden');
-        }
-    }
 }
-
 /**
  * Actualiza la interfaz de cada requisito individual
  */
 function updateRequirementUI(element, isValid) {
+    // Si por alguna razón el elemento principal no existe, salimos inmediatamente
+    if (!element) return;
+
     const iconContainer = element.querySelector('.icon-container');
     const label = element.querySelector('.label-text');
 
     if (isValid) {
-        iconContainer.className = "icon-container mt-1 w-5 h-5 rounded-full flex items-center justify-center transition-all bg-[#233C7E] border-2 border-[#233C7E]";
-        label.classList.remove('text-slate-400');
-        label.classList.add('text-[#233C7E]');
-        iconContainer.innerHTML = `
-            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>`;
+        // Modificaciones para el estado VÁLIDO (con checks de existencia)
+        if (iconContainer) {
+            iconContainer.className = "icon-container mt-1 w-5 h-5 rounded-full flex items-center justify-center transition-all bg-[#233C7E] border-2 border-[#233C7E]";
+            iconContainer.innerHTML = `
+                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>`;
+        }
+        
+        if (label) {
+            label.classList.remove('text-slate-400');
+            label.classList.add('text-[#233C7E]');
+        }
+
     } else {
-        iconContainer.className = "icon-container mt-1 w-5 h-5 rounded-full flex items-center justify-center transition-all bg-white border-2 border-slate-200";
-        label.classList.remove('text-[#233C7E]');
-        label.classList.add('text-slate-400');
-        iconContainer.innerHTML = `<div class="dot w-1.5 h-1.5 rounded-full bg-slate-200"></div>`;
+        // Modificaciones para el estado INVÁLIDO (con checks de existencia)
+        if (iconContainer) {
+            iconContainer.className = "icon-container mt-1 w-5 h-5 rounded-full flex items-center justify-center transition-all bg-white border-2 border-slate-200";
+            iconContainer.innerHTML = `<div class="dot w-1.5 h-1.5 rounded-full bg-slate-200"></div>`;
+        }
+
+        if (label) {
+            label.classList.remove('text-[#233C7E]');
+            label.classList.add('text-slate-400');
+        }
     }
 }
 
