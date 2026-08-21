@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 use App\Models\Usuario;
 use Carbon\Carbon;
 
-#[Signature('usuarios:eliminar-no-verificados')] 
+#[Signature('usuarios:eliminar-no-verificados')]
 #[Description('Elimina las cuentas de usuarios que no han verificado su correo después de 6 meses')]
 class EliminarUsuariosNoVerificados extends Command
 {
@@ -18,10 +18,10 @@ class EliminarUsuariosNoVerificados extends Command
     public function handle()
     {
         try {
-            // Volvemos a activar la fecha límite de 6 meses
-            $fechaLimite = Carbon::now()->subMonths(6);
+            // Volvemos a activar la fecha límite de 24h
+            $fechaLimite = Carbon::now()->subDays(1);
 
-            // Buscamos usuarios creados hace más de 6 meses y sin verificar
+            // Buscamos usuarios creados hace más de 24h y sin verificar
             $usuariosParaEliminar = Usuario::whereNull('email_verified_at')
                 ->where('created_at', '<', $fechaLimite);
 
@@ -41,3 +41,5 @@ class EliminarUsuariosNoVerificados extends Command
         return Command::SUCCESS;
     }
 }
+
+// 2026-06-22 12:47:14

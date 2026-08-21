@@ -10,8 +10,7 @@
                     <p class="text-blue-300 text-sm font-medium mt-1">
                         Complete sus datos para el acceso oficial al panel.
                         <br>
-                        <span
-                            class="text-xs text-red-300 py-1 rounded-md inline-block">
+                        <span class="text-xs text-red-300 py-1 rounded-md inline-block">
                             Los campos con <strong class="text-red-400 font-black">*</strong> son obligatorios.
                         </span>
                     </p>
@@ -315,6 +314,31 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Indicador visual de requerimientos de la contraseña -->
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/80">
+                        <p class="text-xs font-semibold text-slate-600 mb-2">La contraseña debe cumplir con los siguientes
+                            requisitos:</p>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-500">
+                            <li class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                Mínimo 8 caracteres
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                Al menos una letra mayúscula y una minúscula
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                Al menos un número (0-9)
+                            </li>
+                            <li class="flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                Al menos un símbolo (@, #, $, %, etc.)
+                            </li>
+                        </ul>
+                    </div>
+
                     <section class="pt-10 flex flex-col md:flex-row justify-between items-center gap-4">
                         <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                             <a href="{{ url('/') }}"

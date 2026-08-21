@@ -9,5 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 
-// Cambia la línea 12 por esta expresión Cron exacta:
-Schedule::command('usuarios:eliminar-no-verificados')->cron('0 0 1 1,7 *');
+Schedule::command('usuarios:eliminar-no-verificados')->daily();
